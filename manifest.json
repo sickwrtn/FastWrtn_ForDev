@@ -1,0 +1,12 @@
+{
+    "manifest_version":3,
+    "name":"Fast wrtn",
+    "version": "0.1",
+    "permissions": [
+        "storage"
+    ],
+    "content_scripts": [{
+        "js": ["index.js"],
+        "matches": ["https://wrtn.ai/character/u/*"]
+    }]
+}
