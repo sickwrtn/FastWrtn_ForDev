@@ -7,6 +7,13 @@
 코딩 시작을 자바로 하긴 했다만 제가 py C# 쪽에만 능해서 코드 세분화랑 함수화를 1도 안했습니다...
 정리 해야하긴 하나 엄두가 안나서... (주석 다 다는데 2시간 걸림)
 언제 한번 시간 되면 날잡고 코드정리랑 하겠습니다! 코드 기여 하고싶으시면 하셔도 되요 보고 수정하겠습니다.
+#마지막으로...
+이 코드를 보실분들은 없을거라고 생각하긴 하지만 만약 보시는 분이 계시다면
+후원 계좌 : 카카오뱅크 3333-31-5207450 인태호
+로 작은 금액이라도 후원해 주시면 감사하겠습니다...
+제가 백수기도 하고... 코드 에디터 구독할 돈도 없어서...
+파이참 에디터로 코딩하는데 무료체험판 끝나니까 결제하라고 계속 알림 띄워주네요...
+저도 후원 받는게 부끄럽고 죄송스럽긴 하지만 부탁드립니다!
 */
 
 //real-time apply
@@ -63,6 +70,9 @@ function main(){
         if (xhr.status == 200) { //GET 요청에 대해 성공적인경우
             return xhr.responseText // 서버로부터 받은 데이터를 출력
         }
+        else{
+            alert(`api get 요청 실패 ${url}`);
+        }
     }
     //POST
     function postAfetch (url,data){
@@ -78,7 +88,7 @@ function main(){
             return xhr.responseText;
         }
         else{
-            alert(`api post 요청 실패 ${url} | ${data}`);
+            alert(`api post 요청 실패 ${url} | ${JSON.stringify(data)}`);
         }
     }
     //PUT
@@ -95,7 +105,7 @@ function main(){
             return xhr.responseText;
         }
         else{
-            alert(`api put 요청 실패 ${url} | ${data}`);
+            alert(`api put 요청 실패 ${url} | ${JSON.stringify(data)}`);
         }
     }
     //캐릭터 플러스 랭킹 기능
@@ -353,7 +363,7 @@ function main(){
                             모달 팝업 내의 모든 버튼 이벤트 리스너를 바꿔버림
                             기능이 정상작동 가능하도록
                              */
-                            var auto_summation_characterChatId = "6787aecf65c02321daf25b0d";
+                            var auto_summation_characterChatId = "6787aecf65c02321daf25b0d"; // 자동요약기능을 수행할 캐챗 id
                             const usernote_modal_btn_c = usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[2].childNodes.item(0); //닫기 버튼 형식
                             const usernote_modal_btn_x = usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[0].childNodes.item(1); //x 버튼 형식
                             const usernote_modal_x = usernote_modal_btn_x.cloneNode(true); // x 버튼 형식을 기반으로 버튼을 새로 만듦
@@ -400,14 +410,20 @@ function main(){
                             //수정 버튼을 누를시
                             usernote_modal_apply_btn.addEventListener('click',()=>{
                                 //해당 채팅방에 할당된 유저노트의 값을 api로 변경
-                                putAfetch(`https://william.wow.wrtn.ai/chat-room/${document.URL.split("/")[7]}`,{
-                                    userNote:{"content":usernote_modal_textarea.value}
-                                })
-                                //메뉴의 유저노트 버튼에 이벤트 리스너 삽입
-                                usernote.removeEventListener('click',after_usernote_event);
-                                usernote.addEventListener('click',after_usernote_event);
-                                modal.childNodes.item(0).remove(); //모달 팝업 닫기
-                                alert("유저노트에 반영되었습니다!");
+                                if (document.URL.split("/")[7] == undefined){
+                                    alert("새 채팅방에서는 불가능한 기능입니다. 진행중인 채팅방에서만 사용 가능해요 (업데이트 예정)")
+                                }
+                                else
+                                {
+                                    putAfetch(`https://william.wow.wrtn.ai/chat-room/${document.URL.split("/")[7].split("?")[0]}`,{
+                                        userNote:{"content":usernote_modal_textarea.value}
+                                    })
+                                    //메뉴의 유저노트 버튼에 이벤트 리스너 삽입
+                                    usernote.removeEventListener('click',after_usernote_event);
+                                    usernote.addEventListener('click',after_usernote_event);
+                                    modal.childNodes.item(0).remove(); //모달 팝업 닫기
+                                    alert("유저노트에 반영되었습니다!");
+                                }
                             })
                             //닫기 버튼 누를시
                             usernote_modal_new_close_btn.addEventListener('click',()=>{
@@ -440,7 +456,7 @@ function main(){
                                     var created_chatId = JSON.parse(postAfetch("https://api.wrtn.ai/be/chat", {
                                         unitId: auto_summation_characterChatId,
                                         type: "character",
-                                        userNote: {"content": ""}
+                                        userNote: {"content": usernote_modal_textarea.textContent}
                                     })).data._id;
                                     //로컬스토리지에 판 방의 id를 저장
                                     localStorage.setItem("usernote", created_chatId);
@@ -1155,4 +1171,5 @@ function main(){
         }
     }
 }
+
 
