@@ -91,7 +91,7 @@ function main(){
         xhr.setRequestHeader("Content-Type", "application/json");
         //PUT 요청에 보낼 데이터 작성
         xhr.send(JSON.stringify(data)); //JSON 형태로 변환하여 서버에 전송
-        if (xhr.status == 201){
+        if (xhr.status == 200){
             return xhr.responseText;
         }
         else{
