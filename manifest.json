@@ -1,12 +1,18 @@
 {
     "manifest_version":3,
     "name":"Fast wrtn",
-    "version": "1.4.0",
+    "version": "1.4.1",
     "permissions": [
         "clipboardWrite"
     ],
     "content_scripts": [{
         "js": ["index.js"],
         "matches": ["https://wrtn.ai/character/*"]
-    }]
+    }],
+    "icons": {
+        "16": "icon-16x16.png",
+        "48": "icon-32x32.png",
+        "64": "icon-64x64.png",
+        "128": "icon-128x128.png"
+    }
 }
