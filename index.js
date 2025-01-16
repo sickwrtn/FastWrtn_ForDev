@@ -173,7 +173,7 @@ function main(){
                     "    align-items: center;\n" +
                     "    background-color: var(--color_surface_tertiary);\n" +
                     "    z-index: 3;\"><svg width=\"24\" height=\"24\" viewBox=\"0 0 25 25\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\" color=\"#a8a69dff\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M14.5 18.801L9.55026 13.8512L9.19671 13.4977C8.61092 12.9119 8.61092 11.9621 9.19671 11.3764L9.55026 11.0228L14.5 6.07305L15.9142 7.48726L10.9645 12.437L15.9142 17.3868L14.5 18.801Z\" fill=\"currentColor\"></path></svg></button>"
-                const feed_struct_six = feed_struct.childNodes[1].childNodes.item(0); //이거 뭐였지?
+                const feed_struct_six = feed_struct.childNodes[1].childNodes.item(0); // < 버튼.
                 var scroll_all_amount = 300 // <  > 누를시 이동할 스크롤 양
                 var scroll_amount = 10; // 끊어서 스크롤 되는 양
                 // > 버튼 누를시
