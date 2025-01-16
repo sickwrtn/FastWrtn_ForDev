@@ -357,157 +357,176 @@ function main(){
                     if (usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[0].childNodes.item(0).textContent == "유저 노트"){
                         const usernote_modal_struct = usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes.item(0); //유저노트 모달팝업 구조 형식
                         //버튼 추가가 1번만 실행될수있도록하는 조건문
-                        if (usernote_modal_struct.childNodes.length < 3) {
-                            /*
-                            textarea의 내부값을 수정해도 적용이 안되는 문제가 있어서
-                            모달 팝업 내의 모든 버튼 이벤트 리스너를 바꿔버림
-                            기능이 정상작동 가능하도록
-                             */
-                            var auto_summation_characterChatId = "6787aecf65c02321daf25b0d"; // 자동요약기능을 수행할 캐챗 id
-                            const usernote_modal_btn_c = usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[2].childNodes.item(0); //닫기 버튼 형식
-                            const usernote_modal_btn_x = usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[0].childNodes.item(1); //x 버튼 형식
-                            const usernote_modal_x = usernote_modal_btn_x.cloneNode(true); // x 버튼 형식을 기반으로 버튼을 새로 만듦
-                            const usernote_modal_btn = usernote_modal_btn_c.cloneNode(true); // 닫기 버튼 형식 기반으로 버튼을 새로만듬
-                            const usernote_modal_textarea = usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes.item(1); //textarea
-                            const usernote_modal_apply_btn_struct = usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[2].childNodes.item(1); // 수정 버튼 형식
-                            /*
-                            닫기 버튼 기반으로 새로운 수정 버튼을 만드는 이유는 수정버튼을 기존 수정버튼 형식으로 만들시 이벤트 리스너가 적용되지 않는 문제가 있음
-                            수정 버튼을 누르고 모달팝업이 사라진후 유저노트의 이벤트 리스너가 사라지는 기이한 현상이 생김 그래서
-                            수정 버튼을 한번 누르고 난 후에는 유저노트에 모달팝업을 띄워주는 이벤트 리스너를 넣음
-                            그래서 모달팝업의 모든 버튼 이벤트는 확장프로그램이 제어하게 설정함
-                             */
-                            const usernote_modal_apply_btn = usernote_modal_btn.cloneNode(true); //닫기 버튼 형식 기반으로 수정 버튼을 새로만듦
-                            const usernote_modal_update_btn = usernote_modal_btn.cloneNode(true); //닫기 버튼 형식 기반으로 업데이트 버튼을 만듦
-                            const usernote_modal_new_close_btn = usernote_modal_btn.cloneNode(true); //닫기 버튼형식으로 새로운 닫기버튼을 만듦
-                            var modal = document.getElementById("web-modal"); //모달 팝업을 가져옴
-                            var usernote = document.getElementsByClassName("css-uxwch2").item(0).childNodes.item(0); //유저노트를 가져옴
-                            //메뉴속 유저노트 버튼을 누를시 모달팝업을 띄워주는 함수
-                            function after_usernote_event (){
-                                {
-                                    modal.appendChild(usernote_modal);
+                        if (document.URL.split("/")[7] != undefined) {
+                            if (usernote_modal_struct.childNodes.length < 3) {
+                                usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes.item(1).textContent = "(Fast wrtn) 자동요약기능을 활용해 글자수를 절약해보세요! 업데이트는 가끔씩 해주시는게 좋아요!"
+                                fetch(`https://api2.wrtn.ai/terry/api/v2/chat-room/${document.URL.split("/")[7].split("?")[0]}`, {
+                                    method: "GET",
+                                    headers: {
+                                        "Authorization": `Bearer ${getCookie("access_token")}`,
+                                    }
+                                }).then(res => res.json()).then(data => {
+                                    usernote_modal_textarea.value = data.data.character.userNote.content;
+                                })
+                                /*
+                                textarea의 내부값을 수정해도 적용이 안되는 문제가 있어서
+                                모달 팝업 내의 모든 버튼 이벤트 리스너를 바꿔버림
+                                기능이 정상작동 가능하도록
+                                 */
+                                var auto_summation_characterChatId = "6787aecf65c02321daf25b0d"; // 자동요약기능을 수행할 캐챗 id
+                                const usernote_modal_btn_c = usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[2].childNodes.item(0); //닫기 버튼 형식
+                                const usernote_modal_btn_x = usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[0].childNodes.item(1); //x 버튼 형식
+                                const usernote_modal_x = usernote_modal_btn_x.cloneNode(true); // x 버튼 형식을 기반으로 버튼을 새로 만듦
+                                const usernote_modal_btn = usernote_modal_btn_c.cloneNode(true); // 닫기 버튼 형식 기반으로 버튼을 새로만듬
+                                const usernote_modal_textarea = usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes.item(1); //textarea
+                                const usernote_modal_apply_btn_struct = usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[2].childNodes.item(1); // 수정 버튼 형식
+                                /*
+                                닫기 버튼 기반으로 새로운 수정 버튼을 만드는 이유는 수정버튼을 기존 수정버튼 형식으로 만들시 이벤트 리스너가 적용되지 않는 문제가 있음
+                                수정 버튼을 누르고 모달팝업이 사라진후 유저노트의 이벤트 리스너가 사라지는 기이한 현상이 생김 그래서
+                                수정 버튼을 한번 누르고 난 후에는 유저노트에 모달팝업을 띄워주는 이벤트 리스너를 넣음
+                                그래서 모달팝업의 모든 버튼 이벤트는 확장프로그램이 제어하게 설정함
+                                 */
+                                const usernote_modal_apply_btn = usernote_modal_btn.cloneNode(true); //닫기 버튼 형식 기반으로 수정 버튼을 새로만듦
+                                const usernote_modal_update_btn = usernote_modal_btn.cloneNode(true); //닫기 버튼 형식 기반으로 업데이트 버튼을 만듦
+                                const usernote_modal_new_close_btn = usernote_modal_btn.cloneNode(true); //닫기 버튼형식으로 새로운 닫기버튼을 만듦
+                                var modal = document.getElementById("web-modal"); //모달 팝업을 가져옴
+                                var usernote = document.getElementsByClassName("css-uxwch2").item(0).childNodes.item(0); //유저노트를 가져옴
+                                //메뉴속 유저노트 버튼을 누를시 모달팝업을 띄워주는 함수
+                                function after_usernote_event() {
+                                    {
+                                        modal.appendChild(usernote_modal);
+                                        fetch(`https://api2.wrtn.ai/terry/api/v2/chat-room/${document.URL.split("/")[7].split("?")[0]}`, {
+                                            method: "GET",
+                                            headers: {
+                                                "Authorization": `Bearer ${getCookie("access_token")}`,
+                                            }
+                                        }).then(res => res.json()).then(data => {
+                                            usernote_modal_textarea.value = data.data.character.userNote.content;
+                                        })
+                                    }
                                 }
-                            }
-                            //css 수동 동기화 (닫기 버튼을 수정버튼으로 만들기 위함)
-                            usernote_modal_apply_btn.removeAttribute("class");
-                            usernote_modal_apply_btn.setAttribute("style","    border-radius: 5px;\n" +
-                                "    -webkit-box-pack: center;\n" +
-                                "    justify-content: center;\n" +
-                                "    -webkit-box-align: center;\n" +
-                                "    align-items: center;\n" +
-                                "    display: flex;\n" +
-                                "    flex-direction: row;\n" +
-                                "    gap: 8px;\n" +
-                                "    width: fit-content;\n" +
-                                "    border: 1px solid transparent;\n" +
-                                "    padding: 0px 20px;\n" +
-                                "    height: 40px;\n" +
-                                "    background-color: var(--color_surface_primary);\n" +
-                                "    color: var(--color_text_ivory);\n" +
-                                "    font-size: 16px;\n" +
-                                "    line-height: 100%;\n" +
-                                "    font-weight: 600;\n" +
-                                "    cursor: pointer;");
-                            //수정 버튼을 누를시
-                            usernote_modal_apply_btn.addEventListener('click',()=>{
-                                //해당 채팅방에 할당된 유저노트의 값을 api로 변경
-                                if (document.URL.split("/")[7] == undefined){
-                                    alert("새 채팅방에서는 불가능한 기능입니다. 진행중인 채팅방에서만 사용 가능해요 (업데이트 예정)")
-                                }
-                                else
-                                {
-                                    putAfetch(`https://william.wow.wrtn.ai/chat-room/${document.URL.split("/")[7].split("?")[0]}`,{
-                                        userNote:{"content":usernote_modal_textarea.value}
+
+                                //css 수동 동기화 (닫기 버튼을 수정버튼으로 만들기 위함)
+                                usernote_modal_apply_btn.removeAttribute("class");
+                                usernote_modal_apply_btn.setAttribute("style", "    border-radius: 5px;\n" +
+                                    "    -webkit-box-pack: center;\n" +
+                                    "    justify-content: center;\n" +
+                                    "    -webkit-box-align: center;\n" +
+                                    "    align-items: center;\n" +
+                                    "    display: flex;\n" +
+                                    "    flex-direction: row;\n" +
+                                    "    gap: 8px;\n" +
+                                    "    width: fit-content;\n" +
+                                    "    border: 1px solid transparent;\n" +
+                                    "    padding: 0px 20px;\n" +
+                                    "    height: 40px;\n" +
+                                    "    background-color: var(--color_surface_primary);\n" +
+                                    "    color: var(--color_text_ivory);\n" +
+                                    "    font-size: 16px;\n" +
+                                    "    line-height: 100%;\n" +
+                                    "    font-weight: 600;\n" +
+                                    "    cursor: pointer;");
+                                //수정 버튼을 누를시
+                                usernote_modal_apply_btn.addEventListener('click', () => {
+                                    //해당 채팅방에 할당된 유저노트의 값을 api로 변경
+                                    putAfetch(`https://william.wow.wrtn.ai/chat-room/${document.URL.split("/")[7].split("?")[0]}`, {
+                                        userNote: {"content": usernote_modal_textarea.value}
                                     })
                                     //메뉴의 유저노트 버튼에 이벤트 리스너 삽입
-                                    usernote.removeEventListener('click',after_usernote_event);
-                                    usernote.addEventListener('click',after_usernote_event);
+                                    usernote.removeEventListener('click', after_usernote_event);
+                                    usernote.addEventListener('click', after_usernote_event);
                                     modal.childNodes.item(0).remove(); //모달 팝업 닫기
                                     alert("유저노트에 반영되었습니다!");
-                                }
-                            })
-                            //닫기 버튼 누를시
-                            usernote_modal_new_close_btn.addEventListener('click',()=>{
-                                //메뉴의 유저노트 버튼에 이벤트 리스너 삽입
-                                usernote.removeEventListener('click',after_usernote_event);
-                                usernote.addEventListener('click',after_usernote_event);
-                                modal.childNodes.item(0).remove(); //모달 팝업 닫기
-                            })
-                            //x 버튼 누를시
-                            usernote_modal_x.addEventListener('click',()=>{
-                                //메뉴의 유저노트 버튼에 이벤트 리스너 삽입
-                                usernote.removeEventListener('click',after_usernote_event);
-                                usernote.addEventListener('click',after_usernote_event);
-                                modal.childNodes.item(0).remove(); //모달 팝업 닫기
-                            })
-                            usernote_modal_apply_btn.childNodes.item(0).textContent = "수정"; //버튼 이름을 변경
-                            //자동생성 버튼을 누를시
-                            usernote_modal_btn.addEventListener('click',()=>{
-                                /* 작동방식
-                                설정해둔 자동요약을 수행할 캐챗 id이랑 연동이 가능하도록 방을 만듦
-                                그리고 생성버튼을 누를시 요약할 유저노트내용을 textarea에서 가져온 후 캐챗에게 전송
-                                캐챗에게 응답을 받아온 후 그걸 다시 textarea에 기입하는 방식
-                                로컬스토리지에는 판 방의 id가 저장됨 그렇게 안하면 매번 방을 파서 보내야 하잖음
-                                업데이트 버튼은 캐챗이 업데이트 됬을경우 그걸 적용하기 위해서
-                                기존의 방을 버리고 새방을 파서 그 방의 id를 로컬 스토리지에 저장함
-                                 */
-                                //처음 사용하면 로컬스토리지에 chatid가 없을꺼니 추가하기위해 판별하는 조건문
-                                if (localStorage.getItem("usernote") == null) {
-                                    // auto_summation_characterChatId의 캐챗방을 팜
+                                })
+                                //닫기 버튼 누를시
+                                usernote_modal_new_close_btn.addEventListener('click', () => {
+                                    //메뉴의 유저노트 버튼에 이벤트 리스너 삽입
+                                    usernote.removeEventListener('click', after_usernote_event);
+                                    usernote.addEventListener('click', after_usernote_event);
+                                    modal.childNodes.item(0).remove(); //모달 팝업 닫기
+                                })
+                                //x 버튼 누를시
+                                usernote_modal_x.addEventListener('click', () => {
+                                    //메뉴의 유저노트 버튼에 이벤트 리스너 삽입
+                                    usernote.removeEventListener('click', after_usernote_event);
+                                    usernote.addEventListener('click', after_usernote_event);
+                                    modal.childNodes.item(0).remove(); //모달 팝업 닫기
+                                })
+                                usernote_modal_apply_btn.childNodes.item(0).textContent = "수정"; //버튼 이름을 변경
+                                //자동생성 버튼을 누를시
+                                usernote_modal_btn.addEventListener('click', () => {
+                                    /* 작동방식
+                                    설정해둔 자동요약을 수행할 캐챗 id이랑 연동이 가능하도록 방을 만듦
+                                    그리고 생성버튼을 누를시 요약할 유저노트내용을 textarea에서 가져온 후 캐챗에게 전송
+                                    캐챗에게 응답을 받아온 후 그걸 다시 textarea에 기입하는 방식
+                                    로컬스토리지에는 판 방의 id가 저장됨 그렇게 안하면 매번 방을 파서 보내야 하잖음
+                                    업데이트 버튼은 캐챗이 업데이트 됬을경우 그걸 적용하기 위해서
+                                    기존의 방을 버리고 새방을 파서 그 방의 id를 로컬 스토리지에 저장함
+                                     */
+                                    //처음 사용하면 로컬스토리지에 chatid가 없을꺼니 추가하기위해 판별하는 조건문
+                                    if (localStorage.getItem("usernote") == null) {
+                                        // auto_summation_characterChatId의 캐챗방을 팜
+                                        var created_chatId = JSON.parse(postAfetch("https://api.wrtn.ai/be/chat", {
+                                            unitId: auto_summation_characterChatId,
+                                            type: "character",
+                                            userNote: {"content": usernote_modal_textarea.textContent}
+                                        })).data._id;
+                                        //로컬스토리지에 판 방의 id를 저장
+                                        localStorage.setItem("usernote", created_chatId);
+                                        //메세지를 보냄
+                                        var created_msg = JSON.parse(postAfetch(`https://api2.wrtn.ai/terry/characters/chat/${created_chatId}/message`, {
+                                            message: usernote_modal_textarea.textContent,
+                                            reroll: false,
+                                            images: [],
+                                            isSuperMode: false
+                                        })).data;
+                                        getAfetch(`https://api2.wrtn.ai/terry/characters/chat/${created_chatId}/message/${created_msg}`);
+                                        var res_msg = JSON.parse(getAfetch(`https://api2.wrtn.ai/terry/characters/chat/${created_chatId}/message/${created_msg}/result`)).data.content;
+                                        usernote_modal_textarea.value = res_msg; //textarea에 값을 반영
+                                    } else {
+                                        var created_chatId = localStorage.getItem("usernote"); //이미 파진 채팅방을 가져옴
+                                        //그 방에 textarea값 즉 요약할 유저노트내용을 보냄
+                                        var created_msg = JSON.parse(postAfetch(`https://api2.wrtn.ai/terry/characters/chat/${created_chatId}/message`, {
+                                            message: usernote_modal_textarea.textContent,
+                                            reroll: false,
+                                            images: [],
+                                            isSuperMode: false
+                                        })).data;
+                                        getAfetch(`https://api2.wrtn.ai/terry/characters/chat/${created_chatId}/message/${created_msg}`);
+                                        var res_msg = JSON.parse(getAfetch(`https://api2.wrtn.ai/terry/characters/chat/${created_chatId}/message/${created_msg}/result`)).data.content;
+                                        usernote_modal_textarea.value = res_msg; //textarea에 값을 반영
+                                    }
+                                })
+                                usernote_modal_update_btn.addEventListener('click', () => {
+                                    //새로운 방을 팜
                                     var created_chatId = JSON.parse(postAfetch("https://api.wrtn.ai/be/chat", {
                                         unitId: auto_summation_characterChatId,
                                         type: "character",
-                                        userNote: {"content": usernote_modal_textarea.textContent}
+                                        userNote: {"content": ""}
                                     })).data._id;
-                                    //로컬스토리지에 판 방의 id를 저장
-                                    localStorage.setItem("usernote", created_chatId);
-                                    //메세지를 보냄
-                                    var created_msg = JSON.parse(postAfetch(`https://api2.wrtn.ai/terry/characters/chat/${created_chatId}/message`, {
-                                        message: usernote_modal_textarea.textContent,
-                                        reroll: false,
-                                        images: [],
-                                        isSuperMode: false
-                                    })).data;
-                                    getAfetch(`https://api2.wrtn.ai/terry/characters/chat/${created_chatId}/message/${created_msg}`);
-                                    var res_msg = JSON.parse(getAfetch(`https://api2.wrtn.ai/terry/characters/chat/${created_chatId}/message/${created_msg}/result`)).data.content;
-                                    usernote_modal_textarea.value = res_msg; //textarea에 값을 반영
-                                }
-                                else{
-                                    var created_chatId = localStorage.getItem("usernote"); //이미 파진 채팅방을 가져옴
-                                    //그 방에 textarea값 즉 요약할 유저노트내용을 보냄
-                                    var created_msg = JSON.parse(postAfetch(`https://api2.wrtn.ai/terry/characters/chat/${created_chatId}/message`, {
-                                        message: usernote_modal_textarea.textContent,
-                                        reroll: false,
-                                        images: [],
-                                        isSuperMode: false
-                                    })).data;
-                                    getAfetch(`https://api2.wrtn.ai/terry/characters/chat/${created_chatId}/message/${created_msg}`);
-                                    var res_msg = JSON.parse(getAfetch(`https://api2.wrtn.ai/terry/characters/chat/${created_chatId}/message/${created_msg}/result`)).data.content;
-                                    usernote_modal_textarea.value = res_msg; //textarea에 값을 반영
-                                }
-                            })
-                            usernote_modal_update_btn.addEventListener('click',()=>{
-                                //새로운 방을 팜
-                                var created_chatId = JSON.parse(postAfetch("https://api.wrtn.ai/be/chat", {
-                                    unitId: auto_summation_characterChatId,
-                                    type: "character",
-                                    userNote: {"content": ""}
-                                })).data._id;
-                                localStorage.setItem("usernote", created_chatId); //스토리지에 방 id 저장
-                                alert("업데이트 되었습니다! (채팅방 확인)");
-                            })
-                            /*
-                            밑의 코드는 기존 버튼들을 삭제후 새로운 버튼으로 대체하는 내용임
-                             */
-                            usernote_modal_btn_c.remove();
-                            usernote_modal_apply_btn_struct.remove();
-                            usernote_modal_btn_x.remove();
-                            usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes.item(0).appendChild(usernote_modal_x);
-                            usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes.item(2).appendChild(usernote_modal_new_close_btn);
-                            usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes.item(2).appendChild(usernote_modal_apply_btn);
-                            usernote_modal_btn.childNodes.item(0).textContent = "자동요약";
-                            usernote_modal_update_btn.childNodes.item(0).textContent = "업데이트";
-                            usernote_modal_struct.appendChild(usernote_modal_update_btn);
-                            usernote_modal_struct.appendChild(usernote_modal_btn);
+                                    localStorage.setItem("usernote", created_chatId); //스토리지에 방 id 저장
+                                    alert("업데이트 되었습니다! (채팅방 확인)");
+                                })
+                                /*
+                                밑의 코드는 기존 버튼들을 삭제후 새로운 버튼으로 대체하는 내용임
+                                 */
+                                usernote_modal_btn_c.remove();
+                                usernote_modal_apply_btn_struct.remove();
+                                usernote_modal_btn_x.remove();
+                                usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes.item(0).appendChild(usernote_modal_x);
+                                usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes.item(2).appendChild(usernote_modal_new_close_btn);
+                                usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes.item(2).appendChild(usernote_modal_apply_btn);
+                                usernote_modal_btn.childNodes.item(0).textContent = "자동요약";
+                                usernote_modal_update_btn.childNodes.item(0).textContent = "업데이트";
+                                usernote_modal_struct.appendChild(usernote_modal_update_btn);
+                                usernote_modal_struct.appendChild(usernote_modal_btn);
+                            }
+                        }
+                        else{
+                            var e = usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes.item(1);
+                            if (e.textContent == "캐릭터가 이 채팅방에서 반드시 기억해 줬으면 하는 내용을 적어주세요"){
+                                e.textContent = "(Fast wrtn) 유저노트 요약기능은 새로운 캐챗이 아닌 진행중인 캐챗에서만 적용됩니다."
+                            }
                         }
                     }
                 }
