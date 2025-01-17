@@ -14,5 +14,8 @@
         "48": "icon-32x32.png",
         "64": "icon-64x64.png",
         "128": "icon-128x128.png"
+    },
+    "action": {
+        "default_popup": "popup.html"
     }
 }
