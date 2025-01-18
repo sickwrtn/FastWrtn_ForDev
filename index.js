@@ -15,7 +15,150 @@
 파이참 에디터로 코딩하는데 무료체험판 끝나니까 결제하라고 계속 알림 띄워주네요...
 저도 후원 받는게 부끄럽고 죄송스럽긴 하지만 부탁드립니다!
 */
-
+var recommand_prompt_html = "<button display=\"flex\" width=\"fit-content\" height=\"34px\" color=\"$color_text_primary\" style=\"    border-radius: 5px;\n" +
+                                "    -webkit-box-pack: center;\n" +
+                                "    justify-content: center;\n" +
+                                "    -webkit-box-align: center;\n" +
+                                "    align-items: center;\n" +
+                                "    display: flex;\n" +
+                                "    flex-direction: row;\n" +
+                                "    gap: 8px;\n" +
+                                "    width: fit-content;\n" +
+                                "    border-width: 1px;\n" +
+                                "    border-style: solid;\n" +
+                                "    border-image: initial;\n" +
+                                "    padding: 0px 12px;\n" +
+                                "    height: 34px;\n" +
+                                "    background-color: var(--color_bg_screen);\n" +
+                                "    color: var(--color_text_primary);\n" +
+                                "    border-color: var(--color_outline_secondary);\n" +
+                                "    font-size: 14px;\n" +
+                                "    line-height: 100%;\n" +
+                                "    font-weight: 600;\n" +
+                                "    cursor: pointer;\"><div display=\"flex\" style=\"    display: -webkit-box;\n" +
+                                "    display: -webkit-flex;\n" +
+                                "    display: -ms-flexbox;\n" +
+                                "    display: flex;\n" +
+                                "    -webkit-flex-direction: row;\n" +
+                                "    -ms-flex-direction: row;\n" +
+                                "    flex-direction: row;\n" +
+                                "    row-gap: 8px;\n" +
+                                "    -webkit-column-gap: 8px;\n" +
+                                "    column-gap: 8px;\n" +
+                                "    -webkit-align-items: center;\n" +
+                                "    -webkit-box-align: center;\n" +
+                                "    -ms-flex-align: center;\n" +
+                                "    align-items: center;\">+</div></button>";
+var persona_modal_html = "<div style=\"position: fixed; inset: 0px; z-index: -1; background-color: var(--color_bg_dimmed); cursor: default;\"><div style=\"align-items: flex-end; width: 100%; height: 100%; display: flex; -webkit-box-align: center; align-items: center; -webkit-box-pack: center; justify-content: center; position: relative;\"><div width=\"100%\" display=\"flex\" style=\"    width: 600px;\n" +
+                                        "    max-width: calc(100% - 40px);\n" +
+                                        "    background-color: var(--color_surface_elevated);\n" +
+                                        "    max-height: 90dvh;\n" +
+                                        "    overflow-y: auto;\n" +
+                                        "    z-index: 15;\n" +
+                                        "    border-width: initial;\n" +
+                                        "    border-style: none;\n" +
+                                        "    border-image: initial;\n" +
+                                        "    border-color: var(--color_outline_secondary);\n" +
+                                        "    border-radius: 12px;\n" +
+                                        "    box-shadow: none;\n" +
+                                        "    display: flex;\n" +
+                                        "    flex-direction: column;\"><div display=\"flex\" style=\"    display: flex;\n" +
+                                        "    flex-direction: column;\n" +
+                                        "    -webkit-box-align: center;\n" +
+                                        "    align-items: center;\n" +
+                                        "    text-align: center;\"><div display=\"flex\" width=\"100%\" style=\"    display: flex;\n" +
+                                        "    flex-direction: row;\n" +
+                                        "    padding: 20px 24px;\n" +
+                                        "    -webkit-box-align: center;\n" +
+                                        "    align-items: center;\n" +
+                                        "    -webkit-box-pack: justify;\n" +
+                                        "    justify-content: space-between;\n" +
+                                        "    width: 100%;\n" +
+                                        "    border-bottom: 1px solid rgb(97, 96, 90);\"><p color=\"$color_text_primary\" style=\"    color: var(--color_text_primary);\n" +
+                                        "    font-size: 20px;\n" +
+                                        "    line-height: 100%;\n" +
+                                        "    font-weight: 600;\">페르소나 수정</p><svg width=\"26\" height=\"26\" viewBox=\"0 0 24 25\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\" color=\"#a8a69dff\" cursor=\"pointer\" id=\"W_x\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M12 11.0228L7.05026 6.07305L5.63604 7.48726L10.5858 12.437L5.63604 17.3868L7.05026 18.801L12 13.8512L16.9498 18.801L18.364 17.3868L13.4142 12.437L18.364 7.48726L16.9498 6.07305L12 11.0228Z\" fill=\"currentColor\"></path></svg></div><div display=\"flex\" width=\"100%\" style=\"    display: flex;\n" +
+                                        "    flex-direction: column;\n" +
+                                        "    padding: 20px;\n" +
+                                        "    width: 100%;\n" +
+                                        "    gap: 12px;\"><div display=\"flex\" style=\"    display: flex;\n" +
+                                        "    flex-direction: column;\n" +
+                                        "    gap: 8px;\"><p color=\"$color_text_primary\" style=\"    color: var(--color_text_primary);\n" +
+                                        "    text-align: left;\n" +
+                                        "    font-size: 16px;\n" +
+                                        "    line-height: 100%;\n" +
+                                        "    font-weight: 600;\">이름</p></div><textarea height=\"26px\" maxlength=\"12\" color=\"$color_text_primary\" placeholder=\"잊으면 안되는 중요한 내용, 추가하고 싶은 설정 등\" rows=\"5\" wrap=\"hard\" style=\"color: var(--color_text_primary);height: 26px; border-radius: 5px; border-width: 1px; border-style: solid; border-image: initial; border-color: var(--color_outline_secondary); background-color: var(--color_surface_ivory); padding: 11px 16px; min-height: 50px; max-height: 386px; font-size: 16px; line-height: 160%; font-weight: 500; resize: none; outline: none; caret-color: var(--color_text_brand);\" class=\"css-wmzh35\" id=\"W_name\"></textarea><div display=\"flex\" style=\"    display: flex;\n" +
+                                        "    flex-direction: column;\n" +
+                                        "    gap: 8px;\"><p color=\"$color_text_primary\" style=\"    color: var(--color_text_primary);\n" +
+                                        "    text-align: left;\n" +
+                                        "    font-size: 16px;\n" +
+                                        "    line-height: 100%;\n" +
+                                        "    font-weight: 600;\">정보</p></div><textarea height=\"26px\" maxlength=\"100\" placeholder=\"잊으면 안되는 중요한 내용, 추가하고 싶은 설정 등\" rows=\"5\" wrap=\"hard\" style=\"color: var(--color_text_primary);height: 26px; border-radius: 5px; border-width: 1px; border-style: solid; border-image: initial; border-color: var(--color_outline_secondary); background-color: var(--color_surface_ivory); padding: 11px 16px; min-height: 100px; max-height: 386px; font-size: 16px; line-height: 160%; font-weight: 500; resize: none; outline: none; caret-color: var(--color_text_brand);\" color=\"$color_text_primary\" class=\"css-wmzh35\" id=\"W_info\"></textarea></div><div display=\"flex\" width=\"100%\" style=\"    display: flex;\n" +
+                                        "    flex-direction: row;\n" +
+                                        "    width: 100%;\n" +
+                                        "    -webkit-box-pack: end;\n" +
+                                        "    justify-content: flex-end;\n" +
+                                        "    gap: 8px;\n" +
+                                        "    padding: 12px 20px 20px;\"><button display=\"flex\" width=\"100%\" height=\"40px\" color=\"$color_text_primary\" id=\"W_close\" style=\"    border-radius: 5px;\n" +
+                                        "    -webkit-box-pack: center;\n" +
+                                        "    justify-content: center;\n" +
+                                        "    -webkit-box-align: center;\n" +
+                                        "    align-items: center;\n" +
+                                        "    display: flex;\n" +
+                                        "    flex-direction: row;\n" +
+                                        "    gap: 8px;\n" +
+                                        "    width: 100%;\n" +
+                                        "    border: 1px solid transparent;\n" +
+                                        "    padding: 0px 20px;\n" +
+                                        "    height: 40px;\n" +
+                                        "    background-color: var(--color_surface_tertiary);\n" +
+                                        "    color: var(--color_text_primary);\n" +
+                                        "    font-size: 16px;\n" +
+                                        "    line-height: 100%;\n" +
+                                        "    font-weight: 600;\n" +
+                                        "    cursor: pointer;\"><div display=\"flex\" style=\"    display: flex;\n" +
+                                        "    flex-direction: row;\n" +
+                                        "    gap: 8px;\n" +
+                                        "    -webkit-box-align: center;\n" +
+                                        "    align-items: center;\">닫기</div></button><button display=\"flex\" width=\"100%\" height=\"40px\" color=\"$color_text_ivory\" id=\"W_sumbit\" style=\"    border-radius: 5px;\n" +
+                                        "    -webkit-box-pack: center;\n" +
+                                        "    justify-content: center;\n" +
+                                        "    -webkit-box-align: center;\n" +
+                                        "    align-items: center;\n" +
+                                        "    display: flex;\n" +
+                                        "    flex-direction: row;\n" +
+                                        "    gap: 8px;\n" +
+                                        "    width: 100%;\n" +
+                                        "    border: 1px solid transparent;\n" +
+                                        "    padding: 0px 20px;\n" +
+                                        "    height: 40px;\n" +
+                                        "    background-color: var(--color_surface_primary);\n" +
+                                        "    color: var(--color_text_ivory);\n" +
+                                        "    font-size: 16px;\n" +
+                                        "    line-height: 100%;\n" +
+                                        "    font-weight: 600;\n" +
+                                        "    cursor: pointer;\"><div display=\"flex\" style=\"    display: flex;\n" +
+                                        "    flex-direction: row;\n" +
+                                        "    gap: 8px;\n" +
+                                        "    -webkit-box-align: center;\n" +
+                                        "    align-items: center;\">등록</div></button></div></div></div></div></div>";
+var feed_front_html_scroll = "<button width=\"36px\" height=\"36px\" display=\"flex\" style=\"    position: absolute;\n" +
+                "    left: 0px;\n" +
+                "    top: 60px;\n" +
+                "    border-radius: 50%;\n" +
+                "    border-width: 1px;\n" +
+                "    border-style: solid;\n" +
+                "    border-image: initial;\n" +
+                "    border-color: var(--color_outline_secondary);\n" +
+                "    width: 36px;\n" +
+                "    height: 36px;\n" +
+                "    display: flex;\n" +
+                "    -webkit-box-pack: center;\n" +
+                "    justify-content: center;\n" +
+                "    -webkit-box-align: center;\n" +
+                "    align-items: center;\n" +
+                "    background-color: var(--color_surface_tertiary);\n" +
+                "    z-index: 3;\"><svg width=\"24\" height=\"24\" viewBox=\"0 0 25 25\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\" color=\"#a8a69dff\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M14.5 18.801L9.55026 13.8512L9.19671 13.4977C8.61092 12.9119 8.61092 11.9621 9.19671 11.3764L9.55026 11.0228L14.5 6.07305L15.9142 7.48726L10.9645 12.437L15.9142 17.3868L14.5 18.801Z\" fill=\"currentColor\"></path></svg></button>";
 var plus_modal_front_html_IsAudlt = "<div display=\"flex\" style=\"    display: flex;\n" +
     "    flex-direction: row;\n" +
     "    padding: 4px 6px;\n" +
@@ -30,7 +173,7 @@ var plus_modal_front_html_IsAudlt = "<div display=\"flex\" style=\"    display: 
     "    background-color: var(--color_surface_elevated);\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 16 16\" fill=\"none\"><mask id=\"mask0_8669_146020\" maskUnits=\"userSpaceOnUse\" x=\"0\" y=\"0\" width=\"16\" height=\"16\" style=\"mask-type: alpha;\"><rect width=\"16\" height=\"16\" fill=\"#D9D9D9\"></rect></mask><g mask=\"url(#mask0_8669_146020)\"><path d=\"M7.9974 8.66732C8.64184 8.66732 9.19184 8.43954 9.6474 7.98398C10.103 7.52843 10.3307 6.97843 10.3307 6.33398C10.3307 5.68954 10.103 5.13954 9.6474 4.68398C9.19184 4.22843 8.64184 4.00065 7.9974 4.00065C7.35295 4.00065 6.80295 4.22843 6.3474 4.68398C5.89184 5.13954 5.66406 5.68954 5.66406 6.33398C5.66406 6.97843 5.89184 7.52843 6.3474 7.98398C6.80295 8.43954 7.35295 8.66732 7.9974 8.66732ZM7.9974 14.6673C6.37517 14.2562 5.08073 13.3673 4.11406 12.0007C3.1474 10.634 2.66406 9.10065 2.66406 7.40065V3.33398L7.9974 1.33398L13.3307 3.33398V7.40065C13.3307 9.10065 12.8474 10.634 11.8807 12.0007C10.9141 13.3673 9.61962 14.2562 7.9974 14.6673ZM7.9974 13.2673C8.65295 13.0562 9.23351 12.7257 9.73906 12.2757C10.2446 11.8257 10.6863 11.3173 11.0641 10.7507C10.5863 10.5062 10.0891 10.3201 9.5724 10.1923C9.05573 10.0645 8.53073 10.0007 7.9974 10.0007C7.46406 10.0007 6.93906 10.0645 6.4224 10.1923C5.90573 10.3201 5.40851 10.5062 4.93073 10.7507C5.30851 11.3173 5.75017 11.8257 6.25573 12.2757C6.76129 12.7257 7.34184 13.0562 7.9974 13.2673Z\" fill=\"#FA816B\"></path></g></svg><p color=\"$color_text_secondary\" style=\"    color: var(--color_text_secondary);\n" +
     "    font-size: 14px;\n" +
     "    line-height: 100%;\n" +
-    "    font-weight: 500;\">언세이프티</p></div>"
+    "    font-weight: 500;\">언세이프티</p></div>";
 var plus_modal_front_html = "<div style=\"    position: fixed;\n" +
     "    inset: 0px;\n" +
     "    z-index: -1;\n" +
@@ -337,7 +480,7 @@ var plus_modal_front_html = "<div style=\"    position: fixed;\n" +
     "    -webkit-align-items: center;\n" +
     "    -webkit-box-align: center;\n" +
     "    -ms-flex-align: center;\n" +
-    "    align-items: center;\">대화하기</div></button></div></div></div></div>"
+    "    align-items: center;\">대화하기</div></button></div></div></div></div>";
 //real-time apply
 var lastest = "";
 setInterval(()=>{
@@ -495,23 +638,7 @@ function main(){
                 "    left: -1px;\n" +
                 "    z-index: 2;\n" +
                 "    background: linear-gradient(90deg, rgb(26, 25, 24) 0%, rgba(26, 25, 24, 0) 100%);");
-            feed_struct_scroll_btn_l.innerHTML = "<button width=\"36px\" height=\"36px\" display=\"flex\" style=\"    position: absolute;\n" +
-                "    left: 0px;\n" +
-                "    top: 60px;\n" +
-                "    border-radius: 50%;\n" +
-                "    border-width: 1px;\n" +
-                "    border-style: solid;\n" +
-                "    border-image: initial;\n" +
-                "    border-color: var(--color_outline_secondary);\n" +
-                "    width: 36px;\n" +
-                "    height: 36px;\n" +
-                "    display: flex;\n" +
-                "    -webkit-box-pack: center;\n" +
-                "    justify-content: center;\n" +
-                "    -webkit-box-align: center;\n" +
-                "    align-items: center;\n" +
-                "    background-color: var(--color_surface_tertiary);\n" +
-                "    z-index: 3;\"><svg width=\"24\" height=\"24\" viewBox=\"0 0 25 25\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\" color=\"#a8a69dff\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M14.5 18.801L9.55026 13.8512L9.19671 13.4977C8.61092 12.9119 8.61092 11.9621 9.19671 11.3764L9.55026 11.0228L14.5 6.07305L15.9142 7.48726L10.9645 12.437L15.9142 17.3868L14.5 18.801Z\" fill=\"currentColor\"></path></svg></button>"
+            feed_struct_scroll_btn_l.innerHTML = feed_front_html_scroll;
             const feed_struct_six = feed_struct.childNodes[1].childNodes.item(0); // < 버튼.
             var scroll_all_amount = 300 // <  > 누를시 이동할 스크롤 양
             var scroll_amount = 10; // 끊어서 스크롤 되는 양
@@ -770,23 +897,7 @@ function main(){
                 "    left: -1px;\n" +
                 "    z-index: 2;\n" +
                 "    background: linear-gradient(90deg, rgb(26, 25, 24) 0%, rgba(26, 25, 24, 0) 100%);");
-            feed_struct_scroll_btn_l.innerHTML = "<button width=\"36px\" height=\"36px\" display=\"flex\" style=\"    position: absolute;\n" +
-                "    left: 0px;\n" +
-                "    top: 60px;\n" +
-                "    border-radius: 50%;\n" +
-                "    border-width: 1px;\n" +
-                "    border-style: solid;\n" +
-                "    border-image: initial;\n" +
-                "    border-color: var(--color_outline_secondary);\n" +
-                "    width: 36px;\n" +
-                "    height: 36px;\n" +
-                "    display: flex;\n" +
-                "    -webkit-box-pack: center;\n" +
-                "    justify-content: center;\n" +
-                "    -webkit-box-align: center;\n" +
-                "    align-items: center;\n" +
-                "    background-color: var(--color_surface_tertiary);\n" +
-                "    z-index: 3;\"><svg width=\"24\" height=\"24\" viewBox=\"0 0 25 25\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\" color=\"#a8a69dff\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M14.5 18.801L9.55026 13.8512L9.19671 13.4977C8.61092 12.9119 8.61092 11.9621 9.19671 11.3764L9.55026 11.0228L14.5 6.07305L15.9142 7.48726L10.9645 12.437L15.9142 17.3868L14.5 18.801Z\" fill=\"currentColor\"></path></svg></button>"
+            feed_struct_scroll_btn_l.innerHTML = feed_front_html_scroll;
             const feed_struct_six = feed_struct.childNodes[1].childNodes.item(0); // < 버튼.
             var scroll_all_amount = 300 // <  > 누를시 이동할 스크롤 양
             var scroll_amount = 10; // 끊어서 스크롤 되는 양
@@ -1361,99 +1472,7 @@ function main(){
                                         m_i++;
                                     }
                                     var personaL_change_modal = document.createElement("modal");//페르소나 모달 팝업
-                                    personaL_change_modal.innerHTML = "<div style=\"position: fixed; inset: 0px; z-index: -1; background-color: var(--color_bg_dimmed); cursor: default;\"><div style=\"align-items: flex-end; width: 100%; height: 100%; display: flex; -webkit-box-align: center; align-items: center; -webkit-box-pack: center; justify-content: center; position: relative;\"><div width=\"100%\" display=\"flex\" style=\"    width: 600px;\n" +
-                                        "    max-width: calc(100% - 40px);\n" +
-                                        "    background-color: var(--color_surface_elevated);\n" +
-                                        "    max-height: 90dvh;\n" +
-                                        "    overflow-y: auto;\n" +
-                                        "    z-index: 15;\n" +
-                                        "    border-width: initial;\n" +
-                                        "    border-style: none;\n" +
-                                        "    border-image: initial;\n" +
-                                        "    border-color: var(--color_outline_secondary);\n" +
-                                        "    border-radius: 12px;\n" +
-                                        "    box-shadow: none;\n" +
-                                        "    display: flex;\n" +
-                                        "    flex-direction: column;\"><div display=\"flex\" style=\"    display: flex;\n" +
-                                        "    flex-direction: column;\n" +
-                                        "    -webkit-box-align: center;\n" +
-                                        "    align-items: center;\n" +
-                                        "    text-align: center;\"><div display=\"flex\" width=\"100%\" style=\"    display: flex;\n" +
-                                        "    flex-direction: row;\n" +
-                                        "    padding: 20px 24px;\n" +
-                                        "    -webkit-box-align: center;\n" +
-                                        "    align-items: center;\n" +
-                                        "    -webkit-box-pack: justify;\n" +
-                                        "    justify-content: space-between;\n" +
-                                        "    width: 100%;\n" +
-                                        "    border-bottom: 1px solid rgb(97, 96, 90);\"><p color=\"$color_text_primary\" style=\"    color: var(--color_text_primary);\n" +
-                                        "    font-size: 20px;\n" +
-                                        "    line-height: 100%;\n" +
-                                        "    font-weight: 600;\">페르소나 수정</p><svg width=\"26\" height=\"26\" viewBox=\"0 0 24 25\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\" color=\"#a8a69dff\" cursor=\"pointer\" id=\"W_x\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M12 11.0228L7.05026 6.07305L5.63604 7.48726L10.5858 12.437L5.63604 17.3868L7.05026 18.801L12 13.8512L16.9498 18.801L18.364 17.3868L13.4142 12.437L18.364 7.48726L16.9498 6.07305L12 11.0228Z\" fill=\"currentColor\"></path></svg></div><div display=\"flex\" width=\"100%\" style=\"    display: flex;\n" +
-                                        "    flex-direction: column;\n" +
-                                        "    padding: 20px;\n" +
-                                        "    width: 100%;\n" +
-                                        "    gap: 12px;\"><div display=\"flex\" style=\"    display: flex;\n" +
-                                        "    flex-direction: column;\n" +
-                                        "    gap: 8px;\"><p color=\"$color_text_primary\" style=\"    color: var(--color_text_primary);\n" +
-                                        "    text-align: left;\n" +
-                                        "    font-size: 16px;\n" +
-                                        "    line-height: 100%;\n" +
-                                        "    font-weight: 600;\">이름</p></div><textarea height=\"26px\" maxlength=\"12\" color=\"$color_text_primary\" placeholder=\"잊으면 안되는 중요한 내용, 추가하고 싶은 설정 등\" rows=\"5\" wrap=\"hard\" style=\"color: var(--color_text_primary);height: 26px; border-radius: 5px; border-width: 1px; border-style: solid; border-image: initial; border-color: var(--color_outline_secondary); background-color: var(--color_surface_ivory); padding: 11px 16px; min-height: 50px; max-height: 386px; font-size: 16px; line-height: 160%; font-weight: 500; resize: none; outline: none; caret-color: var(--color_text_brand);\" class=\"css-wmzh35\" id=\"W_name\"></textarea><div display=\"flex\" style=\"    display: flex;\n" +
-                                        "    flex-direction: column;\n" +
-                                        "    gap: 8px;\"><p color=\"$color_text_primary\" style=\"    color: var(--color_text_primary);\n" +
-                                        "    text-align: left;\n" +
-                                        "    font-size: 16px;\n" +
-                                        "    line-height: 100%;\n" +
-                                        "    font-weight: 600;\">정보</p></div><textarea height=\"26px\" maxlength=\"100\" placeholder=\"잊으면 안되는 중요한 내용, 추가하고 싶은 설정 등\" rows=\"5\" wrap=\"hard\" style=\"color: var(--color_text_primary);height: 26px; border-radius: 5px; border-width: 1px; border-style: solid; border-image: initial; border-color: var(--color_outline_secondary); background-color: var(--color_surface_ivory); padding: 11px 16px; min-height: 100px; max-height: 386px; font-size: 16px; line-height: 160%; font-weight: 500; resize: none; outline: none; caret-color: var(--color_text_brand);\" color=\"$color_text_primary\" class=\"css-wmzh35\" id=\"W_info\"></textarea></div><div display=\"flex\" width=\"100%\" style=\"    display: flex;\n" +
-                                        "    flex-direction: row;\n" +
-                                        "    width: 100%;\n" +
-                                        "    -webkit-box-pack: end;\n" +
-                                        "    justify-content: flex-end;\n" +
-                                        "    gap: 8px;\n" +
-                                        "    padding: 12px 20px 20px;\"><button display=\"flex\" width=\"100%\" height=\"40px\" color=\"$color_text_primary\" id=\"W_close\" style=\"    border-radius: 5px;\n" +
-                                        "    -webkit-box-pack: center;\n" +
-                                        "    justify-content: center;\n" +
-                                        "    -webkit-box-align: center;\n" +
-                                        "    align-items: center;\n" +
-                                        "    display: flex;\n" +
-                                        "    flex-direction: row;\n" +
-                                        "    gap: 8px;\n" +
-                                        "    width: 100%;\n" +
-                                        "    border: 1px solid transparent;\n" +
-                                        "    padding: 0px 20px;\n" +
-                                        "    height: 40px;\n" +
-                                        "    background-color: var(--color_surface_tertiary);\n" +
-                                        "    color: var(--color_text_primary);\n" +
-                                        "    font-size: 16px;\n" +
-                                        "    line-height: 100%;\n" +
-                                        "    font-weight: 600;\n" +
-                                        "    cursor: pointer;\"><div display=\"flex\" style=\"    display: flex;\n" +
-                                        "    flex-direction: row;\n" +
-                                        "    gap: 8px;\n" +
-                                        "    -webkit-box-align: center;\n" +
-                                        "    align-items: center;\">닫기</div></button><button display=\"flex\" width=\"100%\" height=\"40px\" color=\"$color_text_ivory\" id=\"W_sumbit\" style=\"    border-radius: 5px;\n" +
-                                        "    -webkit-box-pack: center;\n" +
-                                        "    justify-content: center;\n" +
-                                        "    -webkit-box-align: center;\n" +
-                                        "    align-items: center;\n" +
-                                        "    display: flex;\n" +
-                                        "    flex-direction: row;\n" +
-                                        "    gap: 8px;\n" +
-                                        "    width: 100%;\n" +
-                                        "    border: 1px solid transparent;\n" +
-                                        "    padding: 0px 20px;\n" +
-                                        "    height: 40px;\n" +
-                                        "    background-color: var(--color_surface_primary);\n" +
-                                        "    color: var(--color_text_ivory);\n" +
-                                        "    font-size: 16px;\n" +
-                                        "    line-height: 100%;\n" +
-                                        "    font-weight: 600;\n" +
-                                        "    cursor: pointer;\"><div display=\"flex\" style=\"    display: flex;\n" +
-                                        "    flex-direction: row;\n" +
-                                        "    gap: 8px;\n" +
-                                        "    -webkit-box-align: center;\n" +
-                                        "    align-items: center;\">등록</div></button></div></div></div></div></div>"
+                                    personaL_change_modal.innerHTML = persona_modal_html;
                                     personal_modal.setAttribute("style","position: relative !important;\n" +
                                         "    z-index: 11 !important;") //이게 있어야 모달이 작동함
                                     personal_modal.appendChild(personaL_change_modal.firstChild);
@@ -1813,40 +1832,7 @@ function main(){
                         //setting에 아무것도 적용안되있을시
                         if (setting != null && 4 > setting.childNodes.length){
                             var recommand_prompt_plus_btn = document.createElement("div"); //+버튼 (양식 겸용)
-                            recommand_prompt_plus_btn.innerHTML = "<button display=\"flex\" width=\"fit-content\" height=\"34px\" color=\"$color_text_primary\" style=\"    border-radius: 5px;\n" +
-                                "    -webkit-box-pack: center;\n" +
-                                "    justify-content: center;\n" +
-                                "    -webkit-box-align: center;\n" +
-                                "    align-items: center;\n" +
-                                "    display: flex;\n" +
-                                "    flex-direction: row;\n" +
-                                "    gap: 8px;\n" +
-                                "    width: fit-content;\n" +
-                                "    border-width: 1px;\n" +
-                                "    border-style: solid;\n" +
-                                "    border-image: initial;\n" +
-                                "    padding: 0px 12px;\n" +
-                                "    height: 34px;\n" +
-                                "    background-color: var(--color_bg_screen);\n" +
-                                "    color: var(--color_text_primary);\n" +
-                                "    border-color: var(--color_outline_secondary);\n" +
-                                "    font-size: 14px;\n" +
-                                "    line-height: 100%;\n" +
-                                "    font-weight: 600;\n" +
-                                "    cursor: pointer;\"><div display=\"flex\" style=\"    display: -webkit-box;\n" +
-                                "    display: -webkit-flex;\n" +
-                                "    display: -ms-flexbox;\n" +
-                                "    display: flex;\n" +
-                                "    -webkit-flex-direction: row;\n" +
-                                "    -ms-flex-direction: row;\n" +
-                                "    flex-direction: row;\n" +
-                                "    row-gap: 8px;\n" +
-                                "    -webkit-column-gap: 8px;\n" +
-                                "    column-gap: 8px;\n" +
-                                "    -webkit-align-items: center;\n" +
-                                "    -webkit-box-align: center;\n" +
-                                "    -ms-flex-align: center;\n" +
-                                "    align-items: center;\">+</div></button>";
+                            recommand_prompt_plus_btn.innerHTML = recommand_prompt_html;
                             const recommand_prompt_minus_btn = recommand_prompt_plus_btn.cloneNode(true); // - 버튼
                             var json_data = JSON.parse(localStorage.getItem("saved_prompt")); //localstorage에 저장된 프롬프트 들고오기
                             recommand_prompt_minus_btn.childNodes.item(0).textContent = "-";
