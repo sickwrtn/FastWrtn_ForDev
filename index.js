@@ -735,7 +735,12 @@ function main(){
                                     console.log("creater");
                                 }
                                 try {
-                                    fe.addEventListener("click", () => {
+                                    const fe_event_bar = fe.childNodes.item(0);
+                                    const fe_creator_event_bar = fe.childNodes.item(1);
+                                    fe_creator_event_bar.addEventListener('click',()=>{
+                                        window.location.href = `https://wrtn.ai/character/profile/${character_list_NoCe[fe.id].creator.wrtnUid}`;
+                                    })
+                                    fe_event_bar.addEventListener("click", () => {
                                         const isModal = document.getElementById("web-modal");
                                         if (isModal == null){
                                             const plus_modal = document.createElement("div");
@@ -994,7 +999,12 @@ function main(){
                                     console.log("creater");
                                 }
                                 try {
-                                    fe.addEventListener("click", () => {
+                                    const fe_event_bar = fe.childNodes.item(0);
+                                    const fe_creator_event_bar = fe.childNodes.item(1);
+                                    fe_creator_event_bar.addEventListener('click',()=>{
+                                        window.location.href = `https://wrtn.ai/character/profile/${character_list[fe.id].creator.wrtnUid}`;
+                                    })
+                                    fe_event_bar.addEventListener("click", () => {
                                         const isModal = document.getElementById("web-modal");
                                         if (isModal == null){
                                             const plus_modal = document.createElement("div");
