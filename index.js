@@ -15,6 +15,80 @@
 파이참 에디터로 코딩하는데 무료체험판 끝나니까 결제하라고 계속 알림 띄워주네요...
 저도 후원 받는게 부끄럽고 죄송스럽긴 하지만 부탁드립니다!
 */
+var plus_modal_date_and_comment = "<div display=\"flex\" width=\"100%\" style=\"    display: flex;\n" +
+    "    flex-direction: column;\n" +
+    "    width: 100%;\n" +
+    "    padding: 24px 20px;\n" +
+    "    gap: 24px;\n" +
+    "    border-top-width: 1px;\n" +
+    "    border-top-style: solid;\n" +
+    "    border-color: var(--color_divider_secondary);\"><div display=\"flex\" width=\"100%\" style=\"    display: flex;\n" +
+    "    flex-direction: column;\n" +
+    "    width: 100%;\n" +
+    "    gap: 16px;\"><p color=\"$color_text_secondary\" style=\"    color: var(--color_text_secondary);\n" +
+    "    font-size: 15px;\n" +
+    "    line-height: 100%;\n" +
+    "    font-weight: 500;\">업데이트 날짜</p><div display=\"flex\" width=\"100%\" style=\"    display: flex;\n" +
+    "    flex-direction: row;\n" +
+    "    width: 100%;\n" +
+    "    gap: 8px;\n" +
+    "    border-radius: 8px;\n" +
+    "    padding: 14px 16px;\n" +
+    "    -webkit-box-align: center;\n" +
+    "    align-items: center;\n" +
+    "    background-color: var(--color_surface_tertiary);\"><p color=\"$color_text_primary\" style=\"    color: var(--color_text_primary);\n" +
+    "    font-size: 16px;\n" +
+    "    line-height: 140%;\n" +
+    "    font-weight: 500;\">2025.01.10</p></div></div><div display=\"flex\" width=\"100%\" style=\"    display: flex;\n" +
+    "    flex-direction: column;\n" +
+    "    width: 100%;\n" +
+    "    gap: 16px;\"><div display=\"flex\" width=\"100%\" style=\"    display: flex;\n" +
+    "    flex-direction: row;\n" +
+    "    width: 100%;\n" +
+    "    gap: 8px;\"><p color=\"$color_text_secondary\" style=\"    color: var(--color_text_secondary);\n" +
+    "    font-size: 15px;\n" +
+    "    line-height: 100%;\n" +
+    "    font-weight: 500;\">댓글</p><p color=\"$color_text_quaternary\" style=\"    color: var(--color_text_quaternary);\n" +
+    "    font-size: 15px;\n" +
+    "    line-height: 100%;\n" +
+    "    font-weight: 500;\">108건</p><div display=\"flex\" style=\"    display: -webkit-box;\n" +
+    "    display: -webkit-flex;\n" +
+    "    display: -ms-flexbox;\n" +
+    "    display: flex;\n" +
+    "    -webkit-flex: 1;\n" +
+    "    -ms-flex: 1;\n" +
+    "    flex: 1;\"></div><a href=\"/character/detail/677fc8eebdc024d390c9f1ef\"><p color=\"$color_action_blue_primary\" style=\"    color: var(--color_action_blue_primary);\n" +
+    "    font-size: 15px;\n" +
+    "    list-spacing: 0;\n" +
+    "    line-height: 100%;\n" +
+    "    font-weight: 500;\">전체보기</p></a></div><div display=\"flex\" width=\"100%\" style=\"    display: flex;\n" +
+    "    flex-direction: row;\n" +
+    "    width: 100%;\n" +
+    "    gap: 8px;\n" +
+    "    border-radius: 8px;\n" +
+    "    padding: 14px 16px;\n" +
+    "    background-color: var(--color_surface_tertiary);\"><div overflow=\"hidden\" display=\"flex\" width=\"24px\" height=\"24px\" style=\"    position: relative;\n" +
+    "    overflow: hidden;\n" +
+    "    display: flex;\n" +
+    "    -webkit-box-align: center;\n" +
+    "    align-items: center;\n" +
+    "    -webkit-box-pack: center;\n" +
+    "    justify-content: center;\n" +
+    "    width: 24px;\n" +
+    "    min-width: 24px;\n" +
+    "    height: 24px;\n" +
+    "    min-height: 24px;\n" +
+    "    border-radius: 50%;\n" +
+    "    border-width: 1px;\n" +
+    "    border-style: solid;\n" +
+    "    border-image: initial;\n" +
+    "    border-color: var(--color_outline_tertiary);\n" +
+    "    cursor: pointer;\"><img src=\"https://d394jeh9729epj.cloudfront.net/8D0KCSRmolG-GGKOMkpaOVZS/51f2210c-436d-4f3c-b771-2bc7c65e173a_w600_w600_w600_w600_w200.jpeg\" alt=\"character_thumbnail\" style=\"width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0px; left: 0px; border-radius: inherit;\" data-clarity-loaded=\"j6k9we\"></div><p color=\"$color_text_primary\" style=\"    color: var(--color_text_primary);\n" +
+    "    font-size: 16px;\n" +
+    "    line-height: 160%;\n" +
+    "    font-weight: 500;\n" +
+    "    white-space: pre-line;\n" +
+    "    word-break: break-all;\">넘 귀엽다</p></div></div></div>";
 var recommand_prompt_html = "<button display=\"flex\" width=\"fit-content\" height=\"34px\" color=\"$color_text_primary\" style=\"    border-radius: 5px;\n" +
                                 "    -webkit-box-pack: center;\n" +
                                 "    justify-content: center;\n" +
@@ -174,6 +248,228 @@ var plus_modal_front_html_IsAudlt = "<div display=\"flex\" style=\"    display: 
     "    font-size: 14px;\n" +
     "    line-height: 100%;\n" +
     "    font-weight: 500;\">언세이프티</p></div>";
+var plus_modal_recommand_creator_front_html = "<div display=\"flex\" width=\"100%\" style=\"    display: flex;\n" +
+    "    flex-direction: column;\n" +
+    "    width: 100%;\n" +
+    "    padding: 24px 20px;\n" +
+    "    gap: 16px;\n" +
+    "    border-top-width: 1px;\n" +
+    "    border-top-style: solid;\n" +
+    "    border-color: var(--color_divider_secondary);\"><p color=\"$color_text_primary\" style=\"    color: var(--color_text_primary);\n" +
+    "    font-size: 18px;\n" +
+    "    list-spacing: 0;\n" +
+    "    line-height: 100%;\n" +
+    "    font-weight: 600;\">제작자의 다른 캐릭터 보기 (Fast wrtn)</p><div width=\"100%\" style=\"    width: 100%;\n" +
+    "    position: relative;\"><div display=\"flex\" width=\"100%\" style=\"    display: -webkit-box;\n" +
+    "    display: -webkit-flex;\n" +
+    "    display: -ms-flexbox;\n" +
+    "    display: flex;\n" +
+    "    -webkit-flex-direction: row;\n" +
+    "    -ms-flex-direction: row;\n" +
+    "    flex-direction: row;\n" +
+    "    width: 100%;\n" +
+    "    overflow-x: scroll;\n" +
+    "    overflow-y: hidden;\n" +
+    "    -ms-overflow-style: none;\n" +
+    "    scrollbar-width: none;\"><div display=\"flex\" width=\"fit-content\" style=\"    display: -webkit-box;\n" +
+    "    display: -webkit-flex;\n" +
+    "    display: -ms-flexbox;\n" +
+    "    display: flex;\n" +
+    "    -webkit-flex-direction: row;\n" +
+    "    -ms-flex-direction: row;\n" +
+    "    flex-direction: row;\n" +
+    "    width: -webkit-fit-content;\n" +
+    "    width: -moz-fit-content;\n" +
+    "    width: fit-content;\n" +
+    "    row-gap: 12px;\n" +
+    "    -webkit-column-gap: 12px;\n" +
+    "    column-gap: 12px;\"><div display=\"flex\" width=\"148px,156px\" overflow=\"hidden\" style=\"    display: -webkit-box;\n" +
+    "    display: -webkit-flex;\n" +
+    "    width: 156px;\n" +
+    "    height: 280px;\n" +
+    "    display: -ms-flexbox;\n" +
+    "    display: flex;\n" +
+    "    -webkit-flex-direction: column;\n" +
+    "    -ms-flex-direction: column;\n" +
+    "    flex-direction: column;\n" +
+    "    width: 148px;\n" +
+    "    min-width: 148px;\n" +
+    "    max-height: 250px;\n" +
+    "    min-height: 250px;\n" +
+    "    overflow: hidden;\n" +
+    "    row-gap: 8px;\n" +
+    "    -webkit-column-gap: 8px;\n" +
+    "    column-gap: 8px;\"><div display=\"flex\" style=\"    display: -webkit-box;\n" +
+    "    display: -webkit-flex;\n" +
+    "    display: -ms-flexbox;\n" +
+    "    display: flex;\n" +
+    "    -webkit-flex-direction: column;\n" +
+    "    -ms-flex-direction: column;\n" +
+    "    flex-direction: column;\n" +
+    "    row-gap: 12px;\n" +
+    "    -webkit-column-gap: 12px;\n" +
+    "    column-gap: 12px;\"><div width=\"100%\" height=\"148px,156px\" style=\"    width: 100%;\n" +
+    "    height: 148px;\n" +
+    "    border-radius: 8px;\n" +
+    "    margin-bottom: unset;\n" +
+    "    position: relative;\n" +
+    "    aspect-ratio: 1/1;\"><div overflow=\"hidden\" display=\"flex\" width=\"100%\" height=\"100%\" style=\"    position: relative;\n" +
+    "    overflow: hidden;\n" +
+    "    display: -webkit-box;\n" +
+    "    display: -webkit-flex;\n" +
+    "    display: -ms-flexbox;\n" +
+    "    display: flex;\n" +
+    "    -webkit-align-items: center;\n" +
+    "    -webkit-box-align: center;\n" +
+    "    -ms-flex-align: center;\n" +
+    "    align-items: center;\n" +
+    "    -webkit-box-pack: center;\n" +
+    "    -ms-flex-pack: center;\n" +
+    "    -webkit-justify-content: center;\n" +
+    "    justify-content: center;\n" +
+    "    width: 100%;\n" +
+    "    height: 100%;\n" +
+    "    border-radius: 8px;\n" +
+    "    border: 1px solid;\n" +
+    "    border-color: var(--color_outline_tertiary);\"><img src=\"https://d394jeh9729epj.cloudfront.net/8DJAFaDh5Fm-GGKOTTBVVkI3/7978f657-0e6b-4819-972d-8f7a4d0de312_w600.webp\" alt=\"character_thumbnail\" style=\"width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0px; left: 0px; border-radius: inherit;\"></div><div width=\"100%\" height=\"100%\" display=\"none\" style=\"    width: 100%;\n" +
+    "    height: 100%;\n" +
+    "    border-radius: 8px;\n" +
+    "    position: absolute;\n" +
+    "    top: 0px;\n" +
+    "    left: 0px;\n" +
+    "    background-color: rgba(0, 0, 0, 0.20);\n" +
+    "    display: none;\"></div><div display=\"flex\" style=\"    display: -webkit-box;\n" +
+    "    display: -webkit-flex;\n" +
+    "    display: -ms-flexbox;\n" +
+    "    display: flex;\n" +
+    "    -webkit-flex-direction: row;\n" +
+    "    -ms-flex-direction: row;\n" +
+    "    flex-direction: row;\n" +
+    "    position: absolute;\n" +
+    "    bottom: 8px;\n" +
+    "    right: 8px;\n" +
+    "    row-gap: 4px;\n" +
+    "    -webkit-column-gap: 4px;\n" +
+    "    column-gap: 4px;\n" +
+    "    -webkit-align-items: center;\n" +
+    "    -webkit-box-align: center;\n" +
+    "    -ms-flex-align: center;\n" +
+    "    align-items: center;\"><div width=\"28px\" height=\"28px\" display=\"flex\" style=\"    width: 28px;\n" +
+    "    height: 28px;\n" +
+    "    border: 0.8px solid;\n" +
+    "    border-radius: 50%;\n" +
+    "    border-color: var(--palette_gray_gray_600);\n" +
+    "    background-color: var(--color_bg_dimmed);\n" +
+    "    display: -webkit-box;\n" +
+    "    display: -webkit-flex;\n" +
+    "    display: -ms-flexbox;\n" +
+    "    display: flex;\n" +
+    "    -webkit-box-pack: center;\n" +
+    "    -ms-flex-pack: center;\n" +
+    "    -webkit-justify-content: center;\n" +
+    "    justify-content: center;\n" +
+    "    -webkit-align-items: center;\n" +
+    "    -webkit-box-align: center;\n" +
+    "    -ms-flex-align: center;\n" +
+    "    align-items: center;\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 16 16\" fill=\"none\"><mask id=\"mask0_8669_146020\" maskUnits=\"userSpaceOnUse\" x=\"0\" y=\"0\" width=\"16\" height=\"16\" style=\"mask-type: alpha;\"><rect width=\"16\" height=\"16\" fill=\"#D9D9D9\"></rect></mask><g mask=\"url(#mask0_8669_146020)\"><path d=\"M7.9974 8.66732C8.64184 8.66732 9.19184 8.43954 9.6474 7.98398C10.103 7.52843 10.3307 6.97843 10.3307 6.33398C10.3307 5.68954 10.103 5.13954 9.6474 4.68398C9.19184 4.22843 8.64184 4.00065 7.9974 4.00065C7.35295 4.00065 6.80295 4.22843 6.3474 4.68398C5.89184 5.13954 5.66406 5.68954 5.66406 6.33398C5.66406 6.97843 5.89184 7.52843 6.3474 7.98398C6.80295 8.43954 7.35295 8.66732 7.9974 8.66732ZM7.9974 14.6673C6.37517 14.2562 5.08073 13.3673 4.11406 12.0007C3.1474 10.634 2.66406 9.10065 2.66406 7.40065V3.33398L7.9974 1.33398L13.3307 3.33398V7.40065C13.3307 9.10065 12.8474 10.634 11.8807 12.0007C10.9141 13.3673 9.61962 14.2562 7.9974 14.6673ZM7.9974 13.2673C8.65295 13.0562 9.23351 12.7257 9.73906 12.2757C10.2446 11.8257 10.6863 11.3173 11.0641 10.7507C10.5863 10.5062 10.0891 10.3201 9.5724 10.1923C9.05573 10.0645 8.53073 10.0007 7.9974 10.0007C7.46406 10.0007 6.93906 10.0645 6.4224 10.1923C5.90573 10.3201 5.40851 10.5062 4.93073 10.7507C5.30851 11.3173 5.75017 11.8257 6.25573 12.2757C6.76129 12.7257 7.34184 13.0562 7.9974 13.2673Z\" fill=\"#FED4D3\"></path></g></svg></div><div width=\"28px\" height=\"28px\" display=\"flex\" style=\"    width: 28px;\n" +
+    "    height: 28px;\n" +
+    "    border: 0.8px solid;\n" +
+    "    border-radius: 50%;\n" +
+    "    border-color: var(--palette_gray_gray_600);\n" +
+    "    background-color: var(--color_bg_dimmed);\n" +
+    "    display: -webkit-box;\n" +
+    "    display: -webkit-flex;\n" +
+    "    display: -ms-flexbox;\n" +
+    "    display: flex;\n" +
+    "    -webkit-box-pack: center;\n" +
+    "    -ms-flex-pack: center;\n" +
+    "    -webkit-justify-content: center;\n" +
+    "    justify-content: center;\n" +
+    "    -webkit-align-items: center;\n" +
+    "    -webkit-box-align: center;\n" +
+    "    -ms-flex-align: center;\n" +
+    "    align-items: center;\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\" color=\"#ffffffff\"><mask id=\"mask0_13669_84\" maskUnits=\"userSpaceOnUse\" x=\"0\" y=\"0\" width=\"24\" height=\"24\" style=\"mask-type: alpha;\"><rect width=\"24\" height=\"24\" fill=\"currentColor\"></rect></mask><g mask=\"url(#mask0_13669_84)\"><path d=\"M11.951 13.4023L17.3804 9.78409L11.951 6.16591V13.4023ZM6.25011 20.9778C5.75241 21.0532 5.30373 20.9364 4.90406 20.6273C4.5044 20.3183 4.2744 19.915 4.21408 19.4175L3.01508 9.53534C2.95475 9.03784 3.07541 8.5931 3.37704 8.20113C3.67868 7.80916 4.07834 7.58303 4.57604 7.52272L5.61667 7.38704V14.7591C5.61667 15.7541 5.97109 16.6059 6.67993 17.3144C7.38877 18.023 8.24089 18.3773 9.23628 18.3773H17.6519C17.5614 18.7391 17.3804 19.0519 17.1089 19.3157C16.8375 19.5796 16.5057 19.7341 16.1135 19.7793L6.25011 20.9778ZM9.23628 16.5682C8.73858 16.5682 8.31253 16.391 7.95811 16.0368C7.60369 15.6825 7.42648 15.2566 7.42648 14.7591V4.80909C7.42648 4.31159 7.60369 3.8857 7.95811 3.53142C8.31253 3.17714 8.73858 3 9.23628 3H19.1902C19.6879 3 20.114 3.17714 20.4684 3.53142C20.8228 3.8857 21 4.31159 21 4.80909V14.7591C21 15.2566 20.8228 15.6825 20.4684 16.0368C20.114 16.391 19.6879 16.5682 19.1902 16.5682H9.23628Z\" fill=\"currentColor\"></path></g></svg></div></div></div><div display=\"flex\" style=\"    display: -webkit-box;\n" +
+    "    display: -webkit-flex;\n" +
+    "    display: -ms-flexbox;\n" +
+    "    display: flex;\n" +
+    "    -webkit-flex-direction: column;\n" +
+    "    -ms-flex-direction: column;\n" +
+    "    flex-direction: column;\n" +
+    "    row-gap: 8px;\n" +
+    "    -webkit-column-gap: 8px;\n" +
+    "    column-gap: 8px;\"><p color=\"$color_text_primary\" style=\"    color: var(--color_text_primary);\n" +
+    "    font-size: 16px;\n" +
+    "    list-spacing: 0;\n" +
+    "    line-height: 100%;\n" +
+    "    font-weight: 600;\n" +
+    "    white-space: nowrap;\n" +
+    "    overflow: hidden;\n" +
+    "    text-overflow: ellipsis;\">여존남비세계의 빌런</p><p color=\"$color_text_secondary\" style=\"    min-height: 40px;\n" +
+    "    color: var(--color_text_secondary);\n" +
+    "    font-size: 14px;\n" +
+    "    list-spacing: 0;\n" +
+    "    line-height: 140%;\n" +
+    "    font-weight: 500;\n" +
+    "    overflow: hidden;\n" +
+    "    text-overflow: ellipsis;\n" +
+    "    display: -webkit-box;\n" +
+    "    -webkit-line-clamp: 2;\n" +
+    "    -webkit-box-orient: vertical;\">아주 소수의 여성만이 초능력을 가지고 태어나는 세계. 여성들은 권력을 장악하고 여존남비적 사회질서를 선포한다. 남성들은 저항했지만, 5명의 여성 히어로에 의하여 그들의 저항은 간단히 분쇄당했다. 여성이 남성에게 무엇을 해도 범죄가 되지 않는 세상이 된 것이다.\n" +
+    "그런 세상에서 당신은 유일하게 남성이면서도 서큐버스와 계약하여 초능력을 얻었다. 그리고 당신은 설령 원치 않아도 사회질서를 어지럽히는 위험한 '빌런'으로 취급될 수밖에 없다.</p></div></div><div display=\"flex\" width=\"fit-content\" style=\"    display: -webkit-box;\n" +
+    "    display: -webkit-flex;\n" +
+    "    display: -ms-flexbox;\n" +
+    "    display: flex;\n" +
+    "    -webkit-flex-direction: row;\n" +
+    "    -ms-flex-direction: row;\n" +
+    "    flex-direction: row;\n" +
+    "    row-gap: 4px;\n" +
+    "    -webkit-column-gap: 4px;\n" +
+    "    column-gap: 4px;\n" +
+    "    -webkit-align-items: center;\n" +
+    "    -webkit-box-align: center;\n" +
+    "    -ms-flex-align: center;\n" +
+    "    align-items: center;\n" +
+    "    padding: 2px 4px;\n" +
+    "    background-color: var(--color_bg_elevated_secondary);\n" +
+    "    border-radius: 4px;\n" +
+    "    width: -webkit-fit-content;\n" +
+    "    width: -moz-fit-content;\n" +
+    "    width: fit-content;\n" +
+    "    max-width: 100%;\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 25 25\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\" color=\"#85837dff\"><path d=\"M12.5 22.437C11.1167 22.437 9.81667 22.1745 8.6 21.6495C7.38333 21.1245 6.325 20.412 5.425 19.512C4.525 18.612 3.8125 17.5537 3.2875 16.337C2.7625 15.1203 2.5 13.8203 2.5 12.437C2.5 11.0537 2.7625 9.75368 3.2875 8.53701C3.8125 7.32034 4.525 6.26201 5.425 5.36201C6.325 4.46201 7.38333 3.74951 8.6 3.22451C9.81667 2.69951 11.1167 2.43701 12.5 2.43701C13.8833 2.43701 15.1833 2.69951 16.4 3.22451C17.6167 3.74951 18.675 4.46201 19.575 5.36201C20.475 6.26201 21.1875 7.32034 21.7125 8.53701C22.2375 9.75368 22.5 11.0537 22.5 12.437V13.887C22.5 14.8703 22.1625 15.7078 21.4875 16.3995C20.8125 17.0912 19.9833 17.437 19 17.437C18.4167 17.437 17.8667 17.312 17.35 17.062C16.8333 16.812 16.4 16.4537 16.05 15.987C15.5667 16.4703 15.0208 16.8328 14.4125 17.0745C13.8042 17.3162 13.1667 17.437 12.5 17.437C11.1167 17.437 9.9375 16.9495 8.9625 15.9745C7.9875 14.9995 7.5 13.8203 7.5 12.437C7.5 11.0537 7.9875 9.87451 8.9625 8.89951C9.9375 7.92451 11.1167 7.43701 12.5 7.43701C13.8833 7.43701 15.0625 7.92451 16.0375 8.89951C17.0125 9.87451 17.5 11.0537 17.5 12.437V13.887C17.5 14.3203 17.6417 14.687 17.925 14.987C18.2083 15.287 18.5667 15.437 19 15.437C19.4333 15.437 19.7917 15.287 20.075 14.987C20.3583 14.687 20.5 14.3203 20.5 13.887V12.437C20.5 10.2037 19.725 8.31201 18.175 6.76201C16.625 5.21201 14.7333 4.43701 12.5 4.43701C10.2667 4.43701 8.375 5.21201 6.825 6.76201C5.275 8.31201 4.5 10.2037 4.5 12.437C4.5 14.6703 5.275 16.562 6.825 18.112C8.375 19.662 10.2667 20.437 12.5 20.437H17.5V22.437H12.5ZM12.5 15.437C13.3333 15.437 14.0417 15.1453 14.625 14.562C15.2083 13.9787 15.5 13.2703 15.5 12.437C15.5 11.6037 15.2083 10.8953 14.625 10.312C14.0417 9.72868 13.3333 9.43701 12.5 9.43701C11.6667 9.43701 10.9583 9.72868 10.375 10.312C9.79167 10.8953 9.5 11.6037 9.5 12.437C9.5 13.2703 9.79167 13.9787 10.375 14.562C10.9583 15.1453 11.6667 15.437 12.5 15.437Z\" fill=\"currentColor\"></path></svg><p color=\"$color_text_tertiary\" style=\"    color: var(--color_text_tertiary);\n" +
+    "    font-size: 12px;\n" +
+    "    list-spacing: 0;\n" +
+    "    line-height: 100%;\n" +
+    "    font-weight: 500;\n" +
+    "    white-space: nowrap;\n" +
+    "    overflow: hidden;\n" +
+    "    text-overflow: ellipsis;\">이사예</p><svg width=\"16\" height=\"16\" viewBox=\"0 0 18 18\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" color=\"#f95939ff\"><path d=\"M15.75 12.578V5.42297C15.75 5.25797 15.66 5.10047 15.5175 5.01797L9.2325 1.43297C9.09 1.35047 8.9175 1.35047 8.775 1.43297L2.4825 5.01797C2.34 5.10047 2.25 5.25797 2.25 5.42297V12.5855C2.25 12.7505 2.34 12.908 2.4825 12.9905L8.7675 16.5755C8.91 16.658 9.0825 16.658 9.225 16.5755L15.51 12.9905C15.6525 12.908 15.7425 12.7505 15.7425 12.5855L15.75 12.578Z\" fill=\"url(#paint0_linear_14670_273716)\"></path><g filter=\"url(#filter0_i_14670_273716)\"><path d=\"M12.4169 7.5382L10.2944 7.2907C10.2944 7.2907 10.2269 7.2682 10.2194 7.2307L9.32686 5.2882C9.19936 5.0107 8.80186 5.0107 8.67436 5.2882L7.78186 7.2307C7.78186 7.2307 7.73686 7.2832 7.70686 7.2907L5.58436 7.5382C5.27686 7.5757 5.15686 7.9507 5.38186 8.1607L6.94936 9.6082C6.94936 9.6082 6.98686 9.6682 6.97936 9.6982L6.55936 11.7907C6.49936 12.0907 6.82186 12.3232 7.08436 12.1732L8.94436 11.1232C8.94436 11.1232 9.01186 11.1082 9.04186 11.1232L10.9019 12.1732C11.1719 12.3232 11.4869 12.0907 11.4269 11.7907L11.0069 9.6982C11.0069 9.6982 11.0069 9.6307 11.0369 9.6082L12.6044 8.1607C12.8294 7.9507 12.7094 7.5757 12.4019 7.5382H12.4169Z\" fill=\"url(#paint1_linear_14670_273716)\"></path></g><defs><filter id=\"filter0_i_14670_273716\" x=\"5.26562\" y=\"5.08008\" width=\"7.45312\" height=\"7.14062\" filterUnits=\"userSpaceOnUse\" color-interpolation-filters=\"sRGB\"><feFlood flood-opacity=\"0\" result=\"BackgroundImageFix\"></feFlood><feBlend mode=\"normal\" in=\"SourceGraphic\" in2=\"BackgroundImageFix\" result=\"shape\"></feBlend><feColorMatrix in=\"SourceAlpha\" type=\"matrix\" values=\"0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0\" result=\"hardAlpha\"></feColorMatrix><feOffset></feOffset><feGaussianBlur stdDeviation=\"0.68175\"></feGaussianBlur><feComposite in2=\"hardAlpha\" operator=\"arithmetic\" k2=\"-1\" k3=\"1\"></feComposite><feColorMatrix type=\"matrix\" values=\"0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0\"></feColorMatrix><feBlend mode=\"normal\" in2=\"shape\" result=\"effect1_innerShadow_14670_273716\"></feBlend></filter><linearGradient id=\"paint0_linear_14670_273716\" x1=\"9\" y1=\"1.37109\" x2=\"9\" y2=\"16.6373\" gradientUnits=\"userSpaceOnUse\"><stop stop-color=\"#FE1571\"></stop><stop offset=\"1\" stop-color=\"#FF27B4\"></stop></linearGradient><linearGradient id=\"paint1_linear_14670_273716\" x1=\"8.99311\" y1=\"5.08008\" x2=\"8.99311\" y2=\"12.22\" gradientUnits=\"userSpaceOnUse\"><stop stop-color=\"#FFFDEF\"></stop><stop offset=\"1\" stop-color=\"#FFFBDD\"></stop></linearGradient></defs></svg></div></div></div></div><div width=\"61px\" height=\"100%\" style=\"    width: 61px;\n" +
+    "    height: 100%;\n" +
+    "    position: absolute;\n" +
+    "    top: 0;\n" +
+    "    right: -1px;\n" +
+    "    z-index: 2;\n" +
+    "    background: linear-gradient(270deg, #1A1918 0%, rgba(26, 25, 24, 0.00) 100%);\"><button width=\"36px\" height=\"36px\" display=\"flex\" style=\"    position: absolute;\n" +
+    "    right: 0;\n" +
+    "    top: 60px;\n" +
+    "    border-radius: 50%;\n" +
+    "    border: 1px solid;\n" +
+    "    border-color: var(--color_outline_secondary);\n" +
+    "    width: 36px;\n" +
+    "    height: 36px;\n" +
+    "    display: -webkit-box;\n" +
+    "    display: -webkit-flex;\n" +
+    "    display: -ms-flexbox;\n" +
+    "    display: flex;\n" +
+    "    -webkit-box-pack: center;\n" +
+    "    -ms-flex-pack: center;\n" +
+    "    -webkit-justify-content: center;\n" +
+    "    justify-content: center;\n" +
+    "    -webkit-align-items: center;\n" +
+    "    -webkit-box-align: center;\n" +
+    "    -ms-flex-align: center;\n" +
+    "    align-items: center;\n" +
+    "    background-color: var(--color_surface_tertiary);\n" +
+    "    z-index: 3;\"><svg width=\"24\" height=\"24\" viewBox=\"0 0 25 25\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\" color=\"#a8a69dff\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M10.5 18.801L15.4498 13.8512L15.8033 13.4977C16.3891 12.9119 16.3891 11.9621 15.8033 11.3764L15.4498 11.0228L10.5 6.07305L9.08581 7.48726L14.0356 12.437L9.08581 17.3868L10.5 18.801Z\" fill=\"currentColor\"></path></svg></button></div></div></div>"
 var plus_modal_front_html = "<div style=\"    position: fixed;\n" +
     "    inset: 0px;\n" +
     "    z-index: -1;\n" +
@@ -482,6 +778,384 @@ var plus_modal_front_html = "<div style=\"    position: fixed;\n" +
     "    -ms-flex-align: center;\n" +
     "    align-items: center;\">대화하기</div></button></div></div></div></div>";
 
+function plus_modal_func(Tfeed,character_list,CeCreator){
+    const feed_struct = Tfeed.childNodes.item(1).cloneNode(true); //피드의 제일위에서 2번째 요소를 가져와서 형식만 가져옴
+    const feed_struct_text = feed_struct.childNodes[0].childNodes[0].childNodes.item(0); //랭킹 플러스 (Fast wrtn) <- 이거 들어간 텍스트 구역
+    const feed_struct_scroll = feed_struct.childNodes[1].childNodes[0].childNodes.item(0); //스크롤 가져오기
+    const feed_struct_elements = feed_struct.childNodes[1].childNodes[0].childNodes[0].childNodes.item(0); //형식에 들어있던 캐챗 목록 가져오기
+    const feed_struct_element = feed_struct_elements.childNodes.item(0).cloneNode(true); //형식에 들어있던 캐챗중 제일 첫번째걸 형식 삼아 가져옴
+    feed_struct_element.innerHTML = "<div display=\"flex\" class=\"css-1878569\"><div width=\"100%\" height=\"148px,156px\" class=\"css-12gw3o5\"><div class=\"character_avatar css-1w95giw\" overflow=\"hidden\" display=\"flex\" width=\"100%\" height=\"100%\"><img src=\"https://d394jeh9729epj.cloudfront.net/8BwuNilwTjW-GGKONkJEOUk2/b176b0a9-46e0-4d93-baff-7dace3602f6e_w600.webp\" alt=\"character_thumbnail\" style=\"width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0px; left: 0px; border-radius: inherit;\"></div><div class=\"character-card-overlay css-1w1m2cv\" width=\"100%\" height=\"100%\" display=\"none\"></div><div display=\"flex\" class=\"css-17z36ob\"><div width=\"28px\" height=\"28px\" display=\"flex\" class=\"css-1bygmye\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 16 16\" fill=\"none\"><mask id=\"mask0_8669_146020\" maskUnits=\"userSpaceOnUse\" x=\"0\" y=\"0\" width=\"16\" height=\"16\" style=\"mask-type: alpha;\"><rect width=\"16\" height=\"16\" fill=\"#D9D9D9\"></rect></mask><g mask=\"url(#mask0_8669_146020)\"><path d=\"M7.9974 8.66732C8.64184 8.66732 9.19184 8.43954 9.6474 7.98398C10.103 7.52843 10.3307 6.97843 10.3307 6.33398C10.3307 5.68954 10.103 5.13954 9.6474 4.68398C9.19184 4.22843 8.64184 4.00065 7.9974 4.00065C7.35295 4.00065 6.80295 4.22843 6.3474 4.68398C5.89184 5.13954 5.66406 5.68954 5.66406 6.33398C5.66406 6.97843 5.89184 7.52843 6.3474 7.98398C6.80295 8.43954 7.35295 8.66732 7.9974 8.66732ZM7.9974 14.6673C6.37517 14.2562 5.08073 13.3673 4.11406 12.0007C3.1474 10.634 2.66406 9.10065 2.66406 7.40065V3.33398L7.9974 1.33398L13.3307 3.33398V7.40065C13.3307 9.10065 12.8474 10.634 11.8807 12.0007C10.9141 13.3673 9.61962 14.2562 7.9974 14.6673ZM7.9974 13.2673C8.65295 13.0562 9.23351 12.7257 9.73906 12.2757C10.2446 11.8257 10.6863 11.3173 11.0641 10.7507C10.5863 10.5062 10.0891 10.3201 9.5724 10.1923C9.05573 10.0645 8.53073 10.0007 7.9974 10.0007C7.46406 10.0007 6.93906 10.0645 6.4224 10.1923C5.90573 10.3201 5.40851 10.5062 4.93073 10.7507C5.30851 11.3173 5.75017 11.8257 6.25573 12.2757C6.76129 12.7257 7.34184 13.0562 7.9974 13.2673Z\" fill=\"#FED4D3\"></path></g></svg></div><div width=\"28px\" height=\"28px\" display=\"flex\" class=\"css-1bygmye\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\" color=\"#ffffffff\"><mask id=\"mask0_13669_84\" maskUnits=\"userSpaceOnUse\" x=\"0\" y=\"0\" width=\"24\" height=\"24\" style=\"mask-type: alpha;\"><rect width=\"24\" height=\"24\" fill=\"currentColor\"></rect></mask><g mask=\"url(#mask0_13669_84)\"><path d=\"M11.951 13.4023L17.3804 9.78409L11.951 6.16591V13.4023ZM6.25011 20.9778C5.75241 21.0532 5.30373 20.9364 4.90406 20.6273C4.5044 20.3183 4.2744 19.915 4.21408 19.4175L3.01508 9.53534C2.95475 9.03784 3.07541 8.5931 3.37704 8.20113C3.67868 7.80916 4.07834 7.58303 4.57604 7.52272L5.61667 7.38704V14.7591C5.61667 15.7541 5.97109 16.6059 6.67993 17.3144C7.38877 18.023 8.24089 18.3773 9.23628 18.3773H17.6519C17.5614 18.7391 17.3804 19.0519 17.1089 19.3157C16.8375 19.5796 16.5057 19.7341 16.1135 19.7793L6.25011 20.9778ZM9.23628 16.5682C8.73858 16.5682 8.31253 16.391 7.95811 16.0368C7.60369 15.6825 7.42648 15.2566 7.42648 14.7591V4.80909C7.42648 4.31159 7.60369 3.8857 7.95811 3.53142C8.31253 3.17714 8.73858 3 9.23628 3H19.1902C19.6879 3 20.114 3.17714 20.4684 3.53142C20.8228 3.8857 21 4.31159 21 4.80909V14.7591C21 15.2566 20.8228 15.6825 20.4684 16.0368C20.114 16.391 19.6879 16.5682 19.1902 16.5682H9.23628Z\" fill=\"currentColor\"></path></g></svg></div></div></div><div display=\"flex\" class=\"css-19ssvua\"><p color=\"$color_text_primary\" class=\"css-sjt0pv\">NTR 오피스</p><p color=\"$color_text_secondary\" class=\"css-9xnb32\">[R18/이미지 30장] 부하직원의 상사가 되어 그의 아내를 NTR하자! (NTL) / 요즘 부장님이 내 아내를 보는 눈빛이 심상치 않다... 더군다나, 아내도 요즘 태도가 변하기 시작했다... (NTR)\n" +
+        "\n" +
+        "[스토리: 1일차~14일차, 8~11일차 온천 접대 이벤트]</p></div></div><div display=\"flex\" width=\"fit-content\" class=\"css-13rssxq\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 25 25\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\" color=\"#85837dff\"><path d=\"M12.5 22.437C11.1167 22.437 9.81667 22.1745 8.6 21.6495C7.38333 21.1245 6.325 20.412 5.425 19.512C4.525 18.612 3.8125 17.5537 3.2875 16.337C2.7625 15.1203 2.5 13.8203 2.5 12.437C2.5 11.0537 2.7625 9.75368 3.2875 8.53701C3.8125 7.32034 4.525 6.26201 5.425 5.36201C6.325 4.46201 7.38333 3.74951 8.6 3.22451C9.81667 2.69951 11.1167 2.43701 12.5 2.43701C13.8833 2.43701 15.1833 2.69951 16.4 3.22451C17.6167 3.74951 18.675 4.46201 19.575 5.36201C20.475 6.26201 21.1875 7.32034 21.7125 8.53701C22.2375 9.75368 22.5 11.0537 22.5 12.437V13.887C22.5 14.8703 22.1625 15.7078 21.4875 16.3995C20.8125 17.0912 19.9833 17.437 19 17.437C18.4167 17.437 17.8667 17.312 17.35 17.062C16.8333 16.812 16.4 16.4537 16.05 15.987C15.5667 16.4703 15.0208 16.8328 14.4125 17.0745C13.8042 17.3162 13.1667 17.437 12.5 17.437C11.1167 17.437 9.9375 16.9495 8.9625 15.9745C7.9875 14.9995 7.5 13.8203 7.5 12.437C7.5 11.0537 7.9875 9.87451 8.9625 8.89951C9.9375 7.92451 11.1167 7.43701 12.5 7.43701C13.8833 7.43701 15.0625 7.92451 16.0375 8.89951C17.0125 9.87451 17.5 11.0537 17.5 12.437V13.887C17.5 14.3203 17.6417 14.687 17.925 14.987C18.2083 15.287 18.5667 15.437 19 15.437C19.4333 15.437 19.7917 15.287 20.075 14.987C20.3583 14.687 20.5 14.3203 20.5 13.887V12.437C20.5 10.2037 19.725 8.31201 18.175 6.76201C16.625 5.21201 14.7333 4.43701 12.5 4.43701C10.2667 4.43701 8.375 5.21201 6.825 6.76201C5.275 8.31201 4.5 10.2037 4.5 12.437C4.5 14.6703 5.275 16.562 6.825 18.112C8.375 19.662 10.2667 20.437 12.5 20.437H17.5V22.437H12.5ZM12.5 15.437C13.3333 15.437 14.0417 15.1453 14.625 14.562C15.2083 13.9787 15.5 13.2703 15.5 12.437C15.5 11.6037 15.2083 10.8953 14.625 10.312C14.0417 9.72868 13.3333 9.43701 12.5 9.43701C11.6667 9.43701 10.9583 9.72868 10.375 10.312C9.79167 10.8953 9.5 11.6037 9.5 12.437C9.5 13.2703 9.79167 13.9787 10.375 14.562C10.9583 15.1453 11.6667 15.437 12.5 15.437Z\" fill=\"currentColor\"></path></svg><p color=\"$color_text_tertiary\" class=\"css-uoinwu\">야로망</p><svg width=\"16\" height=\"16\" viewBox=\"0 0 18 18\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" color=\"#f72f08ff\"><path d=\"M15.75 12.578V5.42297C15.75 5.25797 15.66 5.10047 15.5175 5.01797L9.2325 1.43297C9.09 1.35047 8.9175 1.35047 8.775 1.43297L2.4825 5.01797C2.34 5.10047 2.25 5.25797 2.25 5.42297V12.5855C2.25 12.7505 2.34 12.908 2.4825 12.9905L8.7675 16.5755C8.91 16.658 9.0825 16.658 9.225 16.5755L15.51 12.9905C15.6525 12.908 15.7425 12.7505 15.7425 12.5855L15.75 12.578Z\" fill=\"url(#paint0_linear_14670_273716)\"></path><g filter=\"url(#filter0_i_14670_273716)\"><path d=\"M12.4169 7.5382L10.2944 7.2907C10.2944 7.2907 10.2269 7.2682 10.2194 7.2307L9.32686 5.2882C9.19936 5.0107 8.80186 5.0107 8.67436 5.2882L7.78186 7.2307C7.78186 7.2307 7.73686 7.2832 7.70686 7.2907L5.58436 7.5382C5.27686 7.5757 5.15686 7.9507 5.38186 8.1607L6.94936 9.6082C6.94936 9.6082 6.98686 9.6682 6.97936 9.6982L6.55936 11.7907C6.49936 12.0907 6.82186 12.3232 7.08436 12.1732L8.94436 11.1232C8.94436 11.1232 9.01186 11.1082 9.04186 11.1232L10.9019 12.1732C11.1719 12.3232 11.4869 12.0907 11.4269 11.7907L11.0069 9.6982C11.0069 9.6982 11.0069 9.6307 11.0369 9.6082L12.6044 8.1607C12.8294 7.9507 12.7094 7.5757 12.4019 7.5382H12.4169Z\" fill=\"url(#paint1_linear_14670_273716)\"></path></g><defs><filter id=\"filter0_i_14670_273716\" x=\"5.26562\" y=\"5.08008\" width=\"7.45312\" height=\"7.14062\" filterUnits=\"userSpaceOnUse\" color-interpolation-filters=\"sRGB\"><feFlood flood-opacity=\"0\" result=\"BackgroundImageFix\"></feFlood><feBlend mode=\"normal\" in=\"SourceGraphic\" in2=\"BackgroundImageFix\" result=\"shape\"></feBlend><feColorMatrix in=\"SourceAlpha\" type=\"matrix\" values=\"0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0\" result=\"hardAlpha\"></feColorMatrix><feOffset></feOffset><feGaussianBlur stdDeviation=\"0.68175\"></feGaussianBlur><feComposite in2=\"hardAlpha\" operator=\"arithmetic\" k2=\"-1\" k3=\"1\"></feComposite><feColorMatrix type=\"matrix\" values=\"0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0\"></feColorMatrix><feBlend mode=\"normal\" in2=\"shape\" result=\"effect1_innerShadow_14670_273716\"></feBlend></filter><linearGradient id=\"paint0_linear_14670_273716\" x1=\"9\" y1=\"1.37109\" x2=\"9\" y2=\"16.6373\" gradientUnits=\"userSpaceOnUse\"><stop stop-color=\"#FE1571\"></stop><stop offset=\"1\" stop-color=\"#FF27B4\"></stop></linearGradient><linearGradient id=\"paint1_linear_14670_273716\" x1=\"8.99311\" y1=\"5.08008\" x2=\"8.99311\" y2=\"12.22\" gradientUnits=\"userSpaceOnUse\"><stop stop-color=\"#FFFDEF\"></stop><stop offset=\"1\" stop-color=\"#FFFBDD\"></stop></linearGradient></defs></svg></div>";
+    const feed_struct_scroll_btn = feed_struct.childNodes[1].childNodes[0].childNodes[1].childNodes.item(0); // > 버튼
+    const feed_struct_scroll_btn_l = document.createElement("div"); // < 버튼
+    feed_struct_scroll_btn_l.setAttribute("width", "61px");
+    feed_struct_scroll_btn_l.setAttribute("style", "    width: 61px;\n" +
+        "    height: 100%;\n" +
+        "    position: absolute;\n" +
+        "    top: 0px;\n" +
+        "    left: -1px;\n" +
+        "    z-index: 2;\n" +
+        "    background: linear-gradient(90deg, rgb(26, 25, 24) 0%, rgba(26, 25, 24, 0) 100%);");
+    feed_struct_scroll_btn_l.innerHTML = feed_front_html_scroll;
+    const feed_struct_six = feed_struct.childNodes[1].childNodes.item(0); // < 버튼.
+    var scroll_all_amount = 300 // <  > 누를시 이동할 스크롤 양
+    var scroll_amount = 10; // 끊어서 스크롤 되는 양
+    // > 버튼 누를시
+    feed_struct_scroll_btn.addEventListener('click', () => {
+        scroll_func(feed_struct_scroll,feed_struct_six,feed_struct_scroll_btn_l,scroll_all_amount,scroll_amount);
+    })
+    /* 이 부분 부터는 랭킹 플러스 내부에 자격을 만족하는 캐릭터챗을 추가하는 기능
+    근대 웃긴게 캐릭터챗을 불러오는데 시간이 걸려서 (원래 형식에 들어있어야할 캐챗을 불러오는거 말하는거임)
+    한번에 알잘딱갈센으로 삭제가 안됨 그래서 기존에 남아있던 캐챗이 전부 삭제될때까지 for문 돌림
+    */
+    //character_list에 불러와진 캐챗이 실제 랭킹플러스에 추가됬는지 확인하기위한 배열
+    var IsAppend = []
+    for (let i = 0; i < character_list.length; i++) {
+        IsAppend[i] = false
+    }
+    var jm = setInterval(() => {
+        if (document.URL != "https://wrtn.ai/character") {
+            clearInterval(jm);
+        }
+        if (feed_struct_element.childNodes.length != 0) {
+            if (feed_struct_elements.childNodes.item(0).id == "") {
+                for (const feedStructElementElement of feed_struct_elements.childNodes) {
+                    if (feedStructElementElement.id == "") {
+                        feedStructElementElement.remove();
+                    } else {
+                        IsAppend[Number(feedStructElementElement.id)] = true;
+                    }
+                }
+                i = 0;
+                for (const argument of IsAppend) {
+                    if (!argument) {
+                        const fe = feed_struct_element.cloneNode(true);
+                        if (fe.childNodes[0].childNodes[0].childNodes[0].childNodes.item(1) != null) {
+                            fe.childNodes[0].childNodes[0].childNodes[0].childNodes.item(1).remove();
+                        }
+                        fe.setAttribute("id", i);
+                        fe.setAttribute("src", character_list[i]._id)
+                        try {
+                            fe.childNodes[0].childNodes[0].childNodes[0].childNodes.item(0).src = character_list[i].profileImage.w600;
+                        } catch {
+                            console.log("image");
+                        }
+                        try {
+                            fe.childNodes[0].childNodes[1].childNodes.item(0).textContent = character_list[i].name;
+                        } catch {
+                            console.log("name");
+                        }
+                        try {
+                            fe.childNodes[0].childNodes[1].childNodes.item(1).textContent = character_list[i].description;
+                        } catch {
+                            console.log("info");
+                        }
+                        try {
+                            fe.childNodes[1].childNodes.item(1).textContent = character_list[i].creator.nickname;
+                        } catch {
+                            console.log("creater");
+                        }
+                        try {
+                            const fe_event_bar = fe.childNodes.item(0);
+                            const fe_creator_event_bar = fe.childNodes.item(1);
+                            fe_creator_event_bar.addEventListener('click',()=>{
+                                window.location.href = `https://wrtn.ai/character/profile/${character_list[fe.id].creator.wrtnUid}`;
+                            })
+                            fe_event_bar.addEventListener("click", () => {
+                                const isModal = document.getElementById("web-modal");
+                                if (isModal == null){
+                                    plus_modal_yes(character_list,fe);
+                                }
+                                else{
+                                    plus_modal_no(isModal,character_list,fe);
+                                }
+                            })
+                        } catch {
+                            console.log("link");
+                        }
+                        try {
+                            if (!character_list[i].creator.isCertifiedCreator) {
+                                fe.childNodes[1].childNodes.item(2).remove();
+                            }
+                        } catch {
+                            console.log("isCertifiedCreator");
+                        }
+                        try {
+                            if (!character_list[i].isAdult) {
+                                fe.childNodes[0].childNodes[0].childNodes[2].childNodes.item(0).remove();
+                            }
+                        } catch {
+                            console.log("isCertifiedCreator");
+                        }
+                        feed_struct_elements.appendChild(fe);
+                    }
+                    i++;
+                }
+            }
+        }
+    })
+    if (feed_struct.childNodes[0].childNodes[0].childNodes.item(1) != null){
+        feed_struct.childNodes[0].childNodes[0].childNodes.item(1).remove();
+    }
+    if (CeCreator){
+        feed_struct.childNodes[0].childNodes.item(0).appendChild(feed_struct_element.childNodes[1].childNodes.item(2).cloneNode(true));
+    }
+    feed_struct_text.textContent = "랭킹 플러스 (Fast wrtn)";
+    Tfeed.prepend(feed_struct);
+}
+    
+function scroll_func(feed_struct_scroll,feed_struct_six, feed_struct_scroll_btn_l,scroll_all_amount,scroll_amount){
+    /* TODO
+    < > 버튼이 유동적으로 삭제될수있게끔 수정 해야함
+        */
+    //만약 예상되는 스크롤양이 한계를 넘어선경우 제한시킴
+    if (feed_struct_scroll.scrollLeft + scroll_all_amount > feed_struct_scroll.scrollWidth - feed_struct_scroll.clientWidth) {
+        wanted_scroll = feed_struct_scroll.scrollWidth - feed_struct_scroll.clientWidth;
+    } else {
+        wanted_scroll = feed_struct_scroll.scrollLeft + scroll_all_amount;
+    }
+    var a = setInterval(() => {
+        //만약 > 버튼을 눌렀을시 < 버튼이 생기게 함 length는 < 버튼이 하나만 생기도록 제한
+        if (0 < feed_struct_scroll.scrollLeft && feed_struct_six.childNodes.length < 3) {
+            // < 버튼을 눌렀을시
+            feed_struct_scroll_btn_l.addEventListener('click', () => {
+                if (feed_struct_scroll.scrollLeft - scroll_all_amount < 0) {
+                    wanted_scroll = feed_struct_scroll.scrollWidth - feed_struct_scroll.clientWidth;
+                } else {
+                    wanted_scroll = feed_struct_scroll.scrollLeft - scroll_all_amount;
+                }
+                var j = setInterval(() => {
+                    if (wanted_scroll == 0) {
+                        feed_struct_scroll.scrollLeft = 0;
+                    } else if (feed_struct_scroll.scrollLeft > wanted_scroll) {
+                        feed_struct_scroll.scrollLeft -= scroll_amount;
+                    } else {
+                        clearInterval(j);
+                    }
+                },)
+            })
+            // < 버튼을 만듦
+            feed_struct_six.insertBefore(feed_struct_scroll_btn_l, feed_struct_six.childNodes.item(0));
+        }
+        if (feed_struct_scroll.scrollLeft < wanted_scroll) {
+            feed_struct_scroll.scrollLeft += scroll_amount;
+        } else {
+            clearInterval(a);
+        }
+    },)
+}
+function plus_modal_recommand_creator_func(creator_character,plus_modal_recommand_creator,isModal){
+    const creator_character_top = plus_modal_recommand_creator.childNodes[1].childNodes.item(0);
+    const creator_character_struct = creator_character_top.childNodes.item(0);
+    const creator_character_six = plus_modal_recommand_creator.childNodes.item(1);
+    const creator_character_scroll = creator_character_six.childNodes.item(0);
+    const creator_character_btn = creator_character_six.childNodes[1].childNodes.item(0);
+    const creater_character_struct_scroll_btn_l = document.createElement("div"); // < 버튼
+    creater_character_struct_scroll_btn_l.setAttribute("width", "61px");
+    creater_character_struct_scroll_btn_l.setAttribute("style", "    width: 61px;\n" +
+        "    height: 100%;\n" +
+        "    position: absolute;\n" +
+        "    top: 0px;\n" +
+        "    left: -1px;\n" +
+        "    z-index: 2;\n" +
+        "    background: linear-gradient(90deg, rgb(26, 25, 24) 0%, rgba(26, 25, 24, 0) 100%);");
+    creater_character_struct_scroll_btn_l.innerHTML = feed_front_html_scroll;
+    var scroll_all_amount = 300 // <  > 누를시 이동할 스크롤 양
+    var scroll_amount = 10; // 끊어서 스크롤 되는 양
+    creator_character_btn.addEventListener('click',()=>{
+        scroll_func(creator_character_scroll,creator_character_six,creater_character_struct_scroll_btn_l,scroll_all_amount,scroll_amount);
+    })
+    i = 0;
+    for (const element of creator_character) {
+        const creator_character_elment = creator_character_struct.cloneNode(true);
+        creator_character_elment.setAttribute("id",i);
+        creator_character_elment.setAttribute("src",element._id);
+        creator_character_elment.childNodes[0].childNodes[0].childNodes[0].childNodes[0].childNodes.item(0).src = element.profileImage.w600;
+        creator_character_elment.childNodes[0].childNodes[0].childNodes[1].childNodes.item(0).textContent = element.name;
+        creator_character_elment.childNodes[0].childNodes[0].childNodes[1].childNodes.item(1).textContent = element.description;
+        creator_character_elment.childNodes[0].childNodes[1].childNodes[1].textContent = element.creator.nickname;
+        if (!element.creator.isCertifiedCreator){
+            creator_character_elment.childNodes[0].childNodes[1].childNodes[2].remove();
+        }
+        if (!element.isAdult){
+            creator_character_elment.childNodes[0].childNodes[0].childNodes[0].childNodes[2].childNodes.item(0).remove();
+        }
+        creator_character_elment.childNodes[0].childNodes.item(0).addEventListener('click',()=>{
+            plus_modal_no(isModal,creator_character,creator_character_elment);
+        })
+        creator_character_elment.childNodes[0].childNodes.item(1).addEventListener('click',()=>{
+            window.location.href = `https://wrtn.ai/character/profile/${creator_character[creator_character_elment.id].creator.wrtnUid}`
+        })
+        creator_character_top.appendChild(creator_character_elment);
+        i++
+    }
+    creator_character_struct.remove();
+}
+function date_and_comment(plus_modal_date_and_comment_struct,comment){
+    if (comment.writer.profileImage == undefined){
+        var guest = document.createElement('div');
+        guest.innerHTML = "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 25\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\" color=\"#85837dff\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M21.7968 14.4524C20.8644 19.0092 16.8325 22.437 12 22.437C11.6548 22.437 11.3137 22.4195 10.9776 22.3854C5.935 21.8733 2 17.6147 2 12.437C2 6.91416 6.47715 2.43701 12 2.43701C17.5228 2.43701 22 6.91416 22 12.437C22 13.1274 21.93 13.8014 21.7968 14.4524ZM16 9.43701C16 11.6462 14.2091 13.437 12 13.437C9.79086 13.437 8 11.6462 8 9.43701C8 7.22787 9.79086 5.43701 12 5.43701C14.2091 5.43701 16 7.22787 16 9.43701ZM18.5786 16.9904C17.1344 19.0731 14.7265 20.437 12 20.437C9.27351 20.437 6.86558 19.0731 5.42131 16.9903C5.79777 16.4264 6.28345 15.9604 6.86686 15.5891C8.2895 14.6837 10.1521 14.437 11.9999 14.437C13.8478 14.437 15.7104 14.6837 17.133 15.5891C17.7165 15.9604 18.2022 16.4264 18.5786 16.9904Z\" fill=\"currentColor\"></path></svg>";
+        guest = guest.childNodes.item(0);
+        plus_modal_date_and_comment_struct.childNodes[1].childNodes[1].childNodes[0].remove();
+        plus_modal_date_and_comment_struct.childNodes[1].childNodes[1].insertBefore(guest,plus_modal_date_and_comment_struct.childNodes[1].childNodes[1].childNodes.item(0));
+    }
+    else{
+        plus_modal_date_and_comment_struct.childNodes[1].childNodes[1].childNodes[0].childNodes.item(0).src = comment.writer.profileImage.w200;
+    }
+    plus_modal_date_and_comment_struct.childNodes[1].childNodes[1].childNodes.item(1).textContent = comment.content;
+}
+function plus_modal_yes(character_list,fe){
+    const plus_modal = document.createElement("div");
+    plus_modal.setAttribute("id","web-modal");
+    plus_modal.setAttribute("style","position: relative !important;z-index: 11 !important;");
+    plus_modal.innerHTML = plus_modal_front_html;
+    const plus_modal_recommand_creator = document.createElement('div');
+    plus_modal_recommand_creator.innerHTML = plus_modal_recommand_creator_front_html;
+    const plus_modal_date_and_comment_struct = document.createElement('div');
+    plus_modal_date_and_comment_struct.innerHTML = plus_modal_date_and_comment;
+    const plus_modal_main_struct = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes.item(1);
+    const plus_modal_x_btn = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[0].childNodes.item(1);
+    const plus_modal_btn = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[3].childNodes.item(0);
+    const plus_modal_img = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[0].childNodes.item(0);
+    const plus_modal_img_likeCount = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[1].childNodes.item(1);
+    const plus_modal_title = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[0].childNodes[0].childNodes.item(0);
+    const plus_modal_creator_link = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[0].childNodes[0].childNodes.item(1);
+    const plus_modal_creator = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes.item(1);
+    const plus_modal_IsCe = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes.item(2);
+    const plus_modal_tabs = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes.item(1);
+    const plus_modal_text = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[2].childNodes.item(0);
+    const plus_modal_tags = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[2].childNodes.item(1);
+    const plus_modal_last = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes.item(3);
+    var creator_character = JSON.parse(getAfetch(`https://api.wrtn.ai/be/character-profiles/${character_list[fe.id].wrtnUid}/characters?limit=10&sort=createdAt`)).data.characters;
+    plus_modal_recommand_creator_func(creator_character,plus_modal_recommand_creator.childNodes.item(0),plus_modal);
+    var comment = JSON.parse(getAfetch(`https://api.wrtn.ai/be/characters/${character_list[fe.id]._id}/comments?sort=likeCount`)).data.comments[0];
+    plus_modal_date_and_comment_struct.childNodes[0].childNodes[1].childNodes[0].childNodes[1].textContent = `${character_list[fe.id].commentCount}건`;
+    plus_modal_date_and_comment_struct.childNodes[0].childNodes[1].childNodes[0].childNodes[3].href = `/character/detail/${character_list[fe.id]._id}`;
+    var update = new Date(character_list[fe.id].updatedAt);
+    plus_modal_date_and_comment_struct.childNodes[0].childNodes[0].childNodes[1].childNodes.item(0).textContent = `${update.getFullYear()}.${update.getMonth()+1}.${update.getDate()}`
+    if (comment == null){
+        plus_modal_date_and_comment_struct.childNodes[0].childNodes[1].remove();
+    }
+    else{
+        date_and_comment(plus_modal_date_and_comment_struct.childNodes.item(0),comment);
+    }
+    plus_modal_last.childNodes[0].childNodes[0].childNodes.item(1).textContent = character_list[fe.id].chatUserCount;
+    plus_modal_last.childNodes[1].childNodes[0].childNodes.item(1).textContent = character_list[fe.id].likeCount;
+    plus_modal_last.childNodes[2].childNodes[0].childNodes.item(1).textContent = character_list[fe.id].commentCount;
+    plus_modal_main_struct.appendChild(plus_modal_date_and_comment_struct);
+    plus_modal_main_struct.appendChild(plus_modal_recommand_creator);
+    plus_modal_img_likeCount.textContent = character_list[fe.id].likeCount;
+    plus_modal_creator_link.href = `https://wrtn.ai/character/profile/${character_list[fe.id].creator.wrtnUid}`
+    const plus_modal_tags_struct = plus_modal_tags.childNodes.item(0).cloneNode(true);
+    plus_modal_tags.childNodes.item(0).remove();
+    for (const element of character_list[fe.id].tags) {
+        const new_tags = plus_modal_tags_struct.cloneNode(true);
+        new_tags.textContent = `#${element}`;
+        plus_modal_tags.appendChild(new_tags);
+    }
+    plus_modal_IsAudult = document.createElement('div');
+    plus_modal_IsAudult.innerHTML = plus_modal_front_html_IsAudlt;
+    plus_modal_img.src = character_list[fe.id].profileImage.w600;
+    plus_modal_title.textContent = character_list[fe.id].name;
+    plus_modal_creator.textContent = character_list[fe.id].creator.nickname;
+    plus_modal_tabs.childNodes[1].childNodes.item(1).textContent = character_list[fe.id].promptTemplate.name;
+    plus_modal_text.textContent = character_list[fe.id].description;
+    if (character_list[fe.id].isAdult){
+        plus_modal_tabs.appendChild(plus_modal_IsAudult);
+    }
+    if (!character_list[fe.id].hasImage){
+        plus_modal_tabs.childNodes.item(0).remove();
+    }
+    else{
+        plus_modal_tabs.childNodes[0].childNodes.item(1).textContent = `이미지 ${character_list[fe.id].imageCount}장`;
+    }
+    if (!character_list[fe.id].creator.isCertifiedCreator){
+        plus_modal_IsCe.remove();
+    }
+    plus_modal_x_btn.addEventListener('click',()=>{
+        plus_modal.remove();
+    })
+    plus_modal_btn.addEventListener('click',()=>{
+        window.location.href = `https://wrtn.ai/character/u/${fe.getAttribute("src")}`;
+    })
+    document.body.appendChild(plus_modal);
+}
+
+function plus_modal_no(isModal,character_list,fe){
+    isModal.setAttribute("style","position: relative !important;z-index: 11 !important;");
+    isModal.innerHTML = plus_modal_front_html;
+    const plus_modal_recommand_creator = document.createElement('div');
+    plus_modal_recommand_creator.innerHTML = plus_modal_recommand_creator_front_html;
+    const plus_modal_date_and_comment_struct = document.createElement('div');
+    plus_modal_date_and_comment_struct.innerHTML = plus_modal_date_and_comment;
+    const plus_modal_main_struct = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes.item(1);
+    const plus_modal_x_btn = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[0].childNodes.item(1);
+    const plus_modal_btn = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[3].childNodes.item(0);
+    const plus_modal_img = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[0].childNodes.item(0);
+    const plus_modal_img_likeCount = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[1].childNodes.item(1);
+    const plus_modal_title = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[0].childNodes[0].childNodes.item(0);
+    const plus_modal_creator_link = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[0].childNodes[0].childNodes.item(1);
+    const plus_modal_creator = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes.item(1);
+    const plus_modal_IsCe = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes.item(2);
+    const plus_modal_tabs = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes.item(1);
+    const plus_modal_text = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[2].childNodes.item(0);
+    const plus_modal_tags = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[2].childNodes.item(1);
+    const plus_modal_last = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes.item(3);
+    var creator_character = JSON.parse(getAfetch(`https://api.wrtn.ai/be/character-profiles/${character_list[fe.id].wrtnUid}/characters?limit=10&sort=createdAt`)).data.characters;
+    plus_modal_recommand_creator_func(creator_character,plus_modal_recommand_creator.childNodes.item(0),isModal);
+    var comment = JSON.parse(getAfetch(`https://api.wrtn.ai/be/characters/${character_list[fe.id]._id}/comments?sort=likeCount`)).data.comments[0];
+    plus_modal_date_and_comment_struct.childNodes[0].childNodes[1].childNodes[0].childNodes[1].textContent = `${character_list[fe.id].commentCount}건`;
+    plus_modal_date_and_comment_struct.childNodes[0].childNodes[1].childNodes[0].childNodes[3].href = `/character/detail/${character_list[fe.id]._id}`;
+    var update = new Date(character_list[fe.id].updatedAt);
+    plus_modal_date_and_comment_struct.childNodes[0].childNodes[0].childNodes[1].childNodes.item(0).textContent = `${update.getFullYear()}.${update.getMonth()+1}.${update.getDate()}`
+    if (comment == null){
+        plus_modal_date_and_comment_struct.childNodes[0].childNodes[1].remove();
+    }
+    else{
+        date_and_comment(plus_modal_date_and_comment_struct.childNodes.item(0),comment);
+    }
+    plus_modal_last.childNodes[0].childNodes[0].childNodes.item(1).textContent = character_list[fe.id].chatUserCount;
+    plus_modal_last.childNodes[1].childNodes[0].childNodes.item(1).textContent = character_list[fe.id].likeCount;
+    plus_modal_last.childNodes[2].childNodes[0].childNodes.item(1).textContent = character_list[fe.id].commentCount;
+    plus_modal_main_struct.appendChild(plus_modal_date_and_comment_struct);
+    plus_modal_main_struct.appendChild(plus_modal_recommand_creator);
+    plus_modal_img_likeCount.textContent = character_list[fe.id].likeCount;
+    plus_modal_creator_link.href = `https://wrtn.ai/character/profile/${character_list[fe.id].creator.wrtnUid}`
+    const plus_modal_tags_struct = plus_modal_tags.childNodes.item(0).cloneNode(true);
+    plus_modal_tags.childNodes.item(0).remove();
+    for (const element of character_list[fe.id].tags) {
+        const new_tags = plus_modal_tags_struct.cloneNode(true);
+        new_tags.textContent = `#${element}`;
+        plus_modal_tags.appendChild(new_tags);
+    }
+    plus_modal_IsAudult = document.createElement('div');
+    plus_modal_IsAudult.innerHTML = plus_modal_front_html_IsAudlt;
+    plus_modal_img.src = character_list[fe.id].profileImage.w600;
+    plus_modal_title.textContent = character_list[fe.id].name;
+    plus_modal_creator.textContent = character_list[fe.id].creator.nickname;
+    plus_modal_tabs.childNodes[1].childNodes.item(1).textContent = character_list[fe.id].promptTemplate.name;
+    plus_modal_text.textContent = character_list[fe.id].description;
+    if (character_list[fe.id].isAdult){
+        plus_modal_tabs.appendChild(plus_modal_IsAudult);
+    }
+    if (!character_list[fe.id].hasImage){
+        plus_modal_tabs.childNodes.item(0).remove();
+    }
+    else{
+        plus_modal_tabs.childNodes[0].childNodes.item(1).textContent = `이미지 ${character_list[fe.id].imageCount}장`;
+    }
+    if (!character_list[fe.id].creator.isCertifiedCreator){
+        plus_modal_IsCe.remove();
+    }
+    plus_modal_x_btn.addEventListener('click',()=>{
+        isModal.remove();
+    })
+    plus_modal_btn.addEventListener('click',()=>{
+        window.location.href = `https://wrtn.ai/character/u/${fe.getAttribute("src")}`;
+    })
+}
+
 //쿠키 가져오는 함수
 function getCookie(name) {
     let matches = document.cookie.match(new RegExp(
@@ -620,534 +1294,11 @@ function main(){
         }
         character_list_NoCe = new_list;
         //랭킹 플러스
-        //비크레이터
         if (Tfeed != null) {
-            const feed_struct = Tfeed.childNodes.item(0).cloneNode(true); //피드의 제일위에서 2번째 요소를 가져와서 형식만 가져옴
-            const feed_struct_text = feed_struct.childNodes[0].childNodes[0].childNodes.item(0); //랭킹 플러스 (Fast wrtn) <- 이거 들어간 텍스트 구역
-            const feed_struct_scroll = feed_struct.childNodes[1].childNodes[0].childNodes.item(0); //스크롤 가져오기
-            const feed_struct_elements = feed_struct.childNodes[1].childNodes[0].childNodes[0].childNodes.item(0); //형식에 들어있던 캐챗 목록 가져오기
-            const feed_struct_element = feed_struct_elements.childNodes.item(0).cloneNode(true); //형식에 들어있던 캐챗중 제일 첫번째걸 형식 삼아 가져옴
-            feed_struct_element.innerHTML = "<div display=\"flex\" class=\"css-1878569\"><div width=\"100%\" height=\"148px,156px\" class=\"css-12gw3o5\"><div class=\"character_avatar css-1w95giw\" overflow=\"hidden\" display=\"flex\" width=\"100%\" height=\"100%\"><img src=\"https://d394jeh9729epj.cloudfront.net/8BwuNilwTjW-GGKONkJEOUk2/b176b0a9-46e0-4d93-baff-7dace3602f6e_w600.webp\" alt=\"character_thumbnail\" style=\"width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0px; left: 0px; border-radius: inherit;\"></div><div class=\"character-card-overlay css-1w1m2cv\" width=\"100%\" height=\"100%\" display=\"none\"></div><div display=\"flex\" class=\"css-17z36ob\"><div width=\"28px\" height=\"28px\" display=\"flex\" class=\"css-1bygmye\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 16 16\" fill=\"none\"><mask id=\"mask0_8669_146020\" maskUnits=\"userSpaceOnUse\" x=\"0\" y=\"0\" width=\"16\" height=\"16\" style=\"mask-type: alpha;\"><rect width=\"16\" height=\"16\" fill=\"#D9D9D9\"></rect></mask><g mask=\"url(#mask0_8669_146020)\"><path d=\"M7.9974 8.66732C8.64184 8.66732 9.19184 8.43954 9.6474 7.98398C10.103 7.52843 10.3307 6.97843 10.3307 6.33398C10.3307 5.68954 10.103 5.13954 9.6474 4.68398C9.19184 4.22843 8.64184 4.00065 7.9974 4.00065C7.35295 4.00065 6.80295 4.22843 6.3474 4.68398C5.89184 5.13954 5.66406 5.68954 5.66406 6.33398C5.66406 6.97843 5.89184 7.52843 6.3474 7.98398C6.80295 8.43954 7.35295 8.66732 7.9974 8.66732ZM7.9974 14.6673C6.37517 14.2562 5.08073 13.3673 4.11406 12.0007C3.1474 10.634 2.66406 9.10065 2.66406 7.40065V3.33398L7.9974 1.33398L13.3307 3.33398V7.40065C13.3307 9.10065 12.8474 10.634 11.8807 12.0007C10.9141 13.3673 9.61962 14.2562 7.9974 14.6673ZM7.9974 13.2673C8.65295 13.0562 9.23351 12.7257 9.73906 12.2757C10.2446 11.8257 10.6863 11.3173 11.0641 10.7507C10.5863 10.5062 10.0891 10.3201 9.5724 10.1923C9.05573 10.0645 8.53073 10.0007 7.9974 10.0007C7.46406 10.0007 6.93906 10.0645 6.4224 10.1923C5.90573 10.3201 5.40851 10.5062 4.93073 10.7507C5.30851 11.3173 5.75017 11.8257 6.25573 12.2757C6.76129 12.7257 7.34184 13.0562 7.9974 13.2673Z\" fill=\"#FED4D3\"></path></g></svg></div><div width=\"28px\" height=\"28px\" display=\"flex\" class=\"css-1bygmye\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\" color=\"#ffffffff\"><mask id=\"mask0_13669_84\" maskUnits=\"userSpaceOnUse\" x=\"0\" y=\"0\" width=\"24\" height=\"24\" style=\"mask-type: alpha;\"><rect width=\"24\" height=\"24\" fill=\"currentColor\"></rect></mask><g mask=\"url(#mask0_13669_84)\"><path d=\"M11.951 13.4023L17.3804 9.78409L11.951 6.16591V13.4023ZM6.25011 20.9778C5.75241 21.0532 5.30373 20.9364 4.90406 20.6273C4.5044 20.3183 4.2744 19.915 4.21408 19.4175L3.01508 9.53534C2.95475 9.03784 3.07541 8.5931 3.37704 8.20113C3.67868 7.80916 4.07834 7.58303 4.57604 7.52272L5.61667 7.38704V14.7591C5.61667 15.7541 5.97109 16.6059 6.67993 17.3144C7.38877 18.023 8.24089 18.3773 9.23628 18.3773H17.6519C17.5614 18.7391 17.3804 19.0519 17.1089 19.3157C16.8375 19.5796 16.5057 19.7341 16.1135 19.7793L6.25011 20.9778ZM9.23628 16.5682C8.73858 16.5682 8.31253 16.391 7.95811 16.0368C7.60369 15.6825 7.42648 15.2566 7.42648 14.7591V4.80909C7.42648 4.31159 7.60369 3.8857 7.95811 3.53142C8.31253 3.17714 8.73858 3 9.23628 3H19.1902C19.6879 3 20.114 3.17714 20.4684 3.53142C20.8228 3.8857 21 4.31159 21 4.80909V14.7591C21 15.2566 20.8228 15.6825 20.4684 16.0368C20.114 16.391 19.6879 16.5682 19.1902 16.5682H9.23628Z\" fill=\"currentColor\"></path></g></svg></div></div></div><div display=\"flex\" class=\"css-19ssvua\"><p color=\"$color_text_primary\" class=\"css-sjt0pv\">NTR 오피스</p><p color=\"$color_text_secondary\" class=\"css-9xnb32\">[R18/이미지 30장] 부하직원의 상사가 되어 그의 아내를 NTR하자! (NTL) / 요즘 부장님이 내 아내를 보는 눈빛이 심상치 않다... 더군다나, 아내도 요즘 태도가 변하기 시작했다... (NTR)\n" +
-                "\n" +
-                "[스토리: 1일차~14일차, 8~11일차 온천 접대 이벤트]</p></div></div><div display=\"flex\" width=\"fit-content\" class=\"css-13rssxq\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 25 25\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\" color=\"#85837dff\"><path d=\"M12.5 22.437C11.1167 22.437 9.81667 22.1745 8.6 21.6495C7.38333 21.1245 6.325 20.412 5.425 19.512C4.525 18.612 3.8125 17.5537 3.2875 16.337C2.7625 15.1203 2.5 13.8203 2.5 12.437C2.5 11.0537 2.7625 9.75368 3.2875 8.53701C3.8125 7.32034 4.525 6.26201 5.425 5.36201C6.325 4.46201 7.38333 3.74951 8.6 3.22451C9.81667 2.69951 11.1167 2.43701 12.5 2.43701C13.8833 2.43701 15.1833 2.69951 16.4 3.22451C17.6167 3.74951 18.675 4.46201 19.575 5.36201C20.475 6.26201 21.1875 7.32034 21.7125 8.53701C22.2375 9.75368 22.5 11.0537 22.5 12.437V13.887C22.5 14.8703 22.1625 15.7078 21.4875 16.3995C20.8125 17.0912 19.9833 17.437 19 17.437C18.4167 17.437 17.8667 17.312 17.35 17.062C16.8333 16.812 16.4 16.4537 16.05 15.987C15.5667 16.4703 15.0208 16.8328 14.4125 17.0745C13.8042 17.3162 13.1667 17.437 12.5 17.437C11.1167 17.437 9.9375 16.9495 8.9625 15.9745C7.9875 14.9995 7.5 13.8203 7.5 12.437C7.5 11.0537 7.9875 9.87451 8.9625 8.89951C9.9375 7.92451 11.1167 7.43701 12.5 7.43701C13.8833 7.43701 15.0625 7.92451 16.0375 8.89951C17.0125 9.87451 17.5 11.0537 17.5 12.437V13.887C17.5 14.3203 17.6417 14.687 17.925 14.987C18.2083 15.287 18.5667 15.437 19 15.437C19.4333 15.437 19.7917 15.287 20.075 14.987C20.3583 14.687 20.5 14.3203 20.5 13.887V12.437C20.5 10.2037 19.725 8.31201 18.175 6.76201C16.625 5.21201 14.7333 4.43701 12.5 4.43701C10.2667 4.43701 8.375 5.21201 6.825 6.76201C5.275 8.31201 4.5 10.2037 4.5 12.437C4.5 14.6703 5.275 16.562 6.825 18.112C8.375 19.662 10.2667 20.437 12.5 20.437H17.5V22.437H12.5ZM12.5 15.437C13.3333 15.437 14.0417 15.1453 14.625 14.562C15.2083 13.9787 15.5 13.2703 15.5 12.437C15.5 11.6037 15.2083 10.8953 14.625 10.312C14.0417 9.72868 13.3333 9.43701 12.5 9.43701C11.6667 9.43701 10.9583 9.72868 10.375 10.312C9.79167 10.8953 9.5 11.6037 9.5 12.437C9.5 13.2703 9.79167 13.9787 10.375 14.562C10.9583 15.1453 11.6667 15.437 12.5 15.437Z\" fill=\"currentColor\"></path></svg><p color=\"$color_text_tertiary\" class=\"css-uoinwu\">야로망</p><svg width=\"16\" height=\"16\" viewBox=\"0 0 18 18\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" color=\"#f72f08ff\"><path d=\"M15.75 12.578V5.42297C15.75 5.25797 15.66 5.10047 15.5175 5.01797L9.2325 1.43297C9.09 1.35047 8.9175 1.35047 8.775 1.43297L2.4825 5.01797C2.34 5.10047 2.25 5.25797 2.25 5.42297V12.5855C2.25 12.7505 2.34 12.908 2.4825 12.9905L8.7675 16.5755C8.91 16.658 9.0825 16.658 9.225 16.5755L15.51 12.9905C15.6525 12.908 15.7425 12.7505 15.7425 12.5855L15.75 12.578Z\" fill=\"url(#paint0_linear_14670_273716)\"></path><g filter=\"url(#filter0_i_14670_273716)\"><path d=\"M12.4169 7.5382L10.2944 7.2907C10.2944 7.2907 10.2269 7.2682 10.2194 7.2307L9.32686 5.2882C9.19936 5.0107 8.80186 5.0107 8.67436 5.2882L7.78186 7.2307C7.78186 7.2307 7.73686 7.2832 7.70686 7.2907L5.58436 7.5382C5.27686 7.5757 5.15686 7.9507 5.38186 8.1607L6.94936 9.6082C6.94936 9.6082 6.98686 9.6682 6.97936 9.6982L6.55936 11.7907C6.49936 12.0907 6.82186 12.3232 7.08436 12.1732L8.94436 11.1232C8.94436 11.1232 9.01186 11.1082 9.04186 11.1232L10.9019 12.1732C11.1719 12.3232 11.4869 12.0907 11.4269 11.7907L11.0069 9.6982C11.0069 9.6982 11.0069 9.6307 11.0369 9.6082L12.6044 8.1607C12.8294 7.9507 12.7094 7.5757 12.4019 7.5382H12.4169Z\" fill=\"url(#paint1_linear_14670_273716)\"></path></g><defs><filter id=\"filter0_i_14670_273716\" x=\"5.26562\" y=\"5.08008\" width=\"7.45312\" height=\"7.14062\" filterUnits=\"userSpaceOnUse\" color-interpolation-filters=\"sRGB\"><feFlood flood-opacity=\"0\" result=\"BackgroundImageFix\"></feFlood><feBlend mode=\"normal\" in=\"SourceGraphic\" in2=\"BackgroundImageFix\" result=\"shape\"></feBlend><feColorMatrix in=\"SourceAlpha\" type=\"matrix\" values=\"0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0\" result=\"hardAlpha\"></feColorMatrix><feOffset></feOffset><feGaussianBlur stdDeviation=\"0.68175\"></feGaussianBlur><feComposite in2=\"hardAlpha\" operator=\"arithmetic\" k2=\"-1\" k3=\"1\"></feComposite><feColorMatrix type=\"matrix\" values=\"0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0\"></feColorMatrix><feBlend mode=\"normal\" in2=\"shape\" result=\"effect1_innerShadow_14670_273716\"></feBlend></filter><linearGradient id=\"paint0_linear_14670_273716\" x1=\"9\" y1=\"1.37109\" x2=\"9\" y2=\"16.6373\" gradientUnits=\"userSpaceOnUse\"><stop stop-color=\"#FE1571\"></stop><stop offset=\"1\" stop-color=\"#FF27B4\"></stop></linearGradient><linearGradient id=\"paint1_linear_14670_273716\" x1=\"8.99311\" y1=\"5.08008\" x2=\"8.99311\" y2=\"12.22\" gradientUnits=\"userSpaceOnUse\"><stop stop-color=\"#FFFDEF\"></stop><stop offset=\"1\" stop-color=\"#FFFBDD\"></stop></linearGradient></defs></svg></div>";
-            const feed_struct_scroll_btn = feed_struct.childNodes[1].childNodes[0].childNodes[1].childNodes.item(0); // > 버튼
-            const feed_struct_scroll_btn_l = document.createElement("div"); // < 버튼
-            feed_struct_scroll_btn_l.setAttribute("width", "61px");
-            feed_struct_scroll_btn_l.setAttribute("style", "    width: 61px;\n" +
-                "    height: 100%;\n" +
-                "    position: absolute;\n" +
-                "    top: 0px;\n" +
-                "    left: -1px;\n" +
-                "    z-index: 2;\n" +
-                "    background: linear-gradient(90deg, rgb(26, 25, 24) 0%, rgba(26, 25, 24, 0) 100%);");
-            feed_struct_scroll_btn_l.innerHTML = feed_front_html_scroll;
-            const feed_struct_six = feed_struct.childNodes[1].childNodes.item(0); // < 버튼.
-            var scroll_all_amount = 300 // <  > 누를시 이동할 스크롤 양
-            var scroll_amount = 10; // 끊어서 스크롤 되는 양
-            // > 버튼 누를시
-            feed_struct_scroll_btn.addEventListener('click', () => {
-                /* TODO
-                < > 버튼이 유동적으로 삭제될수있게끔 수정 해야함
-                 */
-                //만약 예상되는 스크롤양이 한계를 넘어선경우 제한시킴
-                if (feed_struct_scroll.scrollLeft + scroll_all_amount > feed_struct_scroll.scrollWidth - feed_struct_scroll.clientWidth) {
-                    wanted_scroll = feed_struct_scroll.scrollWidth - feed_struct_scroll.clientWidth;
-                } else {
-                    wanted_scroll = feed_struct_scroll.scrollLeft + scroll_all_amount;
-                }
-                var a = setInterval(() => {
-                    //만약 > 버튼을 눌렀을시 < 버튼이 생기게 함 length는 < 버튼이 하나만 생기도록 제한
-                    if (0 < feed_struct_scroll.scrollLeft && feed_struct_six.childNodes.length < 3) {
-                        // < 버튼을 눌렀을시
-                        feed_struct_scroll_btn_l.addEventListener('click', () => {
-                            if (feed_struct_scroll.scrollLeft - scroll_all_amount < 0) {
-                                wanted_scroll = feed_struct_scroll.scrollWidth - feed_struct_scroll.clientWidth;
-                            } else {
-                                wanted_scroll = feed_struct_scroll.scrollLeft - scroll_all_amount;
-                            }
-                            var j = setInterval(() => {
-                                if (wanted_scroll == 0) {
-                                    feed_struct_scroll.scrollLeft = 0;
-                                } else if (feed_struct_scroll.scrollLeft > wanted_scroll) {
-                                    feed_struct_scroll.scrollLeft -= scroll_amount;
-                                } else {
-                                    clearInterval(j);
-                                }
-                            },)
-                        })
-                        // < 버튼을 만듦
-                        feed_struct_six.insertBefore(feed_struct_scroll_btn_l, feed_struct_six.childNodes.item(0));
-                    }
-                    if (feed_struct_scroll.scrollLeft < wanted_scroll) {
-                        feed_struct_scroll.scrollLeft += scroll_amount;
-                    } else {
-                        clearInterval(a);
-                    }
-                },)
-            })
-            /* 이 부분 부터는 랭킹 플러스 내부에 자격을 만족하는 캐릭터챗을 추가하는 기능
-            근대 웃긴게 캐릭터챗을 불러오는데 시간이 걸려서 (원래 형식에 들어있어야할 캐챗을 불러오는거 말하는거임)
-            한번에 알잘딱갈센으로 삭제가 안됨 그래서 기존에 남아있던 캐챗이 전부 삭제될때까지 for문 돌림
-            */
-            //character_list에 불러와진 캐챗이 실제 랭킹플러스에 추가됬는지 확인하기위한 배열
-            var IsAppend = []
-            for (let i = 0; i < character_list_NoCe.length; i++) {
-                IsAppend[i] = false
-            }
-            var jm = setInterval(() => {
-                if (document.URL != "https://wrtn.ai/character") {
-                    clearInterval(jm);
-                }
-                if (feed_struct_element.childNodes.length != 0) {
-                    if (feed_struct_elements.childNodes.item(0).id == "") {
-                        for (const feedStructElementElement of feed_struct_elements.childNodes) {
-                            if (feedStructElementElement.id == "") {
-                                feedStructElementElement.remove();
-                            } else {
-                                IsAppend[Number(feedStructElementElement.id)] = true;
-                            }
-                        }
-                        i = 0;
-                        for (const argument of IsAppend) {
-                            if (!argument) {
-                                const fe = feed_struct_element.cloneNode(true);
-                                if (fe.childNodes[0].childNodes[0].childNodes[0].childNodes.item(1) != null) {
-                                    fe.childNodes[0].childNodes[0].childNodes[0].childNodes.item(1).remove();
-                                }
-                                fe.setAttribute("id", i);
-                                fe.setAttribute("src", character_list_NoCe[i]._id)
-                                try {
-                                    fe.childNodes[0].childNodes[0].childNodes[0].childNodes.item(0).src = character_list_NoCe[i].profileImage.w600;
-                                } catch {
-                                    console.log("image");
-                                }
-                                try {
-                                    fe.childNodes[0].childNodes[1].childNodes.item(0).textContent = character_list_NoCe[i].name;
-                                } catch {
-                                    console.log("name");
-                                }
-                                try {
-                                    fe.childNodes[0].childNodes[1].childNodes.item(1).textContent = character_list_NoCe[i].description;
-                                } catch {
-                                    console.log("info");
-                                }
-                                try {
-                                    fe.childNodes[1].childNodes.item(1).textContent = character_list_NoCe[i].creator.nickname;
-                                } catch {
-                                    console.log("creater");
-                                }
-                                try {
-                                    const fe_event_bar = fe.childNodes.item(0);
-                                    const fe_creator_event_bar = fe.childNodes.item(1);
-                                    fe_creator_event_bar.addEventListener('click',()=>{
-                                        window.location.href = `https://wrtn.ai/character/profile/${character_list_NoCe[fe.id].creator.wrtnUid}`;
-                                    })
-                                    fe_event_bar.addEventListener("click", () => {
-                                        const isModal = document.getElementById("web-modal");
-                                        if (isModal == null){
-                                            const plus_modal = document.createElement("div");
-                                            plus_modal.setAttribute("id","web-modal");
-                                            plus_modal.setAttribute("style","position: relative !important;z-index: 11 !important;");
-                                            plus_modal.innerHTML = plus_modal_front_html;
-                                            const plus_modal_x_btn = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[0].childNodes.item(1);
-                                            const plus_modal_btn = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[3].childNodes.item(0);
-                                            const plus_modal_img = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[0].childNodes.item(0);
-                                            const plus_modal_img_likeCount = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[1].childNodes.item(1);
-                                            const plus_modal_title = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[0].childNodes[0].childNodes.item(0);
-                                            const plus_modal_creator_link = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[0].childNodes[0].childNodes.item(1);
-                                            const plus_modal_creator = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes.item(1);
-                                            const plus_modal_IsCe = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes.item(2);
-                                            const plus_modal_tabs = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes.item(1);
-                                            const plus_modal_text = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[2].childNodes.item(0);
-                                            const plus_modal_tags = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[2].childNodes.item(1);
-                                            const plus_modal_last = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes.item(3);
-                                            plus_modal_last.childNodes[0].childNodes[0].childNodes.item(1).textContent = character_list_NoCe[fe.id].chatUserCount;
-                                            plus_modal_last.childNodes[1].childNodes[0].childNodes.item(1).textContent = character_list_NoCe[fe.id].likeCount;
-                                            plus_modal_last.childNodes[2].childNodes[0].childNodes.item(1).textContent = character_list_NoCe[fe.id].commentCount;
-                                            plus_modal_img_likeCount.textContent = character_list_NoCe[fe.id].likeCount;
-                                            plus_modal_creator_link.href = `https://wrtn.ai/character/profile/${character_list_NoCe[fe.id].creator.wrtnUid}`
-                                            const plus_modal_tags_struct = plus_modal_tags.childNodes.item(0).cloneNode(true);
-                                            plus_modal_tags.childNodes.item(0).remove();
-                                            for (const element of character_list_NoCe[fe.id].tags) {
-                                                const new_tags = plus_modal_tags_struct.cloneNode(true);
-                                                new_tags.textContent = `#${element}`;
-                                                plus_modal_tags.appendChild(new_tags);
-                                            }
-                                            plus_modal_IsAudult = document.createElement('div');
-                                            plus_modal_IsAudult.innerHTML = plus_modal_front_html_IsAudlt;
-                                            plus_modal_img.src = character_list_NoCe[fe.id].profileImage.w600;
-                                            plus_modal_title.textContent = character_list_NoCe[fe.id].name;
-                                            plus_modal_creator.textContent = character_list_NoCe[fe.id].creator.nickname;
-                                            plus_modal_tabs.childNodes[1].childNodes.item(1).textContent = character_list_NoCe[fe.id].promptTemplate.name;
-                                            plus_modal_text.textContent = character_list_NoCe[fe.id].description;
-                                            if (character_list_NoCe[fe.id].isAdult){
-                                                plus_modal_tabs.appendChild(plus_modal_IsAudult);
-                                            }
-                                            if (!character_list_NoCe[fe.id].hasImage){
-                                                plus_modal_tabs.childNodes.item(0).remove();
-                                            }
-                                            else{
-                                                plus_modal_tabs.childNodes[0].childNodes.item(1).textContent = `이미지 ${character_list_NoCe[fe.id].imageCount}장`;
-                                            }
-                                            if (!character_list_NoCe[fe.id].creator.isCertifiedCreator){
-                                                plus_modal_IsCe.remove();
-                                            }
-                                            plus_modal_x_btn.addEventListener('click',()=>{
-                                                plus_modal.remove();
-                                            })
-                                            plus_modal_btn.addEventListener('click',()=>{
-                                                window.location.href = `https://wrtn.ai/character/u/${fe.getAttribute("src")}`;
-                                            })
-                                            document.body.appendChild(plus_modal);
-                                        }
-                                        else{
-                                            isModal.setAttribute("style","position: relative !important;z-index: 11 !important;");
-                                            isModal.innerHTML = plus_modal_front_html;
-                                            const plus_modal_x_btn = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[0].childNodes.item(1);
-                                            const plus_modal_btn = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[3].childNodes.item(0);
-                                            const plus_modal_img = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[0].childNodes.item(0);
-                                            const plus_modal_img_likeCount = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[1].childNodes.item(1);
-                                            const plus_modal_title = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[0].childNodes[0].childNodes.item(0);
-                                            const plus_modal_creator_link = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[0].childNodes[0].childNodes.item(1);
-                                            const plus_modal_creator = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes.item(1);
-                                            const plus_modal_IsCe = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes.item(2);
-                                            const plus_modal_tabs = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes.item(1);
-                                            const plus_modal_text = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[2].childNodes.item(0);
-                                            const plus_modal_tags = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[2].childNodes.item(1);
-                                            const plus_modal_last = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes.item(3);
-                                            plus_modal_last.childNodes[0].childNodes[0].childNodes.item(1).textContent = character_list_NoCe[fe.id].chatUserCount;
-                                            plus_modal_last.childNodes[1].childNodes[0].childNodes.item(1).textContent = character_list_NoCe[fe.id].likeCount;
-                                            plus_modal_last.childNodes[2].childNodes[0].childNodes.item(1).textContent = character_list_NoCe[fe.id].commentCount;
-                                            plus_modal_img_likeCount.textContent = character_list_NoCe[fe.id].likeCount;
-                                            plus_modal_creator_link.href = `https://wrtn.ai/character/profile/${character_list_NoCe[fe.id].creator.wrtnUid}`
-                                            const plus_modal_tags_struct = plus_modal_tags.childNodes.item(0).cloneNode(true);
-                                            plus_modal_tags.childNodes.item(0).remove();
-                                            for (const element of character_list_NoCe[fe.id].tags) {
-                                                const new_tags = plus_modal_tags_struct.cloneNode(true);
-                                                new_tags.textContent = `#${element}`;
-                                                plus_modal_tags.appendChild(new_tags);
-                                            }
-                                            plus_modal_IsAudult = document.createElement('div');
-                                            plus_modal_IsAudult.innerHTML = plus_modal_front_html_IsAudlt;
-                                            plus_modal_img.src = character_list_NoCe[fe.id].profileImage.w600;
-                                            plus_modal_title.textContent = character_list_NoCe[fe.id].name;
-                                            plus_modal_creator.textContent = character_list_NoCe[fe.id].creator.nickname;
-                                            plus_modal_tabs.childNodes[1].childNodes.item(1).textContent = character_list_NoCe[fe.id].promptTemplate.name;
-                                            plus_modal_text.textContent = character_list_NoCe[fe.id].description;
-                                            if (character_list_NoCe[fe.id].isAdult){
-                                                plus_modal_tabs.appendChild(plus_modal_IsAudult);
-                                            }
-                                            if (!character_list_NoCe[fe.id].hasImage){
-                                                plus_modal_tabs.childNodes.item(0).remove();
-                                            }
-                                            else{
-                                                plus_modal_tabs.childNodes[0].childNodes.item(1).textContent = `이미지 ${character_list_NoCe[fe.id].imageCount}장`;
-                                            }
-                                            if (!character_list_NoCe[fe.id].creator.isCertifiedCreator){
-                                                plus_modal_IsCe.remove();
-                                            }
-                                            plus_modal_x_btn.addEventListener('click',()=>{
-                                                isModal.remove();
-                                            })
-                                            plus_modal_btn.addEventListener('click',()=>{
-                                                window.location.href = `https://wrtn.ai/character/u/${fe.getAttribute("src")}`;
-                                            })
-                                        }
-                                    })
-                                } catch {
-                                    console.log("link");
-                                }
-                                try {
-                                    if (!character_list_NoCe[i].creator.isCertifiedCreator) {
-                                        fe.childNodes[1].childNodes.item(2).remove();
-                                    }
-                                } catch {
-                                    console.log("isCertifiedCreator");
-                                }
-                                try {
-                                    if (!character_list_NoCe[i].isAdult) {
-                                        fe.childNodes[0].childNodes[0].childNodes[2].childNodes.item(0).remove();
-                                    }
-                                } catch {
-                                    console.log("isAdult");
-                                }
-                                feed_struct_elements.appendChild(fe);
-                            }
-                            i++;
-                        }
-                    }
-                }
-            })
-            if (feed_struct.childNodes[0].childNodes[0].childNodes.item(1) != null){
-                feed_struct.childNodes[0].childNodes[0].childNodes.item(1).remove();
-            }
-            feed_struct_text.textContent = "랭킹 플러스 (Fast wrtn)";
-            Tfeed.prepend(feed_struct);
-        }
-        //크레이터
-        if (Tfeed != null) {
-            const feed_struct = Tfeed.childNodes.item(1).cloneNode(true); //피드의 제일위에서 2번째 요소를 가져와서 형식만 가져옴
-            const feed_struct_text = feed_struct.childNodes[0].childNodes[0].childNodes.item(0); //랭킹 플러스 (Fast wrtn) <- 이거 들어간 텍스트 구역
-            const feed_struct_scroll = feed_struct.childNodes[1].childNodes[0].childNodes.item(0); //스크롤 가져오기
-            const feed_struct_elements = feed_struct.childNodes[1].childNodes[0].childNodes[0].childNodes.item(0); //형식에 들어있던 캐챗 목록 가져오기
-            const feed_struct_element = feed_struct_elements.childNodes.item(0).cloneNode(true); //형식에 들어있던 캐챗중 제일 첫번째걸 형식 삼아 가져옴
-            feed_struct_element.innerHTML = "<div display=\"flex\" class=\"css-1878569\"><div width=\"100%\" height=\"148px,156px\" class=\"css-12gw3o5\"><div class=\"character_avatar css-1w95giw\" overflow=\"hidden\" display=\"flex\" width=\"100%\" height=\"100%\"><img src=\"https://d394jeh9729epj.cloudfront.net/8BwuNilwTjW-GGKONkJEOUk2/b176b0a9-46e0-4d93-baff-7dace3602f6e_w600.webp\" alt=\"character_thumbnail\" style=\"width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0px; left: 0px; border-radius: inherit;\"></div><div class=\"character-card-overlay css-1w1m2cv\" width=\"100%\" height=\"100%\" display=\"none\"></div><div display=\"flex\" class=\"css-17z36ob\"><div width=\"28px\" height=\"28px\" display=\"flex\" class=\"css-1bygmye\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 16 16\" fill=\"none\"><mask id=\"mask0_8669_146020\" maskUnits=\"userSpaceOnUse\" x=\"0\" y=\"0\" width=\"16\" height=\"16\" style=\"mask-type: alpha;\"><rect width=\"16\" height=\"16\" fill=\"#D9D9D9\"></rect></mask><g mask=\"url(#mask0_8669_146020)\"><path d=\"M7.9974 8.66732C8.64184 8.66732 9.19184 8.43954 9.6474 7.98398C10.103 7.52843 10.3307 6.97843 10.3307 6.33398C10.3307 5.68954 10.103 5.13954 9.6474 4.68398C9.19184 4.22843 8.64184 4.00065 7.9974 4.00065C7.35295 4.00065 6.80295 4.22843 6.3474 4.68398C5.89184 5.13954 5.66406 5.68954 5.66406 6.33398C5.66406 6.97843 5.89184 7.52843 6.3474 7.98398C6.80295 8.43954 7.35295 8.66732 7.9974 8.66732ZM7.9974 14.6673C6.37517 14.2562 5.08073 13.3673 4.11406 12.0007C3.1474 10.634 2.66406 9.10065 2.66406 7.40065V3.33398L7.9974 1.33398L13.3307 3.33398V7.40065C13.3307 9.10065 12.8474 10.634 11.8807 12.0007C10.9141 13.3673 9.61962 14.2562 7.9974 14.6673ZM7.9974 13.2673C8.65295 13.0562 9.23351 12.7257 9.73906 12.2757C10.2446 11.8257 10.6863 11.3173 11.0641 10.7507C10.5863 10.5062 10.0891 10.3201 9.5724 10.1923C9.05573 10.0645 8.53073 10.0007 7.9974 10.0007C7.46406 10.0007 6.93906 10.0645 6.4224 10.1923C5.90573 10.3201 5.40851 10.5062 4.93073 10.7507C5.30851 11.3173 5.75017 11.8257 6.25573 12.2757C6.76129 12.7257 7.34184 13.0562 7.9974 13.2673Z\" fill=\"#FED4D3\"></path></g></svg></div><div width=\"28px\" height=\"28px\" display=\"flex\" class=\"css-1bygmye\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\" color=\"#ffffffff\"><mask id=\"mask0_13669_84\" maskUnits=\"userSpaceOnUse\" x=\"0\" y=\"0\" width=\"24\" height=\"24\" style=\"mask-type: alpha;\"><rect width=\"24\" height=\"24\" fill=\"currentColor\"></rect></mask><g mask=\"url(#mask0_13669_84)\"><path d=\"M11.951 13.4023L17.3804 9.78409L11.951 6.16591V13.4023ZM6.25011 20.9778C5.75241 21.0532 5.30373 20.9364 4.90406 20.6273C4.5044 20.3183 4.2744 19.915 4.21408 19.4175L3.01508 9.53534C2.95475 9.03784 3.07541 8.5931 3.37704 8.20113C3.67868 7.80916 4.07834 7.58303 4.57604 7.52272L5.61667 7.38704V14.7591C5.61667 15.7541 5.97109 16.6059 6.67993 17.3144C7.38877 18.023 8.24089 18.3773 9.23628 18.3773H17.6519C17.5614 18.7391 17.3804 19.0519 17.1089 19.3157C16.8375 19.5796 16.5057 19.7341 16.1135 19.7793L6.25011 20.9778ZM9.23628 16.5682C8.73858 16.5682 8.31253 16.391 7.95811 16.0368C7.60369 15.6825 7.42648 15.2566 7.42648 14.7591V4.80909C7.42648 4.31159 7.60369 3.8857 7.95811 3.53142C8.31253 3.17714 8.73858 3 9.23628 3H19.1902C19.6879 3 20.114 3.17714 20.4684 3.53142C20.8228 3.8857 21 4.31159 21 4.80909V14.7591C21 15.2566 20.8228 15.6825 20.4684 16.0368C20.114 16.391 19.6879 16.5682 19.1902 16.5682H9.23628Z\" fill=\"currentColor\"></path></g></svg></div></div></div><div display=\"flex\" class=\"css-19ssvua\"><p color=\"$color_text_primary\" class=\"css-sjt0pv\">NTR 오피스</p><p color=\"$color_text_secondary\" class=\"css-9xnb32\">[R18/이미지 30장] 부하직원의 상사가 되어 그의 아내를 NTR하자! (NTL) / 요즘 부장님이 내 아내를 보는 눈빛이 심상치 않다... 더군다나, 아내도 요즘 태도가 변하기 시작했다... (NTR)\n" +
-                "\n" +
-                "[스토리: 1일차~14일차, 8~11일차 온천 접대 이벤트]</p></div></div><div display=\"flex\" width=\"fit-content\" class=\"css-13rssxq\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 25 25\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\" color=\"#85837dff\"><path d=\"M12.5 22.437C11.1167 22.437 9.81667 22.1745 8.6 21.6495C7.38333 21.1245 6.325 20.412 5.425 19.512C4.525 18.612 3.8125 17.5537 3.2875 16.337C2.7625 15.1203 2.5 13.8203 2.5 12.437C2.5 11.0537 2.7625 9.75368 3.2875 8.53701C3.8125 7.32034 4.525 6.26201 5.425 5.36201C6.325 4.46201 7.38333 3.74951 8.6 3.22451C9.81667 2.69951 11.1167 2.43701 12.5 2.43701C13.8833 2.43701 15.1833 2.69951 16.4 3.22451C17.6167 3.74951 18.675 4.46201 19.575 5.36201C20.475 6.26201 21.1875 7.32034 21.7125 8.53701C22.2375 9.75368 22.5 11.0537 22.5 12.437V13.887C22.5 14.8703 22.1625 15.7078 21.4875 16.3995C20.8125 17.0912 19.9833 17.437 19 17.437C18.4167 17.437 17.8667 17.312 17.35 17.062C16.8333 16.812 16.4 16.4537 16.05 15.987C15.5667 16.4703 15.0208 16.8328 14.4125 17.0745C13.8042 17.3162 13.1667 17.437 12.5 17.437C11.1167 17.437 9.9375 16.9495 8.9625 15.9745C7.9875 14.9995 7.5 13.8203 7.5 12.437C7.5 11.0537 7.9875 9.87451 8.9625 8.89951C9.9375 7.92451 11.1167 7.43701 12.5 7.43701C13.8833 7.43701 15.0625 7.92451 16.0375 8.89951C17.0125 9.87451 17.5 11.0537 17.5 12.437V13.887C17.5 14.3203 17.6417 14.687 17.925 14.987C18.2083 15.287 18.5667 15.437 19 15.437C19.4333 15.437 19.7917 15.287 20.075 14.987C20.3583 14.687 20.5 14.3203 20.5 13.887V12.437C20.5 10.2037 19.725 8.31201 18.175 6.76201C16.625 5.21201 14.7333 4.43701 12.5 4.43701C10.2667 4.43701 8.375 5.21201 6.825 6.76201C5.275 8.31201 4.5 10.2037 4.5 12.437C4.5 14.6703 5.275 16.562 6.825 18.112C8.375 19.662 10.2667 20.437 12.5 20.437H17.5V22.437H12.5ZM12.5 15.437C13.3333 15.437 14.0417 15.1453 14.625 14.562C15.2083 13.9787 15.5 13.2703 15.5 12.437C15.5 11.6037 15.2083 10.8953 14.625 10.312C14.0417 9.72868 13.3333 9.43701 12.5 9.43701C11.6667 9.43701 10.9583 9.72868 10.375 10.312C9.79167 10.8953 9.5 11.6037 9.5 12.437C9.5 13.2703 9.79167 13.9787 10.375 14.562C10.9583 15.1453 11.6667 15.437 12.5 15.437Z\" fill=\"currentColor\"></path></svg><p color=\"$color_text_tertiary\" class=\"css-uoinwu\">야로망</p><svg width=\"16\" height=\"16\" viewBox=\"0 0 18 18\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" color=\"#f72f08ff\"><path d=\"M15.75 12.578V5.42297C15.75 5.25797 15.66 5.10047 15.5175 5.01797L9.2325 1.43297C9.09 1.35047 8.9175 1.35047 8.775 1.43297L2.4825 5.01797C2.34 5.10047 2.25 5.25797 2.25 5.42297V12.5855C2.25 12.7505 2.34 12.908 2.4825 12.9905L8.7675 16.5755C8.91 16.658 9.0825 16.658 9.225 16.5755L15.51 12.9905C15.6525 12.908 15.7425 12.7505 15.7425 12.5855L15.75 12.578Z\" fill=\"url(#paint0_linear_14670_273716)\"></path><g filter=\"url(#filter0_i_14670_273716)\"><path d=\"M12.4169 7.5382L10.2944 7.2907C10.2944 7.2907 10.2269 7.2682 10.2194 7.2307L9.32686 5.2882C9.19936 5.0107 8.80186 5.0107 8.67436 5.2882L7.78186 7.2307C7.78186 7.2307 7.73686 7.2832 7.70686 7.2907L5.58436 7.5382C5.27686 7.5757 5.15686 7.9507 5.38186 8.1607L6.94936 9.6082C6.94936 9.6082 6.98686 9.6682 6.97936 9.6982L6.55936 11.7907C6.49936 12.0907 6.82186 12.3232 7.08436 12.1732L8.94436 11.1232C8.94436 11.1232 9.01186 11.1082 9.04186 11.1232L10.9019 12.1732C11.1719 12.3232 11.4869 12.0907 11.4269 11.7907L11.0069 9.6982C11.0069 9.6982 11.0069 9.6307 11.0369 9.6082L12.6044 8.1607C12.8294 7.9507 12.7094 7.5757 12.4019 7.5382H12.4169Z\" fill=\"url(#paint1_linear_14670_273716)\"></path></g><defs><filter id=\"filter0_i_14670_273716\" x=\"5.26562\" y=\"5.08008\" width=\"7.45312\" height=\"7.14062\" filterUnits=\"userSpaceOnUse\" color-interpolation-filters=\"sRGB\"><feFlood flood-opacity=\"0\" result=\"BackgroundImageFix\"></feFlood><feBlend mode=\"normal\" in=\"SourceGraphic\" in2=\"BackgroundImageFix\" result=\"shape\"></feBlend><feColorMatrix in=\"SourceAlpha\" type=\"matrix\" values=\"0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0\" result=\"hardAlpha\"></feColorMatrix><feOffset></feOffset><feGaussianBlur stdDeviation=\"0.68175\"></feGaussianBlur><feComposite in2=\"hardAlpha\" operator=\"arithmetic\" k2=\"-1\" k3=\"1\"></feComposite><feColorMatrix type=\"matrix\" values=\"0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0\"></feColorMatrix><feBlend mode=\"normal\" in2=\"shape\" result=\"effect1_innerShadow_14670_273716\"></feBlend></filter><linearGradient id=\"paint0_linear_14670_273716\" x1=\"9\" y1=\"1.37109\" x2=\"9\" y2=\"16.6373\" gradientUnits=\"userSpaceOnUse\"><stop stop-color=\"#FE1571\"></stop><stop offset=\"1\" stop-color=\"#FF27B4\"></stop></linearGradient><linearGradient id=\"paint1_linear_14670_273716\" x1=\"8.99311\" y1=\"5.08008\" x2=\"8.99311\" y2=\"12.22\" gradientUnits=\"userSpaceOnUse\"><stop stop-color=\"#FFFDEF\"></stop><stop offset=\"1\" stop-color=\"#FFFBDD\"></stop></linearGradient></defs></svg></div>";
-            const feed_struct_scroll_btn = feed_struct.childNodes[1].childNodes[0].childNodes[1].childNodes.item(0); // > 버튼
-            const feed_struct_scroll_btn_l = document.createElement("div"); // < 버튼
-            feed_struct_scroll_btn_l.setAttribute("width", "61px");
-            feed_struct_scroll_btn_l.setAttribute("style", "    width: 61px;\n" +
-                "    height: 100%;\n" +
-                "    position: absolute;\n" +
-                "    top: 0px;\n" +
-                "    left: -1px;\n" +
-                "    z-index: 2;\n" +
-                "    background: linear-gradient(90deg, rgb(26, 25, 24) 0%, rgba(26, 25, 24, 0) 100%);");
-            feed_struct_scroll_btn_l.innerHTML = feed_front_html_scroll;
-            const feed_struct_six = feed_struct.childNodes[1].childNodes.item(0); // < 버튼.
-            var scroll_all_amount = 300 // <  > 누를시 이동할 스크롤 양
-            var scroll_amount = 10; // 끊어서 스크롤 되는 양
-            // > 버튼 누를시
-            feed_struct_scroll_btn.addEventListener('click', () => {
-                /* TODO
-                < > 버튼이 유동적으로 삭제될수있게끔 수정 해야함
-                 */
-                //만약 예상되는 스크롤양이 한계를 넘어선경우 제한시킴
-                if (feed_struct_scroll.scrollLeft + scroll_all_amount > feed_struct_scroll.scrollWidth - feed_struct_scroll.clientWidth) {
-                    wanted_scroll = feed_struct_scroll.scrollWidth - feed_struct_scroll.clientWidth;
-                } else {
-                    wanted_scroll = feed_struct_scroll.scrollLeft + scroll_all_amount;
-                }
-                var a = setInterval(() => {
-                    //만약 > 버튼을 눌렀을시 < 버튼이 생기게 함 length는 < 버튼이 하나만 생기도록 제한
-                    if (0 < feed_struct_scroll.scrollLeft && feed_struct_six.childNodes.length < 3) {
-                        // < 버튼을 눌렀을시
-                        feed_struct_scroll_btn_l.addEventListener('click', () => {
-                            if (feed_struct_scroll.scrollLeft - scroll_all_amount < 0) {
-                                wanted_scroll = feed_struct_scroll.scrollWidth - feed_struct_scroll.clientWidth;
-                            } else {
-                                wanted_scroll = feed_struct_scroll.scrollLeft - scroll_all_amount;
-                            }
-                            var j = setInterval(() => {
-                                if (wanted_scroll == 0) {
-                                    feed_struct_scroll.scrollLeft = 0;
-                                } else if (feed_struct_scroll.scrollLeft > wanted_scroll) {
-                                    feed_struct_scroll.scrollLeft -= scroll_amount;
-                                } else {
-                                    clearInterval(j);
-                                }
-                            },)
-                        })
-                        // < 버튼을 만듦
-                        feed_struct_six.insertBefore(feed_struct_scroll_btn_l, feed_struct_six.childNodes.item(0));
-                    }
-                    if (feed_struct_scroll.scrollLeft < wanted_scroll) {
-                        feed_struct_scroll.scrollLeft += scroll_amount;
-                    } else {
-                        clearInterval(a);
-                    }
-                },)
-            })
-            /* 이 부분 부터는 랭킹 플러스 내부에 자격을 만족하는 캐릭터챗을 추가하는 기능
-            근대 웃긴게 캐릭터챗을 불러오는데 시간이 걸려서 (원래 형식에 들어있어야할 캐챗을 불러오는거 말하는거임)
-            한번에 알잘딱갈센으로 삭제가 안됨 그래서 기존에 남아있던 캐챗이 전부 삭제될때까지 for문 돌림
-            */
-            //character_list에 불러와진 캐챗이 실제 랭킹플러스에 추가됬는지 확인하기위한 배열
-            var IsAppend = []
-            for (let i = 0; i < character_list.length; i++) {
-                IsAppend[i] = false
-            }
-            var jm = setInterval(() => {
-                if (document.URL != "https://wrtn.ai/character") {
-                    clearInterval(jm);
-                }
-                if (feed_struct_element.childNodes.length != 0) {
-                    if (feed_struct_elements.childNodes.item(0).id == "") {
-                        for (const feedStructElementElement of feed_struct_elements.childNodes) {
-                            if (feedStructElementElement.id == "") {
-                                feedStructElementElement.remove();
-                            } else {
-                                IsAppend[Number(feedStructElementElement.id)] = true;
-                            }
-                        }
-                        i = 0;
-                        for (const argument of IsAppend) {
-                            if (!argument) {
-                                const fe = feed_struct_element.cloneNode(true);
-                                if (fe.childNodes[0].childNodes[0].childNodes[0].childNodes.item(1) != null) {
-                                    fe.childNodes[0].childNodes[0].childNodes[0].childNodes.item(1).remove();
-                                }
-                                fe.setAttribute("id", i);
-                                fe.setAttribute("src", character_list[i]._id)
-                                try {
-                                    fe.childNodes[0].childNodes[0].childNodes[0].childNodes.item(0).src = character_list[i].profileImage.w600;
-                                } catch {
-                                    console.log("image");
-                                }
-                                try {
-                                    fe.childNodes[0].childNodes[1].childNodes.item(0).textContent = character_list[i].name;
-                                } catch {
-                                    console.log("name");
-                                }
-                                try {
-                                    fe.childNodes[0].childNodes[1].childNodes.item(1).textContent = character_list[i].description;
-                                } catch {
-                                    console.log("info");
-                                }
-                                try {
-                                    fe.childNodes[1].childNodes.item(1).textContent = character_list[i].creator.nickname;
-                                } catch {
-                                    console.log("creater");
-                                }
-                                try {
-                                    const fe_event_bar = fe.childNodes.item(0);
-                                    const fe_creator_event_bar = fe.childNodes.item(1);
-                                    fe_creator_event_bar.addEventListener('click',()=>{
-                                        window.location.href = `https://wrtn.ai/character/profile/${character_list[fe.id].creator.wrtnUid}`;
-                                    })
-                                    fe_event_bar.addEventListener("click", () => {
-                                        const isModal = document.getElementById("web-modal");
-                                        if (isModal == null){
-                                            const plus_modal = document.createElement("div");
-                                            plus_modal.setAttribute("id","web-modal");
-                                            plus_modal.setAttribute("style","position: relative !important;z-index: 11 !important;");
-                                            plus_modal.innerHTML = plus_modal_front_html;
-                                            const plus_modal_x_btn = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[0].childNodes.item(1);
-                                            const plus_modal_btn = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[3].childNodes.item(0);
-                                            const plus_modal_img = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[0].childNodes.item(0);
-                                            const plus_modal_img_likeCount = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[1].childNodes.item(1);
-                                            const plus_modal_title = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[0].childNodes[0].childNodes.item(0);
-                                            const plus_modal_creator_link = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[0].childNodes[0].childNodes.item(1);
-                                            const plus_modal_creator = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes.item(1);
-                                            const plus_modal_IsCe = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes.item(2);
-                                            const plus_modal_tabs = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes.item(1);
-                                            const plus_modal_text = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[2].childNodes.item(0);
-                                            const plus_modal_tags = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[2].childNodes.item(1);
-                                            const plus_modal_last = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes.item(3);
-                                            plus_modal_last.childNodes[0].childNodes[0].childNodes.item(1).textContent = character_list[fe.id].chatUserCount;
-                                            plus_modal_last.childNodes[1].childNodes[0].childNodes.item(1).textContent = character_list[fe.id].likeCount;
-                                            plus_modal_last.childNodes[2].childNodes[0].childNodes.item(1).textContent = character_list[fe.id].commentCount;
-                                            plus_modal_img_likeCount.textContent = character_list[fe.id].likeCount;
-                                            plus_modal_creator_link.href = `https://wrtn.ai/character/profile/${character_list[fe.id].creator.wrtnUid}`
-                                            const plus_modal_tags_struct = plus_modal_tags.childNodes.item(0).cloneNode(true);
-                                            plus_modal_tags.childNodes.item(0).remove();
-                                            for (const element of character_list[fe.id].tags) {
-                                                const new_tags = plus_modal_tags_struct.cloneNode(true);
-                                                new_tags.textContent = `#${element}`;
-                                                plus_modal_tags.appendChild(new_tags);
-                                            }
-                                            plus_modal_IsAudult = document.createElement('div');
-                                            plus_modal_IsAudult.innerHTML = plus_modal_front_html_IsAudlt;
-                                            plus_modal_img.src = character_list[fe.id].profileImage.w600;
-                                            plus_modal_title.textContent = character_list[fe.id].name;
-                                            plus_modal_creator.textContent = character_list[fe.id].creator.nickname;
-                                            plus_modal_tabs.childNodes[1].childNodes.item(1).textContent = character_list[fe.id].promptTemplate.name;
-                                            plus_modal_text.textContent = character_list[fe.id].description;
-                                            if (character_list[fe.id].isAdult){
-                                                plus_modal_tabs.appendChild(plus_modal_IsAudult);
-                                            }
-                                            if (!character_list[fe.id].hasImage){
-                                                plus_modal_tabs.childNodes.item(0).remove();
-                                            }
-                                            else{
-                                                plus_modal_tabs.childNodes[0].childNodes.item(1).textContent = `이미지 ${character_list[fe.id].imageCount}장`;
-                                            }
-                                            if (!character_list[fe.id].creator.isCertifiedCreator){
-                                                plus_modal_IsCe.remove();
-                                            }
-                                            plus_modal_x_btn.addEventListener('click',()=>{
-                                                plus_modal.remove();
-                                            })
-                                            plus_modal_btn.addEventListener('click',()=>{
-                                                window.location.href = `https://wrtn.ai/character/u/${fe.getAttribute("src")}`;
-                                            })
-                                            document.body.appendChild(plus_modal);
-                                        }
-                                        else{
-                                            isModal.setAttribute("style","position: relative !important;z-index: 11 !important;");
-                                            isModal.innerHTML = plus_modal_front_html;
-                                            const plus_modal_x_btn = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[0].childNodes.item(1);
-                                            const plus_modal_btn = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[3].childNodes.item(0);
-                                            const plus_modal_img = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[0].childNodes.item(0);
-                                            const plus_modal_img_likeCount = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[1].childNodes.item(1);
-                                            const plus_modal_title = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[0].childNodes[0].childNodes.item(0);
-                                            const plus_modal_creator_link = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[0].childNodes[0].childNodes.item(1);
-                                            const plus_modal_creator = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes.item(1);
-                                            const plus_modal_IsCe = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes.item(2);
-                                            const plus_modal_tabs = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes.item(1);
-                                            const plus_modal_text = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[2].childNodes.item(0);
-                                            const plus_modal_tags = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[2].childNodes.item(1);
-                                            const plus_modal_last = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes.item(3);
-                                            plus_modal_last.childNodes[0].childNodes[0].childNodes.item(1).textContent = character_list[fe.id].chatUserCount;
-                                            plus_modal_last.childNodes[1].childNodes[0].childNodes.item(1).textContent = character_list[fe.id].likeCount;
-                                            plus_modal_last.childNodes[2].childNodes[0].childNodes.item(1).textContent = character_list[fe.id].commentCount;
-                                            plus_modal_img_likeCount.textContent = character_list[fe.id].likeCount;
-                                            plus_modal_creator_link.href = `https://wrtn.ai/character/profile/${character_list[fe.id].creator.wrtnUid}`
-                                            const plus_modal_tags_struct = plus_modal_tags.childNodes.item(0).cloneNode(true);
-                                            plus_modal_tags.childNodes.item(0).remove();
-                                            for (const element of character_list[fe.id].tags) {
-                                                const new_tags = plus_modal_tags_struct.cloneNode(true);
-                                                new_tags.textContent = `#${element}`;
-                                                plus_modal_tags.appendChild(new_tags);
-                                            }
-                                            plus_modal_IsAudult = document.createElement('div');
-                                            plus_modal_IsAudult.innerHTML = plus_modal_front_html_IsAudlt;
-                                            plus_modal_img.src = character_list[fe.id].profileImage.w600;
-                                            plus_modal_title.textContent = character_list[fe.id].name;
-                                            plus_modal_creator.textContent = character_list[fe.id].creator.nickname;
-                                            plus_modal_tabs.childNodes[1].childNodes.item(1).textContent = character_list[fe.id].promptTemplate.name;
-                                            plus_modal_text.textContent = character_list[fe.id].description;
-                                            if (character_list[fe.id].isAdult){
-                                                plus_modal_tabs.appendChild(plus_modal_IsAudult);
-                                            }
-                                            if (!character_list[fe.id].hasImage){
-                                                plus_modal_tabs.childNodes.item(0).remove();
-                                            }
-                                            else{
-                                                plus_modal_tabs.childNodes[0].childNodes.item(1).textContent = `이미지 ${character_list[fe.id].imageCount}장`;
-                                            }
-                                            if (!character_list[fe.id].creator.isCertifiedCreator){
-                                                plus_modal_IsCe.remove();
-                                            }
-                                            plus_modal_x_btn.addEventListener('click',()=>{
-                                                isModal.remove();
-                                            })
-                                            plus_modal_btn.addEventListener('click',()=>{
-                                                window.location.href = `https://wrtn.ai/character/u/${fe.getAttribute("src")}`;
-                                            })
-                                        }
-                                    })
-                                } catch {
-                                    console.log("link");
-                                }
-                                try {
-                                    if (!character_list[i].creator.isCertifiedCreator) {
-                                        fe.childNodes[1].childNodes.item(2).remove();
-                                    }
-                                } catch {
-                                    console.log("isCertifiedCreator");
-                                }
-                                try {
-                                    if (!character_list[i].isAdult) {
-                                        fe.childNodes[0].childNodes[0].childNodes[2].childNodes.item(0).remove();
-                                    }
-                                } catch {
-                                    console.log("isCertifiedCreator");
-                                }
-                                feed_struct_elements.appendChild(fe);
-                            }
-                            i++;
-                        }
-                    }
-                }
-            })
-            if (feed_struct.childNodes[0].childNodes[0].childNodes.item(1) != null){
-                feed_struct.childNodes[0].childNodes[0].childNodes.item(1).remove();
-            }
-            feed_struct.childNodes[0].childNodes.item(0).appendChild(feed_struct_element.childNodes[1].childNodes.item(2).cloneNode(true));
-            feed_struct_text.textContent = "랭킹 플러스 (Fast wrtn)";
-            Tfeed.prepend(feed_struct);
+            //비크레이터
+            plus_modal_func(Tfeed,character_list_NoCe,false);
+            //크레이터
+            plus_modal_func(Tfeed,character_list,true);
         }
     }
     //채팅방 기능
