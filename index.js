@@ -481,33 +481,93 @@ var plus_modal_front_html = "<div style=\"    position: fixed;\n" +
     "    -webkit-box-align: center;\n" +
     "    -ms-flex-align: center;\n" +
     "    align-items: center;\">대화하기</div></button></div></div></div></div>";
+
+//쿠키 가져오는 함수
+function getCookie(name) {
+    let matches = document.cookie.match(new RegExp(
+      "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+    ));
+    return matches ? decodeURIComponent(matches[1]) : undefined;
+}
+
+//url 리퀘스트 동기처리
+//GET
+function getAfetch (url){
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", url, false); // 동기(false) ,비동기(true)
+    //헤더 정보가 필요한 경우에만 추가
+    xhr.setRequestHeader("Authorization", `Bearer ${getCookie("access_token")}`);
+    xhr.send();
+    if (xhr.status == 200) { //GET 요청에 대해 성공적인경우
+        return xhr.responseText // 서버로부터 받은 데이터를 출력
+    }
+    else{
+        alert(`api get 요청 실패 ${url}`);
+    }
+}
+//POST
+function postAfetch (url,data){
+    //******* AJAX Sync POST 요청 *******
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", url, false); // 동기(false) ,비동기(true)
+    xhr.setRequestHeader("Authorization", `Bearer ${getCookie("access_token")}`);
+    //POST 요청 시 일반적으로 Content-Type은 세팅
+    xhr.setRequestHeader("Content-Type", "application/json");
+    //POST 요청에 보낼 데이터 작성
+    xhr.send(JSON.stringify(data)); //JSON 형태로 변환하여 서버에 전송
+    if (xhr.status == 201){
+        return xhr.responseText;
+    }
+    else{
+        alert(`api post 요청 실패 ${url} | ${JSON.stringify(data)}`);
+    }
+}
+//PUT
+function putAfetch (url,data){
+    //******* AJAX Sync PUT 요청 *******
+    const xhr = new XMLHttpRequest();
+    xhr.open("PUT", url, false); // 동기(false) ,비동기(true)
+    xhr.setRequestHeader("Authorization", `Bearer ${getCookie("access_token")}`);
+    //PUT 요청 시 일반적으로 Content-Type은 세팅
+    xhr.setRequestHeader("Content-Type", "application/json");
+    //PUT 요청에 보낼 데이터 작성
+    xhr.send(JSON.stringify(data)); //JSON 형태로 변환하여 서버에 전송
+    if (xhr.status == 200){
+        return xhr.responseText;
+    }
+    else{
+        alert(`api put 요청 실패 ${url} | ${JSON.stringify(data)}`);
+    }
+}
 //real-time apply
 var lastest = "";
 setInterval(()=>{
-    //character
-    if (lastest != document.URL){
-        if (document.URL == "https://wrtn.ai/character"){
-            main();
-        }
-    }
-    //character/u
-    const targetDiv = document.getElementsByClassName("css-d7pngb").item(0);
-    if (targetDiv != null) {
-        if (targetDiv.childNodes.length < 5) {
-            main();
-        }
-    }
-    //character/my
-    if (lastest != document.URL){
-        if (document.URL.split("/")[4] == "my"){
-            main();
-        }
-    }
-    //character/builder
-    if (lastest != document.URL){
-        if (document.URL.split("/")[4] != undefined){
-            if (document.URL.split("/")[4].split("?")[0] == "builder"){
+    if (getCookie("access_token") != undefined){
+        //character
+        if (lastest != document.URL){
+            if (document.URL == "https://wrtn.ai/character"){
                 main();
+            }
+        }
+        //character/u
+        const targetDiv = document.getElementsByClassName("css-d7pngb").item(0);
+        if (targetDiv != null) {
+            if (targetDiv.childNodes.length < 5) {
+                main();
+            }
+        }
+        //character/my
+        if (lastest != document.URL){
+            if (document.URL.split("/")[4] == "my"){
+                main();
+            }
+        }
+        //character/builder
+        if (lastest != document.URL){
+            if (document.URL.split("/")[4] != undefined){
+                if (document.URL.split("/")[4].split("?")[0] == "builder"){
+                    main();
+                }
             }
         }
     }
@@ -515,64 +575,6 @@ setInterval(()=>{
 },500)
 
 function main(){
-
-    //쿠키 가져오는 함수
-    function getCookie(name) {
-      let matches = document.cookie.match(new RegExp(
-        "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-      ));
-      return matches ? decodeURIComponent(matches[1]) : undefined;
-    }
-
-    //url 리퀘스트 동기처리
-    //GET
-    function getAfetch (url){
-        const xhr = new XMLHttpRequest();
-        xhr.open("GET", url, false); // 동기(false) ,비동기(true)
-        //헤더 정보가 필요한 경우에만 추가
-        xhr.setRequestHeader("Authorization", `Bearer ${getCookie("access_token")}`);
-        xhr.send();
-        if (xhr.status == 200) { //GET 요청에 대해 성공적인경우
-            return xhr.responseText // 서버로부터 받은 데이터를 출력
-        }
-        else{
-            alert(`api get 요청 실패 ${url}`);
-        }
-    }
-    //POST
-    function postAfetch (url,data){
-        //******* AJAX Sync POST 요청 *******
-        const xhr = new XMLHttpRequest();
-        xhr.open("POST", url, false); // 동기(false) ,비동기(true)
-        xhr.setRequestHeader("Authorization", `Bearer ${getCookie("access_token")}`);
-        //POST 요청 시 일반적으로 Content-Type은 세팅
-        xhr.setRequestHeader("Content-Type", "application/json");
-        //POST 요청에 보낼 데이터 작성
-        xhr.send(JSON.stringify(data)); //JSON 형태로 변환하여 서버에 전송
-        if (xhr.status == 201){
-            return xhr.responseText;
-        }
-        else{
-            alert(`api post 요청 실패 ${url} | ${JSON.stringify(data)}`);
-        }
-    }
-    //PUT
-    function putAfetch (url,data){
-        //******* AJAX Sync PUT 요청 *******
-        const xhr = new XMLHttpRequest();
-        xhr.open("PUT", url, false); // 동기(false) ,비동기(true)
-        xhr.setRequestHeader("Authorization", `Bearer ${getCookie("access_token")}`);
-        //PUT 요청 시 일반적으로 Content-Type은 세팅
-        xhr.setRequestHeader("Content-Type", "application/json");
-        //PUT 요청에 보낼 데이터 작성
-        xhr.send(JSON.stringify(data)); //JSON 형태로 변환하여 서버에 전송
-        if (xhr.status == 200){
-            return xhr.responseText;
-        }
-        else{
-            alert(`api put 요청 실패 ${url} | ${JSON.stringify(data)}`);
-        }
-    }
     //캐릭터 플러스 랭킹 기능
     if (document.URL.split("/")[3] == "character" && document.URL.split("/").length == 4){
         /*
