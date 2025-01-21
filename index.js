@@ -15,6 +15,20 @@
 파이참 에디터로 코딩하는데 무료체험판 끝나니까 결제하라고 계속 알림 띄워주네요...
 저도 후원 받는게 부끄럽고 죄송스럽긴 하지만 부탁드립니다!
 */
+/* TODO
+코드 가독성 개선 (시급)
+
+대화 내역 검색 기능 및 순서 변경 기능
+
+랭킹 플러스 검색 필터링기능 추가
+
+팝업 기능 다채롭게 만들기
+
+*/
+
+
+
+//댓글 및 업데이트 날짜 front html + css
 var plus_modal_date_and_comment = "<div display=\"flex\" width=\"100%\" style=\"    display: flex;\n" +
     "    flex-direction: column;\n" +
     "    width: 100%;\n" +
@@ -89,6 +103,8 @@ var plus_modal_date_and_comment = "<div display=\"flex\" width=\"100%\" style=\"
     "    font-weight: 500;\n" +
     "    white-space: pre-line;\n" +
     "    word-break: break-all;\">넘 귀엽다</p></div></div></div>";
+
+//프롬프트 front html + css
 var recommand_prompt_html = "<button display=\"flex\" width=\"fit-content\" height=\"34px\" color=\"$color_text_primary\" style=\"    border-radius: 5px;\n" +
                                 "    -webkit-box-pack: center;\n" +
                                 "    justify-content: center;\n" +
@@ -123,6 +139,7 @@ var recommand_prompt_html = "<button display=\"flex\" width=\"fit-content\" heig
                                 "    -webkit-box-align: center;\n" +
                                 "    -ms-flex-align: center;\n" +
                                 "    align-items: center;\">+</div></button>";
+//페르소나 front html + css
 var persona_modal_html = "<div style=\"position: fixed; inset: 0px; z-index: -1; background-color: var(--color_bg_dimmed); cursor: default;\"><div style=\"align-items: flex-end; width: 100%; height: 100%; display: flex; -webkit-box-align: center; align-items: center; -webkit-box-pack: center; justify-content: center; position: relative;\"><div width=\"100%\" display=\"flex\" style=\"    width: 600px;\n" +
                                         "    max-width: calc(100% - 40px);\n" +
                                         "    background-color: var(--color_surface_elevated);\n" +
@@ -216,6 +233,7 @@ var persona_modal_html = "<div style=\"position: fixed; inset: 0px; z-index: -1;
                                         "    gap: 8px;\n" +
                                         "    -webkit-box-align: center;\n" +
                                         "    align-items: center;\">등록</div></button></div></div></div></div></div>";
+//피드(랭킹플러스) front html + css
 var feed_front_html_scroll = "<button width=\"36px\" height=\"36px\" display=\"flex\" style=\"    position: absolute;\n" +
                 "    left: 0px;\n" +
                 "    top: 60px;\n" +
@@ -233,6 +251,7 @@ var feed_front_html_scroll = "<button width=\"36px\" height=\"36px\" display=\"f
                 "    align-items: center;\n" +
                 "    background-color: var(--color_surface_tertiary);\n" +
                 "    z-index: 3;\"><svg width=\"24\" height=\"24\" viewBox=\"0 0 25 25\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\" color=\"#a8a69dff\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M14.5 18.801L9.55026 13.8512L9.19671 13.4977C8.61092 12.9119 8.61092 11.9621 9.19671 11.3764L9.55026 11.0228L14.5 6.07305L15.9142 7.48726L10.9645 12.437L15.9142 17.3868L14.5 18.801Z\" fill=\"currentColor\"></path></svg></button>";
+//랭킹 플러스 모달 IsAudult front html + css
 var plus_modal_front_html_IsAudlt = "<div display=\"flex\" style=\"    display: flex;\n" +
     "    flex-direction: row;\n" +
     "    padding: 4px 6px;\n" +
@@ -248,6 +267,7 @@ var plus_modal_front_html_IsAudlt = "<div display=\"flex\" style=\"    display: 
     "    font-size: 14px;\n" +
     "    line-height: 100%;\n" +
     "    font-weight: 500;\">언세이프티</p></div>";
+//제작자의 다른 캐릭터챗 보기 front html + css
 var plus_modal_recommand_creator_front_html = "<div display=\"flex\" width=\"100%\" style=\"    display: flex;\n" +
     "    flex-direction: column;\n" +
     "    width: 100%;\n" +
@@ -469,7 +489,8 @@ var plus_modal_recommand_creator_front_html = "<div display=\"flex\" width=\"100
     "    -ms-flex-align: center;\n" +
     "    align-items: center;\n" +
     "    background-color: var(--color_surface_tertiary);\n" +
-    "    z-index: 3;\"><svg width=\"24\" height=\"24\" viewBox=\"0 0 25 25\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\" color=\"#a8a69dff\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M10.5 18.801L15.4498 13.8512L15.8033 13.4977C16.3891 12.9119 16.3891 11.9621 15.8033 11.3764L15.4498 11.0228L10.5 6.07305L9.08581 7.48726L14.0356 12.437L9.08581 17.3868L10.5 18.801Z\" fill=\"currentColor\"></path></svg></button></div></div></div>"
+    "    z-index: 3;\"><svg width=\"24\" height=\"24\" viewBox=\"0 0 25 25\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\" color=\"#a8a69dff\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M10.5 18.801L15.4498 13.8512L15.8033 13.4977C16.3891 12.9119 16.3891 11.9621 15.8033 11.3764L15.4498 11.0228L10.5 6.07305L9.08581 7.48726L14.0356 12.437L9.08581 17.3868L10.5 18.801Z\" fill=\"currentColor\"></path></svg></button></div></div></div>";
+//플러스 랭킹 내부 모달 html + css
 var plus_modal_front_html = "<div style=\"    position: fixed;\n" +
     "    inset: 0px;\n" +
     "    z-index: -1;\n" +
@@ -777,16 +798,18 @@ var plus_modal_front_html = "<div style=\"    position: fixed;\n" +
     "    -webkit-box-align: center;\n" +
     "    -ms-flex-align: center;\n" +
     "    align-items: center;\">대화하기</div></button></div></div></div></div>";
+var feed_struct_element_front_html = "<div display=\"flex\" class=\"css-1878569\"><div width=\"100%\" height=\"148px,156px\" class=\"css-12gw3o5\"><div class=\"character_avatar css-1w95giw\" overflow=\"hidden\" display=\"flex\" width=\"100%\" height=\"100%\"><img src=\"https://d394jeh9729epj.cloudfront.net/8BwuNilwTjW-GGKONkJEOUk2/b176b0a9-46e0-4d93-baff-7dace3602f6e_w600.webp\" alt=\"character_thumbnail\" style=\"width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0px; left: 0px; border-radius: inherit;\"></div><div class=\"character-card-overlay css-1w1m2cv\" width=\"100%\" height=\"100%\" display=\"none\"></div><div display=\"flex\" class=\"css-17z36ob\"><div width=\"28px\" height=\"28px\" display=\"flex\" class=\"css-1bygmye\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 16 16\" fill=\"none\"><mask id=\"mask0_8669_146020\" maskUnits=\"userSpaceOnUse\" x=\"0\" y=\"0\" width=\"16\" height=\"16\" style=\"mask-type: alpha;\"><rect width=\"16\" height=\"16\" fill=\"#D9D9D9\"></rect></mask><g mask=\"url(#mask0_8669_146020)\"><path d=\"M7.9974 8.66732C8.64184 8.66732 9.19184 8.43954 9.6474 7.98398C10.103 7.52843 10.3307 6.97843 10.3307 6.33398C10.3307 5.68954 10.103 5.13954 9.6474 4.68398C9.19184 4.22843 8.64184 4.00065 7.9974 4.00065C7.35295 4.00065 6.80295 4.22843 6.3474 4.68398C5.89184 5.13954 5.66406 5.68954 5.66406 6.33398C5.66406 6.97843 5.89184 7.52843 6.3474 7.98398C6.80295 8.43954 7.35295 8.66732 7.9974 8.66732ZM7.9974 14.6673C6.37517 14.2562 5.08073 13.3673 4.11406 12.0007C3.1474 10.634 2.66406 9.10065 2.66406 7.40065V3.33398L7.9974 1.33398L13.3307 3.33398V7.40065C13.3307 9.10065 12.8474 10.634 11.8807 12.0007C10.9141 13.3673 9.61962 14.2562 7.9974 14.6673ZM7.9974 13.2673C8.65295 13.0562 9.23351 12.7257 9.73906 12.2757C10.2446 11.8257 10.6863 11.3173 11.0641 10.7507C10.5863 10.5062 10.0891 10.3201 9.5724 10.1923C9.05573 10.0645 8.53073 10.0007 7.9974 10.0007C7.46406 10.0007 6.93906 10.0645 6.4224 10.1923C5.90573 10.3201 5.40851 10.5062 4.93073 10.7507C5.30851 11.3173 5.75017 11.8257 6.25573 12.2757C6.76129 12.7257 7.34184 13.0562 7.9974 13.2673Z\" fill=\"#FED4D3\"></path></g></svg></div><div width=\"28px\" height=\"28px\" display=\"flex\" class=\"css-1bygmye\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\" color=\"#ffffffff\"><mask id=\"mask0_13669_84\" maskUnits=\"userSpaceOnUse\" x=\"0\" y=\"0\" width=\"24\" height=\"24\" style=\"mask-type: alpha;\"><rect width=\"24\" height=\"24\" fill=\"currentColor\"></rect></mask><g mask=\"url(#mask0_13669_84)\"><path d=\"M11.951 13.4023L17.3804 9.78409L11.951 6.16591V13.4023ZM6.25011 20.9778C5.75241 21.0532 5.30373 20.9364 4.90406 20.6273C4.5044 20.3183 4.2744 19.915 4.21408 19.4175L3.01508 9.53534C2.95475 9.03784 3.07541 8.5931 3.37704 8.20113C3.67868 7.80916 4.07834 7.58303 4.57604 7.52272L5.61667 7.38704V14.7591C5.61667 15.7541 5.97109 16.6059 6.67993 17.3144C7.38877 18.023 8.24089 18.3773 9.23628 18.3773H17.6519C17.5614 18.7391 17.3804 19.0519 17.1089 19.3157C16.8375 19.5796 16.5057 19.7341 16.1135 19.7793L6.25011 20.9778ZM9.23628 16.5682C8.73858 16.5682 8.31253 16.391 7.95811 16.0368C7.60369 15.6825 7.42648 15.2566 7.42648 14.7591V4.80909C7.42648 4.31159 7.60369 3.8857 7.95811 3.53142C8.31253 3.17714 8.73858 3 9.23628 3H19.1902C19.6879 3 20.114 3.17714 20.4684 3.53142C20.8228 3.8857 21 4.31159 21 4.80909V14.7591C21 15.2566 20.8228 15.6825 20.4684 16.0368C20.114 16.391 19.6879 16.5682 19.1902 16.5682H9.23628Z\" fill=\"currentColor\"></path></g></svg></div></div></div><div display=\"flex\" class=\"css-19ssvua\"><p color=\"$color_text_primary\" class=\"css-sjt0pv\">NTR 오피스</p><p color=\"$color_text_secondary\" class=\"css-9xnb32\">[R18/이미지 30장] 부하직원의 상사가 되어 그의 아내를 NTR하자! (NTL) / 요즘 부장님이 내 아내를 보는 눈빛이 심상치 않다... 더군다나, 아내도 요즘 태도가 변하기 시작했다... (NTR)\n" +
+        "\n" +
+        "[스토리: 1일차~14일차, 8~11일차 온천 접대 이벤트]</p></div></div><div display=\"flex\" width=\"fit-content\" class=\"css-13rssxq\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 25 25\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\" color=\"#85837dff\"><path d=\"M12.5 22.437C11.1167 22.437 9.81667 22.1745 8.6 21.6495C7.38333 21.1245 6.325 20.412 5.425 19.512C4.525 18.612 3.8125 17.5537 3.2875 16.337C2.7625 15.1203 2.5 13.8203 2.5 12.437C2.5 11.0537 2.7625 9.75368 3.2875 8.53701C3.8125 7.32034 4.525 6.26201 5.425 5.36201C6.325 4.46201 7.38333 3.74951 8.6 3.22451C9.81667 2.69951 11.1167 2.43701 12.5 2.43701C13.8833 2.43701 15.1833 2.69951 16.4 3.22451C17.6167 3.74951 18.675 4.46201 19.575 5.36201C20.475 6.26201 21.1875 7.32034 21.7125 8.53701C22.2375 9.75368 22.5 11.0537 22.5 12.437V13.887C22.5 14.8703 22.1625 15.7078 21.4875 16.3995C20.8125 17.0912 19.9833 17.437 19 17.437C18.4167 17.437 17.8667 17.312 17.35 17.062C16.8333 16.812 16.4 16.4537 16.05 15.987C15.5667 16.4703 15.0208 16.8328 14.4125 17.0745C13.8042 17.3162 13.1667 17.437 12.5 17.437C11.1167 17.437 9.9375 16.9495 8.9625 15.9745C7.9875 14.9995 7.5 13.8203 7.5 12.437C7.5 11.0537 7.9875 9.87451 8.9625 8.89951C9.9375 7.92451 11.1167 7.43701 12.5 7.43701C13.8833 7.43701 15.0625 7.92451 16.0375 8.89951C17.0125 9.87451 17.5 11.0537 17.5 12.437V13.887C17.5 14.3203 17.6417 14.687 17.925 14.987C18.2083 15.287 18.5667 15.437 19 15.437C19.4333 15.437 19.7917 15.287 20.075 14.987C20.3583 14.687 20.5 14.3203 20.5 13.887V12.437C20.5 10.2037 19.725 8.31201 18.175 6.76201C16.625 5.21201 14.7333 4.43701 12.5 4.43701C10.2667 4.43701 8.375 5.21201 6.825 6.76201C5.275 8.31201 4.5 10.2037 4.5 12.437C4.5 14.6703 5.275 16.562 6.825 18.112C8.375 19.662 10.2667 20.437 12.5 20.437H17.5V22.437H12.5ZM12.5 15.437C13.3333 15.437 14.0417 15.1453 14.625 14.562C15.2083 13.9787 15.5 13.2703 15.5 12.437C15.5 11.6037 15.2083 10.8953 14.625 10.312C14.0417 9.72868 13.3333 9.43701 12.5 9.43701C11.6667 9.43701 10.9583 9.72868 10.375 10.312C9.79167 10.8953 9.5 11.6037 9.5 12.437C9.5 13.2703 9.79167 13.9787 10.375 14.562C10.9583 15.1453 11.6667 15.437 12.5 15.437Z\" fill=\"currentColor\"></path></svg><p color=\"$color_text_tertiary\" class=\"css-uoinwu\">야로망</p><svg width=\"16\" height=\"16\" viewBox=\"0 0 18 18\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" color=\"#f72f08ff\"><path d=\"M15.75 12.578V5.42297C15.75 5.25797 15.66 5.10047 15.5175 5.01797L9.2325 1.43297C9.09 1.35047 8.9175 1.35047 8.775 1.43297L2.4825 5.01797C2.34 5.10047 2.25 5.25797 2.25 5.42297V12.5855C2.25 12.7505 2.34 12.908 2.4825 12.9905L8.7675 16.5755C8.91 16.658 9.0825 16.658 9.225 16.5755L15.51 12.9905C15.6525 12.908 15.7425 12.7505 15.7425 12.5855L15.75 12.578Z\" fill=\"url(#paint0_linear_14670_273716)\"></path><g filter=\"url(#filter0_i_14670_273716)\"><path d=\"M12.4169 7.5382L10.2944 7.2907C10.2944 7.2907 10.2269 7.2682 10.2194 7.2307L9.32686 5.2882C9.19936 5.0107 8.80186 5.0107 8.67436 5.2882L7.78186 7.2307C7.78186 7.2307 7.73686 7.2832 7.70686 7.2907L5.58436 7.5382C5.27686 7.5757 5.15686 7.9507 5.38186 8.1607L6.94936 9.6082C6.94936 9.6082 6.98686 9.6682 6.97936 9.6982L6.55936 11.7907C6.49936 12.0907 6.82186 12.3232 7.08436 12.1732L8.94436 11.1232C8.94436 11.1232 9.01186 11.1082 9.04186 11.1232L10.9019 12.1732C11.1719 12.3232 11.4869 12.0907 11.4269 11.7907L11.0069 9.6982C11.0069 9.6982 11.0069 9.6307 11.0369 9.6082L12.6044 8.1607C12.8294 7.9507 12.7094 7.5757 12.4019 7.5382H12.4169Z\" fill=\"url(#paint1_linear_14670_273716)\"></path></g><defs><filter id=\"filter0_i_14670_273716\" x=\"5.26562\" y=\"5.08008\" width=\"7.45312\" height=\"7.14062\" filterUnits=\"userSpaceOnUse\" color-interpolation-filters=\"sRGB\"><feFlood flood-opacity=\"0\" result=\"BackgroundImageFix\"></feFlood><feBlend mode=\"normal\" in=\"SourceGraphic\" in2=\"BackgroundImageFix\" result=\"shape\"></feBlend><feColorMatrix in=\"SourceAlpha\" type=\"matrix\" values=\"0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0\" result=\"hardAlpha\"></feColorMatrix><feOffset></feOffset><feGaussianBlur stdDeviation=\"0.68175\"></feGaussianBlur><feComposite in2=\"hardAlpha\" operator=\"arithmetic\" k2=\"-1\" k3=\"1\"></feComposite><feColorMatrix type=\"matrix\" values=\"0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0\"></feColorMatrix><feBlend mode=\"normal\" in2=\"shape\" result=\"effect1_innerShadow_14670_273716\"></feBlend></filter><linearGradient id=\"paint0_linear_14670_273716\" x1=\"9\" y1=\"1.37109\" x2=\"9\" y2=\"16.6373\" gradientUnits=\"userSpaceOnUse\"><stop stop-color=\"#FE1571\"></stop><stop offset=\"1\" stop-color=\"#FF27B4\"></stop></linearGradient><linearGradient id=\"paint1_linear_14670_273716\" x1=\"8.99311\" y1=\"5.08008\" x2=\"8.99311\" y2=\"12.22\" gradientUnits=\"userSpaceOnUse\"><stop stop-color=\"#FFFDEF\"></stop><stop offset=\"1\" stop-color=\"#FFFBDD\"></stop></linearGradient></defs></svg></div>";
 
+//플러스 랭크 내부 캐릭터 클릭시 팝업
 function plus_modal_func(Tfeed,character_list,CeCreator){
     const feed_struct = Tfeed.childNodes.item(1).cloneNode(true); //피드의 제일위에서 2번째 요소를 가져와서 형식만 가져옴
     const feed_struct_text = feed_struct.childNodes[0].childNodes[0].childNodes.item(0); //랭킹 플러스 (Fast wrtn) <- 이거 들어간 텍스트 구역
     const feed_struct_scroll = feed_struct.childNodes[1].childNodes[0].childNodes.item(0); //스크롤 가져오기
     const feed_struct_elements = feed_struct.childNodes[1].childNodes[0].childNodes[0].childNodes.item(0); //형식에 들어있던 캐챗 목록 가져오기
     const feed_struct_element = feed_struct_elements.childNodes.item(0).cloneNode(true); //형식에 들어있던 캐챗중 제일 첫번째걸 형식 삼아 가져옴
-    feed_struct_element.innerHTML = "<div display=\"flex\" class=\"css-1878569\"><div width=\"100%\" height=\"148px,156px\" class=\"css-12gw3o5\"><div class=\"character_avatar css-1w95giw\" overflow=\"hidden\" display=\"flex\" width=\"100%\" height=\"100%\"><img src=\"https://d394jeh9729epj.cloudfront.net/8BwuNilwTjW-GGKONkJEOUk2/b176b0a9-46e0-4d93-baff-7dace3602f6e_w600.webp\" alt=\"character_thumbnail\" style=\"width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0px; left: 0px; border-radius: inherit;\"></div><div class=\"character-card-overlay css-1w1m2cv\" width=\"100%\" height=\"100%\" display=\"none\"></div><div display=\"flex\" class=\"css-17z36ob\"><div width=\"28px\" height=\"28px\" display=\"flex\" class=\"css-1bygmye\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 16 16\" fill=\"none\"><mask id=\"mask0_8669_146020\" maskUnits=\"userSpaceOnUse\" x=\"0\" y=\"0\" width=\"16\" height=\"16\" style=\"mask-type: alpha;\"><rect width=\"16\" height=\"16\" fill=\"#D9D9D9\"></rect></mask><g mask=\"url(#mask0_8669_146020)\"><path d=\"M7.9974 8.66732C8.64184 8.66732 9.19184 8.43954 9.6474 7.98398C10.103 7.52843 10.3307 6.97843 10.3307 6.33398C10.3307 5.68954 10.103 5.13954 9.6474 4.68398C9.19184 4.22843 8.64184 4.00065 7.9974 4.00065C7.35295 4.00065 6.80295 4.22843 6.3474 4.68398C5.89184 5.13954 5.66406 5.68954 5.66406 6.33398C5.66406 6.97843 5.89184 7.52843 6.3474 7.98398C6.80295 8.43954 7.35295 8.66732 7.9974 8.66732ZM7.9974 14.6673C6.37517 14.2562 5.08073 13.3673 4.11406 12.0007C3.1474 10.634 2.66406 9.10065 2.66406 7.40065V3.33398L7.9974 1.33398L13.3307 3.33398V7.40065C13.3307 9.10065 12.8474 10.634 11.8807 12.0007C10.9141 13.3673 9.61962 14.2562 7.9974 14.6673ZM7.9974 13.2673C8.65295 13.0562 9.23351 12.7257 9.73906 12.2757C10.2446 11.8257 10.6863 11.3173 11.0641 10.7507C10.5863 10.5062 10.0891 10.3201 9.5724 10.1923C9.05573 10.0645 8.53073 10.0007 7.9974 10.0007C7.46406 10.0007 6.93906 10.0645 6.4224 10.1923C5.90573 10.3201 5.40851 10.5062 4.93073 10.7507C5.30851 11.3173 5.75017 11.8257 6.25573 12.2757C6.76129 12.7257 7.34184 13.0562 7.9974 13.2673Z\" fill=\"#FED4D3\"></path></g></svg></div><div width=\"28px\" height=\"28px\" display=\"flex\" class=\"css-1bygmye\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\" color=\"#ffffffff\"><mask id=\"mask0_13669_84\" maskUnits=\"userSpaceOnUse\" x=\"0\" y=\"0\" width=\"24\" height=\"24\" style=\"mask-type: alpha;\"><rect width=\"24\" height=\"24\" fill=\"currentColor\"></rect></mask><g mask=\"url(#mask0_13669_84)\"><path d=\"M11.951 13.4023L17.3804 9.78409L11.951 6.16591V13.4023ZM6.25011 20.9778C5.75241 21.0532 5.30373 20.9364 4.90406 20.6273C4.5044 20.3183 4.2744 19.915 4.21408 19.4175L3.01508 9.53534C2.95475 9.03784 3.07541 8.5931 3.37704 8.20113C3.67868 7.80916 4.07834 7.58303 4.57604 7.52272L5.61667 7.38704V14.7591C5.61667 15.7541 5.97109 16.6059 6.67993 17.3144C7.38877 18.023 8.24089 18.3773 9.23628 18.3773H17.6519C17.5614 18.7391 17.3804 19.0519 17.1089 19.3157C16.8375 19.5796 16.5057 19.7341 16.1135 19.7793L6.25011 20.9778ZM9.23628 16.5682C8.73858 16.5682 8.31253 16.391 7.95811 16.0368C7.60369 15.6825 7.42648 15.2566 7.42648 14.7591V4.80909C7.42648 4.31159 7.60369 3.8857 7.95811 3.53142C8.31253 3.17714 8.73858 3 9.23628 3H19.1902C19.6879 3 20.114 3.17714 20.4684 3.53142C20.8228 3.8857 21 4.31159 21 4.80909V14.7591C21 15.2566 20.8228 15.6825 20.4684 16.0368C20.114 16.391 19.6879 16.5682 19.1902 16.5682H9.23628Z\" fill=\"currentColor\"></path></g></svg></div></div></div><div display=\"flex\" class=\"css-19ssvua\"><p color=\"$color_text_primary\" class=\"css-sjt0pv\">NTR 오피스</p><p color=\"$color_text_secondary\" class=\"css-9xnb32\">[R18/이미지 30장] 부하직원의 상사가 되어 그의 아내를 NTR하자! (NTL) / 요즘 부장님이 내 아내를 보는 눈빛이 심상치 않다... 더군다나, 아내도 요즘 태도가 변하기 시작했다... (NTR)\n" +
-        "\n" +
-        "[스토리: 1일차~14일차, 8~11일차 온천 접대 이벤트]</p></div></div><div display=\"flex\" width=\"fit-content\" class=\"css-13rssxq\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 25 25\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\" color=\"#85837dff\"><path d=\"M12.5 22.437C11.1167 22.437 9.81667 22.1745 8.6 21.6495C7.38333 21.1245 6.325 20.412 5.425 19.512C4.525 18.612 3.8125 17.5537 3.2875 16.337C2.7625 15.1203 2.5 13.8203 2.5 12.437C2.5 11.0537 2.7625 9.75368 3.2875 8.53701C3.8125 7.32034 4.525 6.26201 5.425 5.36201C6.325 4.46201 7.38333 3.74951 8.6 3.22451C9.81667 2.69951 11.1167 2.43701 12.5 2.43701C13.8833 2.43701 15.1833 2.69951 16.4 3.22451C17.6167 3.74951 18.675 4.46201 19.575 5.36201C20.475 6.26201 21.1875 7.32034 21.7125 8.53701C22.2375 9.75368 22.5 11.0537 22.5 12.437V13.887C22.5 14.8703 22.1625 15.7078 21.4875 16.3995C20.8125 17.0912 19.9833 17.437 19 17.437C18.4167 17.437 17.8667 17.312 17.35 17.062C16.8333 16.812 16.4 16.4537 16.05 15.987C15.5667 16.4703 15.0208 16.8328 14.4125 17.0745C13.8042 17.3162 13.1667 17.437 12.5 17.437C11.1167 17.437 9.9375 16.9495 8.9625 15.9745C7.9875 14.9995 7.5 13.8203 7.5 12.437C7.5 11.0537 7.9875 9.87451 8.9625 8.89951C9.9375 7.92451 11.1167 7.43701 12.5 7.43701C13.8833 7.43701 15.0625 7.92451 16.0375 8.89951C17.0125 9.87451 17.5 11.0537 17.5 12.437V13.887C17.5 14.3203 17.6417 14.687 17.925 14.987C18.2083 15.287 18.5667 15.437 19 15.437C19.4333 15.437 19.7917 15.287 20.075 14.987C20.3583 14.687 20.5 14.3203 20.5 13.887V12.437C20.5 10.2037 19.725 8.31201 18.175 6.76201C16.625 5.21201 14.7333 4.43701 12.5 4.43701C10.2667 4.43701 8.375 5.21201 6.825 6.76201C5.275 8.31201 4.5 10.2037 4.5 12.437C4.5 14.6703 5.275 16.562 6.825 18.112C8.375 19.662 10.2667 20.437 12.5 20.437H17.5V22.437H12.5ZM12.5 15.437C13.3333 15.437 14.0417 15.1453 14.625 14.562C15.2083 13.9787 15.5 13.2703 15.5 12.437C15.5 11.6037 15.2083 10.8953 14.625 10.312C14.0417 9.72868 13.3333 9.43701 12.5 9.43701C11.6667 9.43701 10.9583 9.72868 10.375 10.312C9.79167 10.8953 9.5 11.6037 9.5 12.437C9.5 13.2703 9.79167 13.9787 10.375 14.562C10.9583 15.1453 11.6667 15.437 12.5 15.437Z\" fill=\"currentColor\"></path></svg><p color=\"$color_text_tertiary\" class=\"css-uoinwu\">야로망</p><svg width=\"16\" height=\"16\" viewBox=\"0 0 18 18\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" color=\"#f72f08ff\"><path d=\"M15.75 12.578V5.42297C15.75 5.25797 15.66 5.10047 15.5175 5.01797L9.2325 1.43297C9.09 1.35047 8.9175 1.35047 8.775 1.43297L2.4825 5.01797C2.34 5.10047 2.25 5.25797 2.25 5.42297V12.5855C2.25 12.7505 2.34 12.908 2.4825 12.9905L8.7675 16.5755C8.91 16.658 9.0825 16.658 9.225 16.5755L15.51 12.9905C15.6525 12.908 15.7425 12.7505 15.7425 12.5855L15.75 12.578Z\" fill=\"url(#paint0_linear_14670_273716)\"></path><g filter=\"url(#filter0_i_14670_273716)\"><path d=\"M12.4169 7.5382L10.2944 7.2907C10.2944 7.2907 10.2269 7.2682 10.2194 7.2307L9.32686 5.2882C9.19936 5.0107 8.80186 5.0107 8.67436 5.2882L7.78186 7.2307C7.78186 7.2307 7.73686 7.2832 7.70686 7.2907L5.58436 7.5382C5.27686 7.5757 5.15686 7.9507 5.38186 8.1607L6.94936 9.6082C6.94936 9.6082 6.98686 9.6682 6.97936 9.6982L6.55936 11.7907C6.49936 12.0907 6.82186 12.3232 7.08436 12.1732L8.94436 11.1232C8.94436 11.1232 9.01186 11.1082 9.04186 11.1232L10.9019 12.1732C11.1719 12.3232 11.4869 12.0907 11.4269 11.7907L11.0069 9.6982C11.0069 9.6982 11.0069 9.6307 11.0369 9.6082L12.6044 8.1607C12.8294 7.9507 12.7094 7.5757 12.4019 7.5382H12.4169Z\" fill=\"url(#paint1_linear_14670_273716)\"></path></g><defs><filter id=\"filter0_i_14670_273716\" x=\"5.26562\" y=\"5.08008\" width=\"7.45312\" height=\"7.14062\" filterUnits=\"userSpaceOnUse\" color-interpolation-filters=\"sRGB\"><feFlood flood-opacity=\"0\" result=\"BackgroundImageFix\"></feFlood><feBlend mode=\"normal\" in=\"SourceGraphic\" in2=\"BackgroundImageFix\" result=\"shape\"></feBlend><feColorMatrix in=\"SourceAlpha\" type=\"matrix\" values=\"0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0\" result=\"hardAlpha\"></feColorMatrix><feOffset></feOffset><feGaussianBlur stdDeviation=\"0.68175\"></feGaussianBlur><feComposite in2=\"hardAlpha\" operator=\"arithmetic\" k2=\"-1\" k3=\"1\"></feComposite><feColorMatrix type=\"matrix\" values=\"0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0\"></feColorMatrix><feBlend mode=\"normal\" in2=\"shape\" result=\"effect1_innerShadow_14670_273716\"></feBlend></filter><linearGradient id=\"paint0_linear_14670_273716\" x1=\"9\" y1=\"1.37109\" x2=\"9\" y2=\"16.6373\" gradientUnits=\"userSpaceOnUse\"><stop stop-color=\"#FE1571\"></stop><stop offset=\"1\" stop-color=\"#FF27B4\"></stop></linearGradient><linearGradient id=\"paint1_linear_14670_273716\" x1=\"8.99311\" y1=\"5.08008\" x2=\"8.99311\" y2=\"12.22\" gradientUnits=\"userSpaceOnUse\"><stop stop-color=\"#FFFDEF\"></stop><stop offset=\"1\" stop-color=\"#FFFBDD\"></stop></linearGradient></defs></svg></div>";
+    feed_struct_element.innerHTML = feed_struct_element_front_html;
     const feed_struct_scroll_btn = feed_struct.childNodes[1].childNodes[0].childNodes[1].childNodes.item(0); // > 버튼
     const feed_struct_scroll_btn_l = document.createElement("div"); // < 버튼
     feed_struct_scroll_btn_l.setAttribute("width", "61px");
@@ -857,6 +880,7 @@ function plus_modal_func(Tfeed,character_list,CeCreator){
                             console.log("creater");
                         }
                         try {
+                            //팝업 이벤트 리스너
                             const fe_event_bar = fe.childNodes.item(0);
                             const fe_creator_event_bar = fe.childNodes.item(1);
                             fe_creator_event_bar.addEventListener('click',()=>{
@@ -864,6 +888,7 @@ function plus_modal_func(Tfeed,character_list,CeCreator){
                             })
                             fe_event_bar.addEventListener("click", () => {
                                 const isModal = document.getElementById("web-modal");
+                                //모달 존재 여부
                                 if (isModal == null){
                                     plus_modal_yes(character_list,fe);
                                 }
@@ -904,11 +929,12 @@ function plus_modal_func(Tfeed,character_list,CeCreator){
     feed_struct_text.textContent = "랭킹 플러스 (Fast wrtn)";
     Tfeed.prepend(feed_struct);
 }
-    
+
+//< > 스크롤 기능 구현
 function scroll_func(feed_struct_scroll,feed_struct_six, feed_struct_scroll_btn_l,scroll_all_amount,scroll_amount){
-    /* TODO
+    /*
     < > 버튼이 유동적으로 삭제될수있게끔 수정 해야함
-        */
+    */
     //만약 예상되는 스크롤양이 한계를 넘어선경우 제한시킴
     if (feed_struct_scroll.scrollLeft + scroll_all_amount > feed_struct_scroll.scrollWidth - feed_struct_scroll.clientWidth) {
         wanted_scroll = feed_struct_scroll.scrollWidth - feed_struct_scroll.clientWidth;
@@ -945,6 +971,7 @@ function scroll_func(feed_struct_scroll,feed_struct_six, feed_struct_scroll_btn_
         }
     },)
 }
+//제작자의 다른 캐릭터 보기 기능
 function plus_modal_recommand_creator_func(creator_character,plus_modal_recommand_creator,isModal){
     const creator_character_top = plus_modal_recommand_creator.childNodes[1].childNodes.item(0);
     const creator_character_struct = creator_character_top.childNodes.item(0);
@@ -992,6 +1019,8 @@ function plus_modal_recommand_creator_func(creator_character,plus_modal_recomman
     }
     creator_character_struct.remove();
 }
+
+//팝업 내부의 업데이트와 댓글
 function date_and_comment(plus_modal_date_and_comment_struct,comment){
     if (comment.writer.profileImage == undefined){
         var guest = document.createElement('div');
@@ -1005,105 +1034,60 @@ function date_and_comment(plus_modal_date_and_comment_struct,comment){
     }
     plus_modal_date_and_comment_struct.childNodes[1].childNodes[1].childNodes.item(1).textContent = comment.content;
 }
+
+//modal 팝업 구역이 존재할시
 function plus_modal_yes(character_list,fe){
+    //새로운 모달 팝업을 생성
     const plus_modal = document.createElement("div");
     plus_modal.setAttribute("id","web-modal");
+    //모달을 활성화 하는 css
     plus_modal.setAttribute("style","position: relative !important;z-index: 11 !important;");
     plus_modal.innerHTML = plus_modal_front_html;
-    const plus_modal_recommand_creator = document.createElement('div');
-    plus_modal_recommand_creator.innerHTML = plus_modal_recommand_creator_front_html;
-    const plus_modal_date_and_comment_struct = document.createElement('div');
-    plus_modal_date_and_comment_struct.innerHTML = plus_modal_date_and_comment;
-    const plus_modal_main_struct = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes.item(1);
-    const plus_modal_x_btn = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[0].childNodes.item(1);
-    const plus_modal_btn = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[3].childNodes.item(0);
-    const plus_modal_img = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[0].childNodes.item(0);
-    const plus_modal_img_likeCount = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[1].childNodes.item(1);
-    const plus_modal_title = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[0].childNodes[0].childNodes.item(0);
-    const plus_modal_creator_link = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[0].childNodes[0].childNodes.item(1);
-    const plus_modal_creator = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes.item(1);
-    const plus_modal_IsCe = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes.item(2);
-    const plus_modal_tabs = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes.item(1);
-    const plus_modal_text = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[2].childNodes.item(0);
-    const plus_modal_tags = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[2].childNodes.item(1);
-    const plus_modal_last = plus_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes.item(3);
-    var creator_character = JSON.parse(getAfetch(`https://api.wrtn.ai/be/character-profiles/${character_list[fe.id].wrtnUid}/characters?limit=10&sort=createdAt`)).data.characters;
-    plus_modal_recommand_creator_func(creator_character,plus_modal_recommand_creator.childNodes.item(0),plus_modal);
-    var comment = JSON.parse(getAfetch(`https://api.wrtn.ai/be/characters/${character_list[fe.id]._id}/comments?sort=likeCount`)).data.comments[0];
-    plus_modal_date_and_comment_struct.childNodes[0].childNodes[1].childNodes[0].childNodes[1].textContent = `${character_list[fe.id].commentCount}건`;
-    plus_modal_date_and_comment_struct.childNodes[0].childNodes[1].childNodes[0].childNodes[3].href = `/character/detail/${character_list[fe.id]._id}`;
-    var update = new Date(character_list[fe.id].updatedAt);
-    plus_modal_date_and_comment_struct.childNodes[0].childNodes[0].childNodes[1].childNodes.item(0).textContent = `${update.getFullYear()}.${update.getMonth()+1}.${update.getDate()}`
-    if (comment == null){
-        plus_modal_date_and_comment_struct.childNodes[0].childNodes[1].remove();
-    }
-    else{
-        date_and_comment(plus_modal_date_and_comment_struct.childNodes.item(0),comment);
-    }
-    plus_modal_last.childNodes[0].childNodes[0].childNodes.item(1).textContent = character_list[fe.id].chatUserCount;
-    plus_modal_last.childNodes[1].childNodes[0].childNodes.item(1).textContent = character_list[fe.id].likeCount;
-    plus_modal_last.childNodes[2].childNodes[0].childNodes.item(1).textContent = character_list[fe.id].commentCount;
-    plus_modal_main_struct.appendChild(plus_modal_date_and_comment_struct);
-    plus_modal_main_struct.appendChild(plus_modal_recommand_creator);
-    plus_modal_img_likeCount.textContent = character_list[fe.id].likeCount;
-    plus_modal_creator_link.href = `https://wrtn.ai/character/profile/${character_list[fe.id].creator.wrtnUid}`
-    const plus_modal_tags_struct = plus_modal_tags.childNodes.item(0).cloneNode(true);
-    plus_modal_tags.childNodes.item(0).remove();
-    for (const element of character_list[fe.id].tags) {
-        const new_tags = plus_modal_tags_struct.cloneNode(true);
-        new_tags.textContent = `#${element}`;
-        plus_modal_tags.appendChild(new_tags);
-    }
-    plus_modal_IsAudult = document.createElement('div');
-    plus_modal_IsAudult.innerHTML = plus_modal_front_html_IsAudlt;
-    plus_modal_img.src = character_list[fe.id].profileImage.w600;
-    plus_modal_title.textContent = character_list[fe.id].name;
-    plus_modal_creator.textContent = character_list[fe.id].creator.nickname;
-    plus_modal_tabs.childNodes[1].childNodes.item(1).textContent = character_list[fe.id].promptTemplate.name;
-    plus_modal_text.textContent = character_list[fe.id].description;
-    if (character_list[fe.id].isAdult){
-        plus_modal_tabs.appendChild(plus_modal_IsAudult);
-    }
-    if (!character_list[fe.id].hasImage){
-        plus_modal_tabs.childNodes.item(0).remove();
-    }
-    else{
-        plus_modal_tabs.childNodes[0].childNodes.item(1).textContent = `이미지 ${character_list[fe.id].imageCount}장`;
-    }
-    if (!character_list[fe.id].creator.isCertifiedCreator){
-        plus_modal_IsCe.remove();
-    }
-    plus_modal_x_btn.addEventListener('click',()=>{
-        plus_modal.remove();
-    })
-    plus_modal_btn.addEventListener('click',()=>{
-        window.location.href = `https://wrtn.ai/character/u/${fe.getAttribute("src")}`;
-    })
+    plus_modal_no(plus_modal,character_list,fe);
     document.body.appendChild(plus_modal);
 }
 
+//modal 팝업구역이 존재하지 않을시 (기능적 요소 포함)
 function plus_modal_no(isModal,character_list,fe){
+    //모달을 활성화 하는 css
     isModal.setAttribute("style","position: relative !important;z-index: 11 !important;");
     isModal.innerHTML = plus_modal_front_html;
+    //제작자의 다른 캐릭터보기 팝업용
     const plus_modal_recommand_creator = document.createElement('div');
     plus_modal_recommand_creator.innerHTML = plus_modal_recommand_creator_front_html;
+    //업데이트 시간 및 댓글 기능용
     const plus_modal_date_and_comment_struct = document.createElement('div');
     plus_modal_date_and_comment_struct.innerHTML = plus_modal_date_and_comment;
+    //plus_modal_date_and_comment_struct,plus_modal_recommand_creator 삽입 위치
     const plus_modal_main_struct = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes.item(1);
+    //모달 내부 x 버튼
     const plus_modal_x_btn = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[0].childNodes.item(1);
+    //모달 내부 대화하기 버튼
     const plus_modal_btn = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[3].childNodes.item(0);
+    //모달 내부 이미지
     const plus_modal_img = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[0].childNodes.item(0);
+    //이미지 내부 좋아요 버튼
     const plus_modal_img_likeCount = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[1].childNodes.item(1);
+    //모달 내부 캐릭터챗 제목
     const plus_modal_title = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[0].childNodes[0].childNodes.item(0);
+    //크레이터 버튼 이벤트 href
     const plus_modal_creator_link = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[0].childNodes[0].childNodes.item(1);
+    //크레이터 요소
     const plus_modal_creator = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes.item(1);
+    //크레이터 뱃지를 가리킴
     const plus_modal_IsCe = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes.item(2);
+    //이미지 장수, 템플릿, 셒 언셒 들어가는 부분
     const plus_modal_tabs = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes.item(1);
+    //모달 내부 캐릭터 설명
     const plus_modal_text = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[2].childNodes.item(0);
+    //모달 내부 태그
     const plus_modal_tags = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[2].childNodes.item(1);
+    //대화 한 유저수, 좋아요수, 댓글수 넣는부분
     const plus_modal_last = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes.item(3);
+    //제작자의 캐챗 불러오기
     var creator_character = JSON.parse(getAfetch(`https://api.wrtn.ai/be/character-profiles/${character_list[fe.id].wrtnUid}/characters?limit=10&sort=createdAt`)).data.characters;
     plus_modal_recommand_creator_func(creator_character,plus_modal_recommand_creator.childNodes.item(0),isModal);
+    //캐릭터챗 댓글 불러오기 (가장 좋아요 많은 댓글만)
     var comment = JSON.parse(getAfetch(`https://api.wrtn.ai/be/characters/${character_list[fe.id]._id}/comments?sort=likeCount`)).data.comments[0];
     plus_modal_date_and_comment_struct.childNodes[0].childNodes[1].childNodes[0].childNodes[1].textContent = `${character_list[fe.id].commentCount}건`;
     plus_modal_date_and_comment_struct.childNodes[0].childNodes[1].childNodes[0].childNodes[3].href = `/character/detail/${character_list[fe.id]._id}`;
@@ -1124,11 +1108,13 @@ function plus_modal_no(isModal,character_list,fe){
     plus_modal_creator_link.href = `https://wrtn.ai/character/profile/${character_list[fe.id].creator.wrtnUid}`
     const plus_modal_tags_struct = plus_modal_tags.childNodes.item(0).cloneNode(true);
     plus_modal_tags.childNodes.item(0).remove();
+    //태그 넣기
     for (const element of character_list[fe.id].tags) {
         const new_tags = plus_modal_tags_struct.cloneNode(true);
         new_tags.textContent = `#${element}`;
         plus_modal_tags.appendChild(new_tags);
     }
+    //언셒 마크
     plus_modal_IsAudult = document.createElement('div');
     plus_modal_IsAudult.innerHTML = plus_modal_front_html_IsAudlt;
     plus_modal_img.src = character_list[fe.id].profileImage.w600;
@@ -1136,21 +1122,26 @@ function plus_modal_no(isModal,character_list,fe){
     plus_modal_creator.textContent = character_list[fe.id].creator.nickname;
     plus_modal_tabs.childNodes[1].childNodes.item(1).textContent = character_list[fe.id].promptTemplate.name;
     plus_modal_text.textContent = character_list[fe.id].description;
+    //언셒이면 언셒마크 추가
     if (character_list[fe.id].isAdult){
         plus_modal_tabs.appendChild(plus_modal_IsAudult);
     }
+    //이미지 있으면 이미지 마크 추가
     if (!character_list[fe.id].hasImage){
         plus_modal_tabs.childNodes.item(0).remove();
     }
     else{
         plus_modal_tabs.childNodes[0].childNodes.item(1).textContent = `이미지 ${character_list[fe.id].imageCount}장`;
     }
+    //크레이터면 크레이터 뱃지 추가
     if (!character_list[fe.id].creator.isCertifiedCreator){
         plus_modal_IsCe.remove();
     }
+    //모달 내부 x버트 이벤트리스너
     plus_modal_x_btn.addEventListener('click',()=>{
         isModal.remove();
     })
+    //대화하기 버튼 이벤트 리스너
     plus_modal_btn.addEventListener('click',()=>{
         window.location.href = `https://wrtn.ai/character/u/${fe.getAttribute("src")}`;
     })
