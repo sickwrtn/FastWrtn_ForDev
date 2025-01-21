@@ -26,7 +26,7 @@
 
 */
 
-//필수값
+//environment variables
 var wrtn_api = "https://api.wrtn.ai/be";
 var wrtn_api2 = "https://api2.wrtn.ai/terry";
 var wrtn_william = "https://william.wow.wrtn.ai";
@@ -38,6 +38,7 @@ var likeCount_limit = 10 // 좋아요수가 10개 이상
 var chatCount_limit = 30 // 채팅수가 30개 이상 이면 올라옴
 var auto_summation_characterChatId = "6787aecf65c02321daf25b0d"; // 자동요약기능을 수행할 캐챗 id
 var local_saved_prompt = "saved_prompt";
+var local_usernote = "usernote";
 var token_key = "access_token";
 
 //namespace
@@ -1404,7 +1405,6 @@ function main(){
                                         })
                                     }
                                 }
-
                                 //css 수동 동기화 (닫기 버튼을 수정버튼으로 만들기 위함)
                                 usernote_modal_apply_btn.removeAttribute("class");
                                 usernote_modal_apply_btn.setAttribute("style", "    border-radius: 5px;\n" +
@@ -1463,7 +1463,7 @@ function main(){
                                     기존의 방을 버리고 새방을 파서 그 방의 id를 로컬 스토리지에 저장함
                                      */
                                     //처음 사용하면 로컬스토리지에 chatid가 없을꺼니 추가하기위해 판별하는 조건문
-                                    if (localStorage.getItem("usernote") == null) {
+                                    if (localStorage.getItem(local_usernote) == null) {
                                         // auto_summation_characterChatId의 캐챗방을 팜
                                         var created_chatId = JSON.parse(postAfetch(wrtn_api + "/chat", {
                                             unitId: auto_summation_characterChatId,
@@ -1471,7 +1471,7 @@ function main(){
                                             userNote: {"content": usernote_modal_textarea.textContent}
                                         })).data._id;
                                         //로컬스토리지에 판 방의 id를 저장
-                                        localStorage.setItem("usernote", created_chatId);
+                                        localStorage.setItem(local_usernote, created_chatId);
                                         //메세지를 보냄
                                         var created_msg = JSON.parse(postAfetch(wrtn_api2 + `/characters/chat/${created_chatId}/message`, {
                                             message: usernote_modal_textarea.textContent,
@@ -1483,7 +1483,7 @@ function main(){
                                         var res_msg = JSON.parse(getAfetch(wrtn_api2 + `/characters/chat/${created_chatId}/message/${created_msg}/result`)).data.content;
                                         usernote_modal_textarea.value = res_msg; //textarea에 값을 반영
                                     } else {
-                                        var created_chatId = localStorage.getItem("usernote"); //이미 파진 채팅방을 가져옴
+                                        var created_chatId = localStorage.getItem(local_usernote); //이미 파진 채팅방을 가져옴
                                         //그 방에 textarea값 즉 요약할 유저노트내용을 보냄
                                         var created_msg = JSON.parse(postAfetch(wrtn_api2 + `/characters/chat/${created_chatId}/message`, {
                                             message: usernote_modal_textarea.textContent,
@@ -1503,7 +1503,7 @@ function main(){
                                         type: "character",
                                         userNote: {"content": ""}
                                     })).data._id;
-                                    localStorage.setItem("usernote", created_chatId); //스토리지에 방 id 저장
+                                    localStorage.setItem(local_usernote, created_chatId); //스토리지에 방 id 저장
                                     alert("업데이트 되었습니다! (채팅방 확인)");
                                 })
                                 /*
