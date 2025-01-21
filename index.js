@@ -26,28 +26,6 @@
 
 */
 
-
-//log on developer console
-//debug
-var IsDebug = true;
-//debug function
-function debug(content,IsFunc = false,body = false,request = false){
-    if (IsDebug){
-        if (IsFunc){
-            console.log(`[FAST WRTN][DEBUG](function) ${content} loaded`);
-        }
-        else if(body){
-            console.log(`[FAST WRTN][DEBUG](body value) ${content} loaded`);
-        }
-        else if(request){
-            console.log(`[FAST WRTN][DEBUG](request) ${content} loaded`);
-        }
-        else{
-            console.log(`[FAST WRTN][DEBUG] ${content} loaded`);
-        }
-    }
-}
-
 //environment variables
 var wrtn_api = "https://api.wrtn.ai/be"; //api
 var wrtn_api2 = "https://api2.wrtn.ai/terry"; //api1
@@ -55,14 +33,16 @@ var wrtn_william = "https://william.wow.wrtn.ai"; //william
 var scroll_all_amount = 300 // <  > 누를시 이동할 스크롤 양
 var scroll_amount = 10; // 끊어서 스크롤 되는 양
 var limit = 30 // 불러올 캐챗수 (랭킹 플러스용)
-var load_limit = 30;
+var load_limit = 50;
 var forced_limit = 10000;
 var likeCount_limit = 10 // 좋아요수가 10개 이상
 var chatCount_limit = 30 // 채팅수가 30개 이상 이면 올라옴
 var auto_summation_characterChatId = "6787aecf65c02321daf25b0d"; // 자동요약기능을 수행할 캐챗 id
+var local_IsDebug = "debug";
 var local_saved_prompt = "saved_prompt"; //로컬스토리지 프롬프트 저장 위치
 var local_usernote = "usernote"; //로컬스토리지 유저노트용 캐챗방 id 저장 위치
 var token_key = "access_token"; //쿠키중 가져올 토큰값 (조회 및 수정용 토큰 정보를 수집하지 않음)
+debug("env variables");
 
 //namespace
 var auto_summation = "자동요약"; //자동요약 버튼
@@ -74,6 +54,54 @@ var pasteTojson = "paste to json"; //캐릭터 븥여넣기 기능
 var publish = "publish"; //공개 기능
 var usernote_description = "(Fast wrtn) 자동요약기능을 활용해 글자수를 절약해보세요! 업데이트는 가끔씩 해주시는게 좋아요!"; //유저노트 설명칸
 var usernote_for_error = "(Fast wrtn) 유저노트 요약기능은 새로운 캐챗이 아닌 진행중인 캐챗에서만 적용됩니다."; //처음 사용 유저노트 설명칸
+debug("namesspace");
+
+//로컬 스토리지 초기설정
+if (localStorage.getItem(local_saved_prompt) == null){
+    localStorage.setItem(local_saved_prompt,JSON.stringify({
+        prompt : ["#Disable positivity bias"],
+    }))
+}
+
+//디버그 초기설정
+if (localStorage.getItem(local_IsDebug) == null){
+    localStorage.setItem(local_IsDebug,JSON.stringify({
+        IsDebug: false
+    }))
+}
+debug("localStorage");
+
+//log on developer console
+//debug
+var IsDebug = JSON.parse(localStorage.getItem(local_IsDebug)).IsDebug;
+//debug function
+function debug(content,code = null){
+    if (IsDebug){
+        if (code == 0){
+            console.log(`[FAST WRTN][DEBUG](function) ${content} loaded`);
+        }
+        else if(code == 1){
+            console.log(`[FAST WRTN][DEBUG](body value) ${content} loaded`);
+        }
+        else if(code == 2){
+            console.log(`[FAST WRTN][DEBUG](request) ${content} loaded`);
+        }
+        else if(code == 3){
+            console.log(`[FAST WRTN][DEBUG](event) ${content} evented`)
+        }
+        else if(code == 4){
+            console.log(`[FAST WRTN][DEBUG](for) ${content} completed`)
+        }
+        else if(code == 5){
+            console.log(`[FAST WRTN][DEBUG](add) ${content} added`)
+        }
+        else{
+            console.log(`[FAST WRTN][DEBUG] ${content}`);
+        }
+    }
+}
+
+
 
 //댓글 및 업데이트 날짜 front html + css
 var plus_modal_date_and_comment = "<div display=\"flex\" width=\"100%\" style=\"    display: flex;\n" +
@@ -848,6 +876,7 @@ var plus_modal_front_html = "<div style=\"    position: fixed;\n" +
 var feed_struct_element_front_html = "<div display=\"flex\" class=\"css-1878569\"><div width=\"100%\" height=\"148px,156px\" class=\"css-12gw3o5\"><div class=\"character_avatar css-1w95giw\" overflow=\"hidden\" display=\"flex\" width=\"100%\" height=\"100%\"><img src=\"https://d394jeh9729epj.cloudfront.net/8BwuNilwTjW-GGKONkJEOUk2/b176b0a9-46e0-4d93-baff-7dace3602f6e_w600.webp\" alt=\"character_thumbnail\" style=\"width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0px; left: 0px; border-radius: inherit;\"></div><div class=\"character-card-overlay css-1w1m2cv\" width=\"100%\" height=\"100%\" display=\"none\"></div><div display=\"flex\" class=\"css-17z36ob\"><div width=\"28px\" height=\"28px\" display=\"flex\" class=\"css-1bygmye\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 16 16\" fill=\"none\"><mask id=\"mask0_8669_146020\" maskUnits=\"userSpaceOnUse\" x=\"0\" y=\"0\" width=\"16\" height=\"16\" style=\"mask-type: alpha;\"><rect width=\"16\" height=\"16\" fill=\"#D9D9D9\"></rect></mask><g mask=\"url(#mask0_8669_146020)\"><path d=\"M7.9974 8.66732C8.64184 8.66732 9.19184 8.43954 9.6474 7.98398C10.103 7.52843 10.3307 6.97843 10.3307 6.33398C10.3307 5.68954 10.103 5.13954 9.6474 4.68398C9.19184 4.22843 8.64184 4.00065 7.9974 4.00065C7.35295 4.00065 6.80295 4.22843 6.3474 4.68398C5.89184 5.13954 5.66406 5.68954 5.66406 6.33398C5.66406 6.97843 5.89184 7.52843 6.3474 7.98398C6.80295 8.43954 7.35295 8.66732 7.9974 8.66732ZM7.9974 14.6673C6.37517 14.2562 5.08073 13.3673 4.11406 12.0007C3.1474 10.634 2.66406 9.10065 2.66406 7.40065V3.33398L7.9974 1.33398L13.3307 3.33398V7.40065C13.3307 9.10065 12.8474 10.634 11.8807 12.0007C10.9141 13.3673 9.61962 14.2562 7.9974 14.6673ZM7.9974 13.2673C8.65295 13.0562 9.23351 12.7257 9.73906 12.2757C10.2446 11.8257 10.6863 11.3173 11.0641 10.7507C10.5863 10.5062 10.0891 10.3201 9.5724 10.1923C9.05573 10.0645 8.53073 10.0007 7.9974 10.0007C7.46406 10.0007 6.93906 10.0645 6.4224 10.1923C5.90573 10.3201 5.40851 10.5062 4.93073 10.7507C5.30851 11.3173 5.75017 11.8257 6.25573 12.2757C6.76129 12.7257 7.34184 13.0562 7.9974 13.2673Z\" fill=\"#FED4D3\"></path></g></svg></div><div width=\"28px\" height=\"28px\" display=\"flex\" class=\"css-1bygmye\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\" color=\"#ffffffff\"><mask id=\"mask0_13669_84\" maskUnits=\"userSpaceOnUse\" x=\"0\" y=\"0\" width=\"24\" height=\"24\" style=\"mask-type: alpha;\"><rect width=\"24\" height=\"24\" fill=\"currentColor\"></rect></mask><g mask=\"url(#mask0_13669_84)\"><path d=\"M11.951 13.4023L17.3804 9.78409L11.951 6.16591V13.4023ZM6.25011 20.9778C5.75241 21.0532 5.30373 20.9364 4.90406 20.6273C4.5044 20.3183 4.2744 19.915 4.21408 19.4175L3.01508 9.53534C2.95475 9.03784 3.07541 8.5931 3.37704 8.20113C3.67868 7.80916 4.07834 7.58303 4.57604 7.52272L5.61667 7.38704V14.7591C5.61667 15.7541 5.97109 16.6059 6.67993 17.3144C7.38877 18.023 8.24089 18.3773 9.23628 18.3773H17.6519C17.5614 18.7391 17.3804 19.0519 17.1089 19.3157C16.8375 19.5796 16.5057 19.7341 16.1135 19.7793L6.25011 20.9778ZM9.23628 16.5682C8.73858 16.5682 8.31253 16.391 7.95811 16.0368C7.60369 15.6825 7.42648 15.2566 7.42648 14.7591V4.80909C7.42648 4.31159 7.60369 3.8857 7.95811 3.53142C8.31253 3.17714 8.73858 3 9.23628 3H19.1902C19.6879 3 20.114 3.17714 20.4684 3.53142C20.8228 3.8857 21 4.31159 21 4.80909V14.7591C21 15.2566 20.8228 15.6825 20.4684 16.0368C20.114 16.391 19.6879 16.5682 19.1902 16.5682H9.23628Z\" fill=\"currentColor\"></path></g></svg></div></div></div><div display=\"flex\" class=\"css-19ssvua\"><p color=\"$color_text_primary\" class=\"css-sjt0pv\">NTR 오피스</p><p color=\"$color_text_secondary\" class=\"css-9xnb32\">[R18/이미지 30장] 부하직원의 상사가 되어 그의 아내를 NTR하자! (NTL) / 요즘 부장님이 내 아내를 보는 눈빛이 심상치 않다... 더군다나, 아내도 요즘 태도가 변하기 시작했다... (NTR)\n" +
         "\n" +
         "[스토리: 1일차~14일차, 8~11일차 온천 접대 이벤트]</p></div></div><div display=\"flex\" width=\"fit-content\" class=\"css-13rssxq\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 25 25\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\" color=\"#85837dff\"><path d=\"M12.5 22.437C11.1167 22.437 9.81667 22.1745 8.6 21.6495C7.38333 21.1245 6.325 20.412 5.425 19.512C4.525 18.612 3.8125 17.5537 3.2875 16.337C2.7625 15.1203 2.5 13.8203 2.5 12.437C2.5 11.0537 2.7625 9.75368 3.2875 8.53701C3.8125 7.32034 4.525 6.26201 5.425 5.36201C6.325 4.46201 7.38333 3.74951 8.6 3.22451C9.81667 2.69951 11.1167 2.43701 12.5 2.43701C13.8833 2.43701 15.1833 2.69951 16.4 3.22451C17.6167 3.74951 18.675 4.46201 19.575 5.36201C20.475 6.26201 21.1875 7.32034 21.7125 8.53701C22.2375 9.75368 22.5 11.0537 22.5 12.437V13.887C22.5 14.8703 22.1625 15.7078 21.4875 16.3995C20.8125 17.0912 19.9833 17.437 19 17.437C18.4167 17.437 17.8667 17.312 17.35 17.062C16.8333 16.812 16.4 16.4537 16.05 15.987C15.5667 16.4703 15.0208 16.8328 14.4125 17.0745C13.8042 17.3162 13.1667 17.437 12.5 17.437C11.1167 17.437 9.9375 16.9495 8.9625 15.9745C7.9875 14.9995 7.5 13.8203 7.5 12.437C7.5 11.0537 7.9875 9.87451 8.9625 8.89951C9.9375 7.92451 11.1167 7.43701 12.5 7.43701C13.8833 7.43701 15.0625 7.92451 16.0375 8.89951C17.0125 9.87451 17.5 11.0537 17.5 12.437V13.887C17.5 14.3203 17.6417 14.687 17.925 14.987C18.2083 15.287 18.5667 15.437 19 15.437C19.4333 15.437 19.7917 15.287 20.075 14.987C20.3583 14.687 20.5 14.3203 20.5 13.887V12.437C20.5 10.2037 19.725 8.31201 18.175 6.76201C16.625 5.21201 14.7333 4.43701 12.5 4.43701C10.2667 4.43701 8.375 5.21201 6.825 6.76201C5.275 8.31201 4.5 10.2037 4.5 12.437C4.5 14.6703 5.275 16.562 6.825 18.112C8.375 19.662 10.2667 20.437 12.5 20.437H17.5V22.437H12.5ZM12.5 15.437C13.3333 15.437 14.0417 15.1453 14.625 14.562C15.2083 13.9787 15.5 13.2703 15.5 12.437C15.5 11.6037 15.2083 10.8953 14.625 10.312C14.0417 9.72868 13.3333 9.43701 12.5 9.43701C11.6667 9.43701 10.9583 9.72868 10.375 10.312C9.79167 10.8953 9.5 11.6037 9.5 12.437C9.5 13.2703 9.79167 13.9787 10.375 14.562C10.9583 15.1453 11.6667 15.437 12.5 15.437Z\" fill=\"currentColor\"></path></svg><p color=\"$color_text_tertiary\" class=\"css-uoinwu\">야로망</p><svg width=\"16\" height=\"16\" viewBox=\"0 0 18 18\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" color=\"#f72f08ff\"><path d=\"M15.75 12.578V5.42297C15.75 5.25797 15.66 5.10047 15.5175 5.01797L9.2325 1.43297C9.09 1.35047 8.9175 1.35047 8.775 1.43297L2.4825 5.01797C2.34 5.10047 2.25 5.25797 2.25 5.42297V12.5855C2.25 12.7505 2.34 12.908 2.4825 12.9905L8.7675 16.5755C8.91 16.658 9.0825 16.658 9.225 16.5755L15.51 12.9905C15.6525 12.908 15.7425 12.7505 15.7425 12.5855L15.75 12.578Z\" fill=\"url(#paint0_linear_14670_273716)\"></path><g filter=\"url(#filter0_i_14670_273716)\"><path d=\"M12.4169 7.5382L10.2944 7.2907C10.2944 7.2907 10.2269 7.2682 10.2194 7.2307L9.32686 5.2882C9.19936 5.0107 8.80186 5.0107 8.67436 5.2882L7.78186 7.2307C7.78186 7.2307 7.73686 7.2832 7.70686 7.2907L5.58436 7.5382C5.27686 7.5757 5.15686 7.9507 5.38186 8.1607L6.94936 9.6082C6.94936 9.6082 6.98686 9.6682 6.97936 9.6982L6.55936 11.7907C6.49936 12.0907 6.82186 12.3232 7.08436 12.1732L8.94436 11.1232C8.94436 11.1232 9.01186 11.1082 9.04186 11.1232L10.9019 12.1732C11.1719 12.3232 11.4869 12.0907 11.4269 11.7907L11.0069 9.6982C11.0069 9.6982 11.0069 9.6307 11.0369 9.6082L12.6044 8.1607C12.8294 7.9507 12.7094 7.5757 12.4019 7.5382H12.4169Z\" fill=\"url(#paint1_linear_14670_273716)\"></path></g><defs><filter id=\"filter0_i_14670_273716\" x=\"5.26562\" y=\"5.08008\" width=\"7.45312\" height=\"7.14062\" filterUnits=\"userSpaceOnUse\" color-interpolation-filters=\"sRGB\"><feFlood flood-opacity=\"0\" result=\"BackgroundImageFix\"></feFlood><feBlend mode=\"normal\" in=\"SourceGraphic\" in2=\"BackgroundImageFix\" result=\"shape\"></feBlend><feColorMatrix in=\"SourceAlpha\" type=\"matrix\" values=\"0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0\" result=\"hardAlpha\"></feColorMatrix><feOffset></feOffset><feGaussianBlur stdDeviation=\"0.68175\"></feGaussianBlur><feComposite in2=\"hardAlpha\" operator=\"arithmetic\" k2=\"-1\" k3=\"1\"></feComposite><feColorMatrix type=\"matrix\" values=\"0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0\"></feColorMatrix><feBlend mode=\"normal\" in2=\"shape\" result=\"effect1_innerShadow_14670_273716\"></feBlend></filter><linearGradient id=\"paint0_linear_14670_273716\" x1=\"9\" y1=\"1.37109\" x2=\"9\" y2=\"16.6373\" gradientUnits=\"userSpaceOnUse\"><stop stop-color=\"#FE1571\"></stop><stop offset=\"1\" stop-color=\"#FF27B4\"></stop></linearGradient><linearGradient id=\"paint1_linear_14670_273716\" x1=\"8.99311\" y1=\"5.08008\" x2=\"8.99311\" y2=\"12.22\" gradientUnits=\"userSpaceOnUse\"><stop stop-color=\"#FFFDEF\"></stop><stop offset=\"1\" stop-color=\"#FFFBDD\"></stop></linearGradient></defs></svg></div>";
+debug("front html");
 //랭킹 플러스 필터링
 function filter_character_list(characterListElement,IsCe){
     if (characterListElement.likeCount < likeCount_limit || characterListElement.chatCount < chatCount_limit){
@@ -856,6 +885,7 @@ function filter_character_list(characterListElement,IsCe){
     else{
         if (IsCe){
             if (characterListElement.creator.isCertifiedCreator){
+                debug(characterListElement.name + " (Ce) ",5);
                 return true
             }
             else{
@@ -864,6 +894,7 @@ function filter_character_list(characterListElement,IsCe){
         }
         else{
             if (!characterListElement.creator.isCertifiedCreator){
+                debug(characterListElement.name + " (NoCe) ",5);
                 return true;
             }
             else{
@@ -871,6 +902,49 @@ function filter_character_list(characterListElement,IsCe){
             }
         }
     }
+}
+
+//디버그 버튼
+function debug_btn(){
+    var debug_Interval = setInterval(()=>{
+        if (document.URL == "https://wrtn.ai/character"){
+            var debug_modal = document.getElementsByClassName("css-e5sxrv").item(0);
+            if (debug_modal != null){
+                if (debug_modal.childNodes.length == 3){
+                    var debug_modal_btn = debug_modal.childNodes[2].childNodes.item(0).cloneNode(true);
+                    debug_modal_btn.textContent = `debug:${IsDebug}`;
+                    debug_modal_btn.addEventListener('click',()=>{
+                        if (IsDebug){
+                            debug("debug OFF");
+                            IsDebug = false;
+                            debug_modal_btn.textContent = `debug:${IsDebug}`;
+                            localStorage.setItem(local_IsDebug,JSON.stringify({
+                                IsDebug: false
+                            }))
+                        }
+                        else {
+                            IsDebug = true;
+                            debug_modal_btn.textContent = `debug:${IsDebug}`;
+                            localStorage.setItem(local_IsDebug,JSON.stringify({
+                                IsDebug: true
+                            }))
+                            debug("debug ON");
+                        }
+                        debug("debug_modal_btn",3);
+                    })
+                    debug_modal.insertBefore(debug_modal_btn,debug_modal.childNodes.item(2));
+                    debug("web-modal founded");
+                }
+                else{
+                    clearInterval(debug_Interval);
+                }
+            }
+        }
+        else{
+            clearInterval(debug_Interval);
+        }
+    },100)
+    debug("debug_btn",0)
 }
 //플러스 랭크 내부 캐릭터 클릭시 팝업
 function plus_modal_func(Tfeed,CeCreator){
@@ -882,7 +956,7 @@ function plus_modal_func(Tfeed,CeCreator){
     feed_struct_element.innerHTML = feed_struct_element_front_html;
     const feed_struct_scroll_btn = feed_struct.childNodes[1].childNodes[0].childNodes[1].childNodes.item(0); // > 버튼
     const feed_struct_scroll_btn_l = document.createElement("div"); // < 버튼
-    debug("plus_modal_func",false,true);
+    debug("plus_modal_func",1);
     feed_struct_scroll_btn_l.setAttribute("width", "61px");
     feed_struct_scroll_btn_l.setAttribute("style", "    width: 61px;\n" +
         "    height: 100%;\n" +
@@ -896,6 +970,7 @@ function plus_modal_func(Tfeed,CeCreator){
     // > 버튼 누를시
     feed_struct_scroll_btn.addEventListener('click', () => {
         scroll_func(feed_struct_scroll,feed_struct_six,feed_struct_scroll_btn_l,scroll_all_amount,scroll_amount);
+        debug("feed_struct_scroll_btn",3);
     })
     /* 이 부분 부터는 랭킹 플러스 내부에 자격을 만족하는 캐릭터챗을 추가하는 기능
     근대 웃긴게 캐릭터챗을 불러오는데 시간이 걸려서 (원래 형식에 들어있어야할 캐챗을 불러오는거 말하는거임)
@@ -989,9 +1064,9 @@ function plus_modal_func(Tfeed,CeCreator){
                                     }
                                     feed_struct_elements.appendChild(fe);
                                     loaded++;
-                                    debug(`added ${element.name}`);
                                 }
                             }
+                            debug("first_charcter_section",2)
                             cursor = data.data.nextCursor;
                             function loadF(cursorL){
                                 fetch(wrtn_api + `/characters?limit=${limit}&sort=createdAt&cursor=${cursorL}`,{
@@ -1063,8 +1138,7 @@ function plus_modal_func(Tfeed,CeCreator){
                                                 console.log("isCertifiedCreator");
                                             }
                                             feed_struct_elements.appendChild(fe);
-                                            loaded++;
-                                            debug(`added ${element.name}`);   
+                                            loaded++;  
                                         }
                                     }
                                     if (loaded < load_limit){
@@ -1089,7 +1163,7 @@ function plus_modal_func(Tfeed,CeCreator){
     }
     feed_struct_text.textContent = plus;
     Tfeed.prepend(feed_struct);
-    debug("plus_modal_func",true);
+    debug("plus_modal_func",0);
 }
 
 //< > 스크롤 기능 구현
@@ -1122,7 +1196,7 @@ function scroll_func(feed_struct_scroll,feed_struct_six, feed_struct_scroll_btn_
                         clearInterval(j);
                     }
                 },)
-                debug("left croll_func",true);
+                debug("left croll_func",3);
             })
             // < 버튼을 만듦
             feed_struct_six.insertBefore(feed_struct_scroll_btn_l, feed_struct_six.childNodes.item(0));
@@ -1133,7 +1207,7 @@ function scroll_func(feed_struct_scroll,feed_struct_six, feed_struct_scroll_btn_
             clearInterval(a);
         }
     },)
-    debug("scroll_func",true);
+    debug("scroll_func",0);
 }
 //제작자의 다른 캐릭터 보기 기능
 function plus_modal_recommand_creator_func(creator_character,plus_modal_recommand_creator,isModal){
@@ -1143,7 +1217,7 @@ function plus_modal_recommand_creator_func(creator_character,plus_modal_recomman
     const creator_character_scroll = creator_character_six.childNodes.item(0);
     const creator_character_btn = creator_character_six.childNodes[1].childNodes.item(0);
     const creater_character_struct_scroll_btn_l = document.createElement("div"); // < 버튼
-    debug("plus_modal_recommand_creator_func",false,true);
+    debug("plus_modal_recommand_creator_func",1);
     creater_character_struct_scroll_btn_l.setAttribute("width", "61px");
     creater_character_struct_scroll_btn_l.setAttribute("style", "    width: 61px;\n" +
         "    height: 100%;\n" +
@@ -1155,6 +1229,7 @@ function plus_modal_recommand_creator_func(creator_character,plus_modal_recomman
     creater_character_struct_scroll_btn_l.innerHTML = feed_front_html_scroll;
     creator_character_btn.addEventListener('click',()=>{
         scroll_func(creator_character_scroll,creator_character_six,creater_character_struct_scroll_btn_l,scroll_all_amount,scroll_amount);
+        debug("creator_character_btn",3)
     })
     i = 0;
     for (const element of creator_character) {
@@ -1180,8 +1255,9 @@ function plus_modal_recommand_creator_func(creator_character,plus_modal_recomman
         creator_character_top.appendChild(creator_character_elment);
         i++
     }
+    debug("creator_character",4);
     creator_character_struct.remove();
-    debug("plus_modal_recommand_creator_func",true);
+    debug("plus_modal_recommand_creator_func",0);
 }
 
 //팝업 내부의 업데이트와 댓글
@@ -1197,7 +1273,7 @@ function date_and_comment(plus_modal_date_and_comment_struct,comment){
         plus_modal_date_and_comment_struct.childNodes[1].childNodes[1].childNodes[0].childNodes.item(0).src = comment.writer.profileImage.w200;
     }
     plus_modal_date_and_comment_struct.childNodes[1].childNodes[1].childNodes.item(1).textContent = comment.content;
-    debug("date_and_comment",true);
+    debug("date_and_comment",0);
 }
 
 //modal 팝업 구역이 존재할시
@@ -1210,7 +1286,7 @@ function plus_modal_yes(character_list,fe){
     plus_modal.innerHTML = plus_modal_front_html;
     plus_modal_no(plus_modal,character_list,fe);
     document.body.appendChild(plus_modal);
-    debug("plus_modal_yes",true);
+    debug("plus_modal_yes",0);
 }
 
 //modal 팝업구역이 존재하지 않을시 (기능적 요소 포함)
@@ -1250,7 +1326,7 @@ function plus_modal_no(isModal,character_list,fe){
     const plus_modal_tags = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[2].childNodes.item(1);
     //대화 한 유저수, 좋아요수, 댓글수 넣는부분
     const plus_modal_last = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes.item(3);
-    debug("plus_modal",false,true);
+    debug("plus_modal",1);
     //제작자의 캐챗 불러오기
     var creator_character = JSON.parse(getAfetch(wrtn_api + `/character-profiles/${character_list[fe.id].wrtnUid}/characters?limit=10&sort=createdAt`)).data.characters;
     plus_modal_recommand_creator_func(creator_character,plus_modal_recommand_creator.childNodes.item(0),isModal);
@@ -1281,7 +1357,7 @@ function plus_modal_no(isModal,character_list,fe){
         new_tags.textContent = `#${element}`;
         plus_modal_tags.appendChild(new_tags);
     }
-    debug("for character_list");
+    debug("character_list.tags",4);
     //언셒 마크
     plus_modal_IsAudult = document.createElement('div');
     plus_modal_IsAudult.innerHTML = plus_modal_front_html_IsAudlt;
@@ -1308,12 +1384,13 @@ function plus_modal_no(isModal,character_list,fe){
     //모달 내부 x버트 이벤트리스너
     plus_modal_x_btn.addEventListener('click',()=>{
         isModal.remove();
+        debug("plus_modal_x_btn",3)
     })
     //대화하기 버튼 이벤트 리스너
     plus_modal_btn.addEventListener('click',()=>{
         window.location.href = `https://wrtn.ai/character/u/${fe.getAttribute("src")}`;
     })
-    debug("plus_modal_no",true);
+    debug("plus_modal_no",0);
 }
 
 function character(){
@@ -1331,7 +1408,7 @@ function character(){
         //크레이터
         plus_modal_func(Tfeed,true);
     }
-    debug("character",true);
+    debug("character",0);
 }
 
 function chatroom(){
@@ -1351,7 +1428,7 @@ function chatroom(){
         const persona_svg = persona.childNodes.item(0); // 페르소나 svg
         const persona_path = persona_svg.childNodes.item(0); // 페르소나 path
         var personal_modal = document.createElement("div"); //모달팝업
-        debug("chatroom",false,true);
+        debug("chatroom",1);
         personal_modal.setAttribute("id","web-modal");
         document.body.appendChild(personal_modal); // body에 모달팝업 추가
 
@@ -1393,6 +1470,7 @@ function chatroom(){
                                 }
                             }).then(res => res.json()).then(data => {
                                 usernote_modal_textarea.value = data.data.character.userNote.content;
+                                debug("GET " + wrtn_api2 + `/api/v2/chat-room/${document.URL.split("/")[7].split("?")[0]}`,2);
                             })
                             /*
                             textarea의 내부값을 수정해도 적용이 안되는 문제가 있어서
@@ -1416,20 +1494,20 @@ function chatroom(){
                             const usernote_modal_new_close_btn = usernote_modal_btn.cloneNode(true); //닫기 버튼형식으로 새로운 닫기버튼을 만듦
                             var modal = document.getElementById("web-modal"); //모달 팝업을 가져옴
                             var usernote = document.getElementsByClassName("css-uxwch2").item(0).childNodes.item(0); //유저노트를 가져옴
-                            debug("usernote",false,true);
+                            debug("usernote",1);
                             //메뉴속 유저노트 버튼을 누를시 모달팝업을 띄워주는 함수
                             function after_usernote_event() {
-                                {
-                                    modal.appendChild(usernote_modal);
-                                    fetch(wrtn_api2 + `/api/v2/chat-room/${document.URL.split("/")[7].split("?")[0]}`, {
-                                        method: "GET",
-                                        headers: {
-                                            "Authorization": `Bearer ${getCookie(token_key)}`,
-                                        }
-                                    }).then(res => res.json()).then(data => {
-                                        usernote_modal_textarea.value = data.data.character.userNote.content;
-                                    })
-                                }
+                                modal.appendChild(usernote_modal);
+                                fetch(wrtn_api2 + `/api/v2/chat-room/${document.URL.split("/")[7].split("?")[0]}`, {
+                                    method: "GET",
+                                    headers: {
+                                        "Authorization": `Bearer ${getCookie(token_key)}`,
+                                    }
+                                }).then(res => res.json()).then(data => {
+                                    usernote_modal_textarea.value = data.data.character.userNote.content;
+                                    debug("GET " + wrtn_api2 + `/api/v2/chat-room/${document.URL.split("/")[7].split("?")[0]}`,2);
+                                })
+                                debug("after_usernote_event",0);
                             }
                             //css 수동 동기화 (닫기 버튼을 수정버튼으로 만들기 위함)
                             usernote_modal_apply_btn.removeAttribute("class");
@@ -1461,6 +1539,7 @@ function chatroom(){
                                 usernote.removeEventListener('click', after_usernote_event);
                                 usernote.addEventListener('click', after_usernote_event);
                                 modal.childNodes.item(0).remove(); //모달 팝업 닫기
+                                debug("usernote_modal_apply_btn",3)
                                 alert("유저노트에 반영되었습니다!");
                             })
                             //닫기 버튼 누를시
@@ -1469,6 +1548,7 @@ function chatroom(){
                                 usernote.removeEventListener('click', after_usernote_event);
                                 usernote.addEventListener('click', after_usernote_event);
                                 modal.childNodes.item(0).remove(); //모달 팝업 닫기
+                                debug("usernote_modal_new_close_btn",3)
                             })
                             //x 버튼 누를시
                             usernote_modal_x.addEventListener('click', () => {
@@ -1476,6 +1556,7 @@ function chatroom(){
                                 usernote.removeEventListener('click', after_usernote_event);
                                 usernote.addEventListener('click', after_usernote_event);
                                 modal.childNodes.item(0).remove(); //모달 팝업 닫기
+                                debug("usernote_modal_x",3)
                             })
                             usernote_modal_apply_btn.childNodes.item(0).textContent = "수정"; //버튼 이름을 변경
                             //자동생성 버튼을 누를시
@@ -1521,6 +1602,7 @@ function chatroom(){
                                     var res_msg = JSON.parse(getAfetch(wrtn_api2 + `/characters/chat/${created_chatId}/message/${created_msg}/result`)).data.content;
                                     usernote_modal_textarea.value = res_msg; //textarea에 값을 반영
                                 }
+                                debug("usernote_modal_btn",3);
                             })
                             usernote_modal_update_btn.addEventListener('click', () => {
                                 //새로운 방을 팜
@@ -1530,6 +1612,7 @@ function chatroom(){
                                     userNote: {"content": ""}
                                 })).data._id;
                                 localStorage.setItem(local_usernote, created_chatId); //스토리지에 방 id 저장
+                                debug("usernote_modal_update_btn",3);
                                 alert("업데이트 되었습니다! (채팅방 확인)");
                             })
                             /*
@@ -1581,13 +1664,13 @@ function chatroom(){
             function v_clicked() {
                 const vsm2 = document.getElementsByTagName("textarea").item(0);
                 vsm2.value = l[vsmc.id][1];
-                debug(`${vsmc.id + 1} button event`);
+                debug(`vsmc`,3);
             }
             vsmc.addEventListener("click",v_clicked);
             targetDiv.appendChild(vsmc);
             targetDiv.appendChild(NBS_E);
             targetDiv.appendChild(NS);
-            debug("+ button event");
+            debug(`NBS`,3);
         }
 
         //-버튼 클릭시
@@ -1595,7 +1678,7 @@ function chatroom(){
             const a = document.getElementById(`${l.length-1}`);
             a.remove();
             l.pop();
-            debug("- button event");
+            debug("NBS_E",3);
         }
 
         window.addEventListener("keydown", keysPressed, false);
@@ -1605,7 +1688,6 @@ function chatroom(){
 
         function keysPressed(e) {
             keys[e.keyCode] = true;
-
             for (let i = 0; i < 58; i++) {
                  if (keys[17] && keys[49 + i] && l.length > i) {
                     const vsm = document.getElementsByTagName("textarea").item(0);
@@ -1712,11 +1794,14 @@ function chatroom(){
                                 //모달 내부 닫기버튼 눌렀을시
                                 personal_modal_Cbtn.addEventListener("click",()=>{
                                     personal_modal.childNodes.item(0).remove();
+                                    debug("personal_modal_Cbtn",3);
                                 })
                                 //모달 내부 x버튼 눌렀을시
                                 personal_modal_x.addEventListener("click",()=>{
                                     personal_modal.childNodes.item(0).remove();
+                                    debug("personal_modal_x",3);
                                 })
+                                debug("personaL",3);
                             }
                             personaL.addEventListener('click',personaL_change);
                             bar_c.appendChild(personaL);
@@ -1725,12 +1810,12 @@ function chatroom(){
                       })
                   })
             });
-        debug("persona",true);
-    }
+            debug("persona",0);
+        }
     }catch (e){
         console.log(e);
     }
-    debug("chatroom",true);
+    debug("chatroom",0);
 }
 
 function my(){
@@ -1791,8 +1876,9 @@ function my(){
                                     }
                                     i++;
                                 }
+                                debug("GET" + wrtn_api + `/characters/me?limit=${forced_limit}`,2);
                             })
-                            debug(`${copyTojson} button event`);
+                            debug(`tipbar_copy`,3);
                         })
                         tipbar.item(0).appendChild(tipbar_copy);
                     }
@@ -1849,14 +1935,16 @@ function my(){
                                                     defaultStartingSetSituationPrompt: json_data.defaultStartingSetSituationPrompt,
                                                 })
                                             }).then(res => res.json).then(data => {
+                                                debug("PATCH " + wrtn_api + `/characters/${datum._id}`,2);
                                                 alert("캐챗 변경 성공! (새로고침 후 적용됩니다.)");
                                             })
                                         })
                                     }
                                     i++
                                 }
+                                debug("GET " + wrtn_api + `/characters/me?limit=${forced_limit}`,2);
                             })
-                            debug(`${pasteTojson} button event`);
+                            debug(`tipbar_paste`,3);
                         })
                         tipbar.item(0).appendChild(tipbar_paste);
                     }
@@ -1952,14 +2040,16 @@ function my(){
                                                 },
                                                 body: json_body,
                                             }).then(res => res.json()).then(data => {
+                                                debug("POST "+ wrtn_api + "/characters",2);
                                                 alert("캐챗 공개 성공! (새로고침 후 적용됩니다.)");
                                             })
                                         })
                                     }
                                     i++;
                                 }
+                                debug("GET " + wrtn_api + `/characters/me?limit=${forced_limit}`,2);
                             })
-                            debug(`${publish} button event`);
+                            debug(`tipbar_clone`,3);
                         })
                         tipbar.item(0).appendChild(tipbar_clone);
                     }
@@ -1997,7 +2087,7 @@ function my(){
             i++;
         }
     },500)
-    debug("my",true);
+    debug("my",0);
 }
 
 function builder (){
@@ -2029,12 +2119,12 @@ function builder (){
                             var json_data2 = JSON.parse(localStorage.getItem(local_saved_prompt));//localstorage에 저장된 프롬프트 들고오기
                             copyToClipboard(json_data2.prompt[recommand_promt_btn_add.id]); //클립보드에 저장된 프롬프트 복사
                             alert("클립보드에 복사되었습니다.");
-                            debug(`${recommand_promt_btn_add.id + 1} button event`);
+                            debug("recommand_promt_btn_add",3);
                         })
                         json_data.prompt[json_data.prompt.length] = text.textContent;//프롬프트 추가
                         setting.insertBefore(recommand_promt_btn_add,recommand_prompt_minus_btn);
                         localStorage.setItem(local_saved_prompt,JSON.stringify(json_data)); //추가한 프롬프트를 localstorage에 등록
-                        debug("+ button event")
+                        debug("recommand_prompt_plus_btn",3);
                     })
                     // - 버튼 누를시
                     recommand_prompt_minus_btn.addEventListener('click',()=>{
@@ -2048,7 +2138,7 @@ function builder (){
                         else{
                             alert("삭제할 항목이 존재하지 않습니다.");
                         }
-                        debug("- button event");
+                        debug("recommand_prompt_minus_btn",3);
                     })
                     setting.appendChild(recommand_prompt_plus_btn)
                     i = 0
@@ -2061,12 +2151,13 @@ function builder (){
                         recommand_promt_add_btn.addEventListener('click',()=>{
                             var json_data = JSON.parse(localStorage.getItem(local_saved_prompt)); //localstorage에 저장된 프롬프트 들고오기
                             copyToClipboard(json_data.prompt[recommand_promt_add_btn.id]); //가져온 프롬프트를 클립보드에 복사
+                            debug("rrecommand_promt_add_btn",3);
                             alert("클립보드에 복사되었습니다.");
                         })
                         setting.appendChild(recommand_promt_add_btn);
                         i++;
                     }
-                    debug("for json_data.promt");
+                    debug("json_data.promt",4);
                     setting.appendChild(recommand_prompt_minus_btn);
                     //커스텀 프롬프트 템플릿에는 자동 생성 버튼없어서 없는경우 추가 안함
                     if (setting_deafult_btn != null){
@@ -2077,7 +2168,7 @@ function builder (){
             i++;
         }
     },100)
-    debug("builder",true);
+    debug("builder",0);
 }
 
 //쿠키 가져오는 함수
@@ -2097,7 +2188,7 @@ function getAfetch (url){
     xhr.setRequestHeader("Authorization", `Bearer ${getCookie(token_key)}`);
     xhr.send();
     if (xhr.status == 200) { //GET 요청에 대해 성공적인경우
-        debug(`GET ${url}`,false,false,true);
+        debug(`GET ${url}`,2);
         return xhr.responseText // 서버로부터 받은 데이터를 출력
     }
     else{
@@ -2115,7 +2206,7 @@ function postAfetch (url,data){
     //POST 요청에 보낼 데이터 작성
     xhr.send(JSON.stringify(data)); //JSON 형태로 변환하여 서버에 전송
     if (xhr.status == 201){
-        debug(`POST ${url}`,false,false,true);
+        debug(`POST ${url}`,2);
         return xhr.responseText;
     }
     else{
@@ -2133,7 +2224,7 @@ function putAfetch (url,data){
     //PUT 요청에 보낼 데이터 작성
     xhr.send(JSON.stringify(data)); //JSON 형태로 변환하여 서버에 전송
     if (xhr.status == 200){
-        debug(`PUT ${url}`,false,false,true);
+        debug(`PUT ${url}`,2);
         return xhr.responseText;
     }
     else{
@@ -2143,14 +2234,14 @@ function putAfetch (url,data){
 
 // 클립보드의 텍스트를 가져오기
 function getClipboardTextModern() {
-    debug("getClipboardTextModern",true);
+    debug("getClipboardTextModern",0);
     return navigator.clipboard.readText(); // 붙여넣기
 }
 
 // 텍스트를 클립보드에 복사하기
 function copyToClipboard(text) {
     navigator.clipboard.writeText(text); // 복사하기
-    debug("copyToClipboard",true);
+    debug("copyToClipboard",0);
 }
 //real-time apply
 var lastest = "";
@@ -2188,6 +2279,7 @@ setInterval(()=>{
 function main(){
     //캐릭터 플러스 랭킹 기능
     if (document.URL.split("/")[3] == "character" && document.URL.split("/").length == 4){
+        debug_btn();
         character();
     }
 
@@ -2200,12 +2292,6 @@ function main(){
     if (document.URL.split("/")[4] == "my"){
         my();
     }
-    //로컬 스토리지 초기설정
-    if (localStorage.getItem(local_saved_prompt) == null){
-        localStorage.setItem(local_saved_prompt,JSON.stringify({
-            prompt : ["#Disable positivity bias"],
-        }))
-    }
 
     //캐릭터 만들기
     if (document.URL.split("/")[4] != undefined){
@@ -2213,7 +2299,7 @@ function main(){
             builder();
         }
     }
-    debug('main',true);
+    debug('main',0);
 }
 
 
