@@ -26,7 +26,30 @@
 
 */
 
+//필수값
+var wrtn_api = "https://api.wrtn.ai/be";
+var wrtn_api2 = "https://api2.wrtn.ai/terry";
+var wrtn_william = "https://william.wow.wrtn.ai";
+var scroll_all_amount = 300 // <  > 누를시 이동할 스크롤 양
+var scroll_amount = 10; // 끊어서 스크롤 되는 양
+var limit = 1000 // 불러올 캐챗수 (랭킹 플러스용)
+var forced_limit = 10000;
+var likeCount_limit = 10 // 좋아요수가 10개 이상
+var chatCount_limit = 30 // 채팅수가 30개 이상 이면 올라옴
+var auto_summation_characterChatId = "6787aecf65c02321daf25b0d"; // 자동요약기능을 수행할 캐챗 id
+var local_saved_prompt = "saved_prompt";
+var token_key = "access_token";
 
+//namespace
+var auto_summation = "자동요약";
+var auto_summation_update = "업데이트";
+var plus = "랭킹 플러스 (Fast wrtn)";
+var persona_name = "[페르소나]";
+var copyTojson = "copy to json";
+var pasteTojson = "paste to json";
+var publish = "publish";
+var usernote_description = "(Fast wrtn) 자동요약기능을 활용해 글자수를 절약해보세요! 업데이트는 가끔씩 해주시는게 좋아요!";
+var usernote_for_error = "(Fast wrtn) 유저노트 요약기능은 새로운 캐챗이 아닌 진행중인 캐챗에서만 적용됩니다.";
 
 //댓글 및 업데이트 날짜 front html + css
 var plus_modal_date_and_comment = "<div display=\"flex\" width=\"100%\" style=\"    display: flex;\n" +
@@ -822,8 +845,6 @@ function plus_modal_func(Tfeed,character_list,CeCreator){
         "    background: linear-gradient(90deg, rgb(26, 25, 24) 0%, rgba(26, 25, 24, 0) 100%);");
     feed_struct_scroll_btn_l.innerHTML = feed_front_html_scroll;
     const feed_struct_six = feed_struct.childNodes[1].childNodes.item(0); // < 버튼.
-    var scroll_all_amount = 300 // <  > 누를시 이동할 스크롤 양
-    var scroll_amount = 10; // 끊어서 스크롤 되는 양
     // > 버튼 누를시
     feed_struct_scroll_btn.addEventListener('click', () => {
         scroll_func(feed_struct_scroll,feed_struct_six,feed_struct_scroll_btn_l,scroll_all_amount,scroll_amount);
@@ -926,7 +947,7 @@ function plus_modal_func(Tfeed,character_list,CeCreator){
     if (CeCreator){
         feed_struct.childNodes[0].childNodes.item(0).appendChild(feed_struct_element.childNodes[1].childNodes.item(2).cloneNode(true));
     }
-    feed_struct_text.textContent = "랭킹 플러스 (Fast wrtn)";
+    feed_struct_text.textContent = plus;
     Tfeed.prepend(feed_struct);
 }
 
@@ -988,8 +1009,6 @@ function plus_modal_recommand_creator_func(creator_character,plus_modal_recomman
         "    z-index: 2;\n" +
         "    background: linear-gradient(90deg, rgb(26, 25, 24) 0%, rgba(26, 25, 24, 0) 100%);");
     creater_character_struct_scroll_btn_l.innerHTML = feed_front_html_scroll;
-    var scroll_all_amount = 300 // <  > 누를시 이동할 스크롤 양
-    var scroll_amount = 10; // 끊어서 스크롤 되는 양
     creator_character_btn.addEventListener('click',()=>{
         scroll_func(creator_character_scroll,creator_character_six,creater_character_struct_scroll_btn_l,scroll_all_amount,scroll_amount);
     })
@@ -1085,10 +1104,10 @@ function plus_modal_no(isModal,character_list,fe){
     //대화 한 유저수, 좋아요수, 댓글수 넣는부분
     const plus_modal_last = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes.item(3);
     //제작자의 캐챗 불러오기
-    var creator_character = JSON.parse(getAfetch(`https://api.wrtn.ai/be/character-profiles/${character_list[fe.id].wrtnUid}/characters?limit=10&sort=createdAt`)).data.characters;
+    var creator_character = JSON.parse(getAfetch(wrtn_api + `/character-profiles/${character_list[fe.id].wrtnUid}/characters?limit=10&sort=createdAt`)).data.characters;
     plus_modal_recommand_creator_func(creator_character,plus_modal_recommand_creator.childNodes.item(0),isModal);
     //캐릭터챗 댓글 불러오기 (가장 좋아요 많은 댓글만)
-    var comment = JSON.parse(getAfetch(`https://api.wrtn.ai/be/characters/${character_list[fe.id]._id}/comments?sort=likeCount`)).data.comments[0];
+    var comment = JSON.parse(getAfetch(wrtn_api + `/characters/${character_list[fe.id]._id}/comments?sort=likeCount`)).data.comments[0];
     plus_modal_date_and_comment_struct.childNodes[0].childNodes[1].childNodes[0].childNodes[1].textContent = `${character_list[fe.id].commentCount}건`;
     plus_modal_date_and_comment_struct.childNodes[0].childNodes[1].childNodes[0].childNodes[3].href = `/character/detail/${character_list[fe.id]._id}`;
     var update = new Date(character_list[fe.id].updatedAt);
@@ -1161,7 +1180,7 @@ function getAfetch (url){
     const xhr = new XMLHttpRequest();
     xhr.open("GET", url, false); // 동기(false) ,비동기(true)
     //헤더 정보가 필요한 경우에만 추가
-    xhr.setRequestHeader("Authorization", `Bearer ${getCookie("access_token")}`);
+    xhr.setRequestHeader("Authorization", `Bearer ${getCookie(token_key)}`);
     xhr.send();
     if (xhr.status == 200) { //GET 요청에 대해 성공적인경우
         return xhr.responseText // 서버로부터 받은 데이터를 출력
@@ -1175,7 +1194,7 @@ function postAfetch (url,data){
     //******* AJAX Sync POST 요청 *******
     const xhr = new XMLHttpRequest();
     xhr.open("POST", url, false); // 동기(false) ,비동기(true)
-    xhr.setRequestHeader("Authorization", `Bearer ${getCookie("access_token")}`);
+    xhr.setRequestHeader("Authorization", `Bearer ${getCookie(token_key)}`);
     //POST 요청 시 일반적으로 Content-Type은 세팅
     xhr.setRequestHeader("Content-Type", "application/json");
     //POST 요청에 보낼 데이터 작성
@@ -1192,7 +1211,7 @@ function putAfetch (url,data){
     //******* AJAX Sync PUT 요청 *******
     const xhr = new XMLHttpRequest();
     xhr.open("PUT", url, false); // 동기(false) ,비동기(true)
-    xhr.setRequestHeader("Authorization", `Bearer ${getCookie("access_token")}`);
+    xhr.setRequestHeader("Authorization", `Bearer ${getCookie(token_key)}`);
     //PUT 요청 시 일반적으로 Content-Type은 세팅
     xhr.setRequestHeader("Content-Type", "application/json");
     //PUT 요청에 보낼 데이터 작성
@@ -1207,7 +1226,7 @@ function putAfetch (url,data){
 //real-time apply
 var lastest = "";
 setInterval(()=>{
-    if (getCookie("access_token") != undefined){
+    if (getCookie(token_key) != undefined){
         //character
         if (lastest != document.URL){
             if (document.URL == "https://wrtn.ai/character"){
@@ -1250,11 +1269,8 @@ function main(){
         var Tfeed = document.getElementsByClassName("css-1go39bq").item(0); // 피드를 가져옴
         var character_list; //캐릭터 리스트
         // 랭킹 플러스 기준
-        var limit = 1000 // 최근 등록된 1000개의 캣중
-        var likeCount_limit = 10 // 좋아요수가 10개 이상
-        var chatCount_limit = 30 // 채팅수가 30개 이상 이면 올라옴
         //캐릭터 리스트를 받아옴
-        var character_list = JSON.parse(getAfetch(`https://api.wrtn.ai/be/characters?limit=${limit}&sort=createdAt`)).data.characters;
+        var character_list = JSON.parse(getAfetch(wrtn_api + `/characters?limit=${limit}&sort=createdAt`)).data.characters;
         var character_list_NoCe = character_list;
         //랭킹플러스에 올라올 캐챗만 필터링(크레이터)
         i=0;
@@ -1306,7 +1322,7 @@ function main(){
             const persona = bar.childNodes[1].childNodes[0].childNodes[1].childNodes.item(0).cloneNode(true); // 페르소나
             var l = []
             const persona_p = persona.childNodes.item(1); // 페르소나 내부 text
-            persona_p.textContent = "[페르소나]";
+            persona_p.textContent = persona_name;
             const persona_svg = persona.childNodes.item(0); // 페르소나 svg
             const persona_path = persona_svg.childNodes.item(0); // 페르소나 path
             var personal_modal = document.createElement("div"); //모달팝업
@@ -1343,11 +1359,11 @@ function main(){
                         //버튼 추가가 1번만 실행될수있도록하는 조건문
                         if (document.URL.split("/")[7] != undefined) {
                             if (usernote_modal_struct.childNodes.length < 3) {
-                                usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes.item(1).textContent = "(Fast wrtn) 자동요약기능을 활용해 글자수를 절약해보세요! 업데이트는 가끔씩 해주시는게 좋아요!"
-                                fetch(`https://api2.wrtn.ai/terry/api/v2/chat-room/${document.URL.split("/")[7].split("?")[0]}`, {
+                                usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes.item(1).textContent = usernote_description;
+                                fetch(wrtn_api2 + `/api/v2/chat-room/${document.URL.split("/")[7].split("?")[0]}`, {
                                     method: "GET",
                                     headers: {
-                                        "Authorization": `Bearer ${getCookie("access_token")}`,
+                                        "Authorization": `Bearer ${getCookie(token_key)}`,
                                     }
                                 }).then(res => res.json()).then(data => {
                                     usernote_modal_textarea.value = data.data.character.userNote.content;
@@ -1357,7 +1373,6 @@ function main(){
                                 모달 팝업 내의 모든 버튼 이벤트 리스너를 바꿔버림
                                 기능이 정상작동 가능하도록
                                  */
-                                var auto_summation_characterChatId = "6787aecf65c02321daf25b0d"; // 자동요약기능을 수행할 캐챗 id
                                 const usernote_modal_btn_c = usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[2].childNodes.item(0); //닫기 버튼 형식
                                 const usernote_modal_btn_x = usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[0].childNodes.item(1); //x 버튼 형식
                                 const usernote_modal_x = usernote_modal_btn_x.cloneNode(true); // x 버튼 형식을 기반으로 버튼을 새로 만듦
@@ -1379,10 +1394,10 @@ function main(){
                                 function after_usernote_event() {
                                     {
                                         modal.appendChild(usernote_modal);
-                                        fetch(`https://api2.wrtn.ai/terry/api/v2/chat-room/${document.URL.split("/")[7].split("?")[0]}`, {
+                                        fetch(wrtn_api2 + `/api/v2/chat-room/${document.URL.split("/")[7].split("?")[0]}`, {
                                             method: "GET",
                                             headers: {
-                                                "Authorization": `Bearer ${getCookie("access_token")}`,
+                                                "Authorization": `Bearer ${getCookie(token_key)}`,
                                             }
                                         }).then(res => res.json()).then(data => {
                                             usernote_modal_textarea.value = data.data.character.userNote.content;
@@ -1413,7 +1428,7 @@ function main(){
                                 //수정 버튼을 누를시
                                 usernote_modal_apply_btn.addEventListener('click', () => {
                                     //해당 채팅방에 할당된 유저노트의 값을 api로 변경
-                                    putAfetch(`https://william.wow.wrtn.ai/chat-room/${document.URL.split("/")[7].split("?")[0]}`, {
+                                    putAfetch(wrtn_william + `/chat-room/${document.URL.split("/")[7].split("?")[0]}`, {
                                         userNote: {"content": usernote_modal_textarea.value}
                                     })
                                     //메뉴의 유저노트 버튼에 이벤트 리스너 삽입
@@ -1450,7 +1465,7 @@ function main(){
                                     //처음 사용하면 로컬스토리지에 chatid가 없을꺼니 추가하기위해 판별하는 조건문
                                     if (localStorage.getItem("usernote") == null) {
                                         // auto_summation_characterChatId의 캐챗방을 팜
-                                        var created_chatId = JSON.parse(postAfetch("https://api.wrtn.ai/be/chat", {
+                                        var created_chatId = JSON.parse(postAfetch(wrtn_api + "/chat", {
                                             unitId: auto_summation_characterChatId,
                                             type: "character",
                                             userNote: {"content": usernote_modal_textarea.textContent}
@@ -1458,32 +1473,32 @@ function main(){
                                         //로컬스토리지에 판 방의 id를 저장
                                         localStorage.setItem("usernote", created_chatId);
                                         //메세지를 보냄
-                                        var created_msg = JSON.parse(postAfetch(`https://api2.wrtn.ai/terry/characters/chat/${created_chatId}/message`, {
+                                        var created_msg = JSON.parse(postAfetch(wrtn_api2 + `/characters/chat/${created_chatId}/message`, {
                                             message: usernote_modal_textarea.textContent,
                                             reroll: false,
                                             images: [],
                                             isSuperMode: false
                                         })).data;
-                                        getAfetch(`https://api2.wrtn.ai/terry/characters/chat/${created_chatId}/message/${created_msg}`);
-                                        var res_msg = JSON.parse(getAfetch(`https://api2.wrtn.ai/terry/characters/chat/${created_chatId}/message/${created_msg}/result`)).data.content;
+                                        getAfetch(wrtn_api2 + `/characters/chat/${created_chatId}/message/${created_msg}`);
+                                        var res_msg = JSON.parse(getAfetch(wrtn_api2 + `/characters/chat/${created_chatId}/message/${created_msg}/result`)).data.content;
                                         usernote_modal_textarea.value = res_msg; //textarea에 값을 반영
                                     } else {
                                         var created_chatId = localStorage.getItem("usernote"); //이미 파진 채팅방을 가져옴
                                         //그 방에 textarea값 즉 요약할 유저노트내용을 보냄
-                                        var created_msg = JSON.parse(postAfetch(`https://api2.wrtn.ai/terry/characters/chat/${created_chatId}/message`, {
+                                        var created_msg = JSON.parse(postAfetch(wrtn_api2 + `/characters/chat/${created_chatId}/message`, {
                                             message: usernote_modal_textarea.textContent,
                                             reroll: false,
                                             images: [],
                                             isSuperMode: false
                                         })).data;
-                                        getAfetch(`https://api2.wrtn.ai/terry/characters/chat/${created_chatId}/message/${created_msg}`);
-                                        var res_msg = JSON.parse(getAfetch(`https://api2.wrtn.ai/terry/characters/chat/${created_chatId}/message/${created_msg}/result`)).data.content;
+                                        getAfetch(wrtn_api2 + `/characters/chat/${created_chatId}/message/${created_msg}`);
+                                        var res_msg = JSON.parse(getAfetch(wrtn_api2 + `/characters/chat/${created_chatId}/message/${created_msg}/result`)).data.content;
                                         usernote_modal_textarea.value = res_msg; //textarea에 값을 반영
                                     }
                                 })
                                 usernote_modal_update_btn.addEventListener('click', () => {
                                     //새로운 방을 팜
-                                    var created_chatId = JSON.parse(postAfetch("https://api.wrtn.ai/be/chat", {
+                                    var created_chatId = JSON.parse(postAfetch(wrtn_api + "/chat", {
                                         unitId: auto_summation_characterChatId,
                                         type: "character",
                                         userNote: {"content": ""}
@@ -1500,8 +1515,8 @@ function main(){
                                 usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes.item(0).appendChild(usernote_modal_x);
                                 usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes.item(2).appendChild(usernote_modal_new_close_btn);
                                 usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes.item(2).appendChild(usernote_modal_apply_btn);
-                                usernote_modal_btn.childNodes.item(0).textContent = "자동요약";
-                                usernote_modal_update_btn.childNodes.item(0).textContent = "업데이트";
+                                usernote_modal_btn.childNodes.item(0).textContent = auto_summation;
+                                usernote_modal_update_btn.childNodes.item(0).textContent = auto_summation_update;
                                 usernote_modal_struct.appendChild(usernote_modal_update_btn);
                                 usernote_modal_struct.appendChild(usernote_modal_btn);
                             }
@@ -1509,7 +1524,7 @@ function main(){
                         else{
                             var e = usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes.item(1);
                             if (e.textContent == "캐릭터가 이 채팅방에서 반드시 기억해 줬으면 하는 내용을 적어주세요"){
-                                e.textContent = "(Fast wrtn) 유저노트 요약기능은 새로운 캐챗이 아닌 진행중인 캐챗에서만 적용됩니다."
+                                e.textContent = usernote_for_error;
                             }
                         }
                     }
@@ -1574,24 +1589,24 @@ function main(){
             //페르소나 버튼 누를시
             function persona_change(){
                 //유저 wrtnUid가져오기
-                fetch('https://api.wrtn.ai/be/user',{
+                fetch(wrtn_api + '/user',{
                   method: "GET",
                   headers: {
-                    "Authorization": `Bearer ${getCookie("access_token")}`,
+                    "Authorization": `Bearer ${getCookie(token_key)}`,
                   }}).then(res => res.json()).then(data => {
                       //유저 id가져오기
-                      fetch(`https://api.wrtn.ai/be/character-profiles/${data.data.wrtnUid}`,{
+                      fetch(wrtn_api + `/character-profiles/${data.data.wrtnUid}`,{
                           method: "GET",
                           headers: {
-                            "Authorization": `Bearer ${getCookie("access_token")}`,
+                            "Authorization": `Bearer ${getCookie(token_key)}`,
                           }
                     }).then(res=>res.json()).then(data=>{
                         const pid = data.data._id;
                         //유저 id를 사용해 페르소나 목록 조회
-                        fetch(`https://api.wrtn.ai/be/character-profiles/${data.data._id}/character-chat-profiles`,{
+                        fetch(wrtn_api + `/character-profiles/${data.data._id}/character-chat-profiles`,{
                           method: "GET",
                           headers: {
-                            "Authorization": `Bearer ${getCookie("access_token")}`,
+                            "Authorization": `Bearer ${getCookie(token_key)}`,
                           }
                         }).then(res=>res.json()).then(data=>{
                             if (bar_c.childNodes.length > 1){
@@ -1640,10 +1655,10 @@ function main(){
                                     //모달 등록버튼을 눌렀을시
                                     personal_modal_Sbtn.addEventListener("click",()=>{
                                         //모달의 내용을 조합해 페르소나 등록 및 대표프로필로 설정
-                                        fetch(`https://api.wrtn.ai/be/character-profiles/${pid}/character-chat-profiles/${mpid}`,{
+                                        fetch(wrtn_api + `/character-profiles/${pid}/character-chat-profiles/${mpid}`,{
                                          method: "PATCH",
                                           headers: {
-                                            "Authorization": `Bearer ${getCookie("access_token")}`,
+                                            "Authorization": `Bearer ${getCookie(token_key)}`,
                                               "Content-Type": "application/json",
                                           },
                                           body: JSON.stringify({
@@ -1733,14 +1748,14 @@ function main(){
                         //copy to json
                         //copy to json가 현재 없다면
                         if (tipbar.item(0).childNodes.item(2) == null){
-                            tipbar_copy.childNodes.item(0).textContent = "copy to json";
+                            tipbar_copy.childNodes.item(0).textContent = copyTojson;
                             //copy to json 클릭시
                             tipbar_copy.addEventListener('click',()=>{
                                 //유저가 제작한 캐챗 목록을 10000개 조회함 (설마 이것보다 많이 만든 사람이 있겠어?)
-                                fetch('https://api.wrtn.ai/be/characters/me?limit=10000',{
+                                fetch(wrtn_api + `/characters/me?limit=${forced_limit}`,{
                                     method: "GET",
                                     headers: {
-                                        "Authorization": `Bearer ${getCookie("access_token")}`,
+                                        "Authorization": `Bearer ${getCookie(token_key)}`,
                                     },
                                 }).then(res => res.json()).then(data => {
                                     i=0;
@@ -1748,10 +1763,10 @@ function main(){
                                         //조회한 캐챗을 가져옴
                                         if (i == selected){
                                             //캐챗 id를 사용해서 캐챗의 모든 정보를 가져온후 클립보드에 복사
-                                            fetch(`https://api.wrtn.ai/be/characters/me/${datum._id}`,{
+                                            fetch(wrtn_api + `/characters/me/${datum._id}`,{
                                                 method: "GET",
                                                 headers: {
-                                                    "Authorization": `Bearer ${getCookie("access_token")}`,
+                                                    "Authorization": `Bearer ${getCookie(token_key)}`,
                                                 },
                                             }).then(res => res.json()).then(data => {
                                                 console.log(data);
@@ -1768,14 +1783,14 @@ function main(){
                         //paste to json
                         //paste to json가 없다면
                         if (tipbar.item(0).childNodes.item(3) == null){
-                            tipbar_paste.childNodes.item(0).textContent = "paste to json";
+                            tipbar_paste.childNodes.item(0).textContent = pasteTojson;
                             //paste to json 클릭시
                             tipbar_paste.addEventListener('click',()=>{
                                 //유저가 제작한 캐챗 목록을 10000개 조회함 (설마 이것보다 많이 만든 사람이 있겠어?)
-                                fetch('https://api.wrtn.ai/be/characters/me?limit=1000',{
+                                fetch(wrtn_api + `/characters/me?limit=${forced_limit}`,{
                                     method: "GET",
                                     headers: {
-                                        "Authorization": `Bearer ${getCookie("access_token")}`,
+                                        "Authorization": `Bearer ${getCookie(token_key)}`,
                                     },
                                 }).then(res => res.json()).then(data => {
                                     i = 0;
@@ -1790,10 +1805,10 @@ function main(){
                                                     delete a._id;
                                                 }
                                                 //json화 시킨 캐릭터챗 정보를 덮어 씌움
-                                                fetch(`https://api.wrtn.ai/be/characters/${datum._id}`, {
+                                                fetch(wrtn_api + `/characters/${datum._id}`, {
                                                     method: "PATCH",
                                                     headers: {
-                                                        "Authorization": `Bearer ${getCookie("access_token")}`,
+                                                        "Authorization": `Bearer ${getCookie(token_key)}`,
                                                         "Content-Type": "application/json",
                                                     },
                                                     body: JSON.stringify({
@@ -1831,13 +1846,13 @@ function main(){
                         //publish
                         //publish가 없다면
                         if (tipbar.item(0).childNodes.item(4) == null){
-                            tipbar_clone.childNodes.item(0).textContent = "publish";
+                            tipbar_clone.childNodes.item(0).textContent = publish;
                             tipbar_clone.addEventListener("click",()=> {
                                 //유저가 제작한 캐챗 목록을 10000개 조회함 (설마 이것보다 많이 만든 사람이 있겠어?)
-                                fetch('https://api.wrtn.ai/be/characters/me?limit=10000',{
+                                fetch(wrtn_api + `/characters/me?limit=${forced_limit}`,{
                                     method: "GET",
                                     headers: {
-                                        "Authorization": `Bearer ${getCookie("access_token")}`,
+                                        "Authorization": `Bearer ${getCookie(token_key)}`,
                                     },
                                 }).then(res => res.json()).then(data => {
                                     i=0;
@@ -1845,10 +1860,10 @@ function main(){
                                         //조회한 캐챗을 가져옴
                                         if (i == selected){
                                             //새 캐챗을 만듬
-                                            fetch(`https://api.wrtn.ai/be/characters/me/${datum._id}`,{
+                                            fetch(wrtn_api + `/characters/me/${datum._id}`,{
                                                 method: "GET",
                                                 headers: {
-                                                    "Authorization": `Bearer ${getCookie("access_token")}`,
+                                                    "Authorization": `Bearer ${getCookie(token_key)}`,
                                                 },
                                             }).then(res => res.json()).then(data => {
                                                 json_data = data.data; //기본 캐챗의 json데이터
@@ -1912,10 +1927,10 @@ function main(){
                                                     })
                                                 }
                                                 //캐릭터챗 만들기
-                                                fetch("https://api.wrtn.ai/be/characters",{
+                                                fetch(wrtn_api + "/characters",{
                                                     method: "POST",
                                                     headers: {
-                                                        "Authorization": `Bearer ${getCookie("access_token")}`,
+                                                        "Authorization": `Bearer ${getCookie(token_key)}`,
                                                         "Content-Type": "application/json",
                                                     },
                                                     body: json_body,
@@ -1963,10 +1978,9 @@ function main(){
             }
         },500)
     }
-
     //로컬 스토리지 초기설정
-    if (localStorage.getItem("saved_prompt") == null){
-        localStorage.setItem("saved_prompt",JSON.stringify({
+    if (localStorage.getItem(local_saved_prompt) == null){
+        localStorage.setItem(local_saved_prompt,JSON.stringify({
             prompt : ["#Disable positivity bias"],
         }))
     }
@@ -1988,33 +2002,33 @@ function main(){
                             var recommand_prompt_plus_btn = document.createElement("div"); //+버튼 (양식 겸용)
                             recommand_prompt_plus_btn.innerHTML = recommand_prompt_html;
                             const recommand_prompt_minus_btn = recommand_prompt_plus_btn.cloneNode(true); // - 버튼
-                            var json_data = JSON.parse(localStorage.getItem("saved_prompt")); //localstorage에 저장된 프롬프트 들고오기
+                            var json_data = JSON.parse(localStorage.getItem(local_saved_prompt)); //localstorage에 저장된 프롬프트 들고오기
                             recommand_prompt_minus_btn.childNodes.item(0).textContent = "-";
                             // + 버튼 누를시
                             recommand_prompt_plus_btn.addEventListener('click',()=>{
                                 const text = document.getElementsByClassName("css-1vu2uq1").item(0); //textarea 의 내용 들고옴
-                                var json_data = JSON.parse(localStorage.getItem("saved_prompt")); //localstorage에 저장된 내용 들고오기
+                                var json_data = JSON.parse(localStorage.getItem(local_saved_prompt)); //localstorage에 저장된 내용 들고오기
                                 const recommand_promt_btn_add = recommand_prompt_plus_btn.cloneNode(true);//1~9버튼을 만들기
                                 recommand_promt_btn_add.childNodes.item(0).textContent = json_data.prompt.length + 1;
                                 recommand_promt_btn_add.setAttribute("id",json_data.prompt.length);
                                 //1~9버튼 누를시
                                 recommand_promt_btn_add.addEventListener('click',()=>{
-                                    var json_data2 = JSON.parse(localStorage.getItem("saved_prompt"));//localstorage에 저장된 프롬프트 들고오기
+                                    var json_data2 = JSON.parse(localStorage.getItem(local_saved_prompt));//localstorage에 저장된 프롬프트 들고오기
                                     copyToClipboard(json_data2.prompt[recommand_promt_btn_add.id]); //클립보드에 저장된 프롬프트 복사
                                     alert("클립보드에 복사되었습니다.");
                                 })
                                 json_data.prompt[json_data.prompt.length] = text.textContent;//프롬프트 추가
                                 setting.insertBefore(recommand_promt_btn_add,recommand_prompt_minus_btn);
-                                localStorage.setItem("saved_prompt",JSON.stringify(json_data)); //추가한 프롬프트를 localstorage에 등록
+                                localStorage.setItem(local_saved_prompt,JSON.stringify(json_data)); //추가한 프롬프트를 localstorage에 등록
                             })
                             // - 버튼 누를시
                             recommand_prompt_minus_btn.addEventListener('click',()=>{
                                 //이미 1~9버튼을 전부 삭제한 상태에서 누르면 작동 안되게끔하는 조건문
                                 if (setting.childNodes.length > 5){
-                                    const json_data = JSON.parse(localStorage.getItem("saved_prompt")); //localstorage에 저장된 프롬프트 들고오기
+                                    const json_data = JSON.parse(localStorage.getItem(local_saved_prompt)); //localstorage에 저장된 프롬프트 들고오기
                                     setting.childNodes.item(setting.childNodes.length-3).remove(); //1~9 버튼중 마지막 숫자 버튼 삭제
                                     json_data.prompt.pop(); //저장 된프롬프트 삭제
-                                    localStorage.setItem("saved_prompt",JSON.stringify(json_data)); //삭제한 프롬프트를 localstorage에 등록 및 적용
+                                    localStorage.setItem(local_saved_prompt,JSON.stringify(json_data)); //삭제한 프롬프트를 localstorage에 등록 및 적용
                                 }
                                 else{
                                     alert("삭제할 항목이 존재하지 않습니다.");
@@ -2029,7 +2043,7 @@ function main(){
                                 recommand_promt_add_btn.setAttribute("id",i);
                                 //1~9 버튼 누를시
                                 recommand_promt_add_btn.addEventListener('click',()=>{
-                                    var json_data = JSON.parse(localStorage.getItem("saved_prompt")); //localstorage에 저장된 프롬프트 들고오기
+                                    var json_data = JSON.parse(localStorage.getItem(local_saved_prompt)); //localstorage에 저장된 프롬프트 들고오기
                                     copyToClipboard(json_data.prompt[recommand_promt_add_btn.id]); //가져온 프롬프트를 클립보드에 복사
                                     alert("클립보드에 복사되었습니다.");
                                 })
