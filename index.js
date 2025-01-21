@@ -29,7 +29,7 @@
 
 //log on developer console
 //debug
-var IsDebug = true; 
+var IsDebug = true;
 //debug function
 function debug(content,IsFunc = false,body = false,request = false){
     if (IsDebug){
@@ -54,7 +54,8 @@ var wrtn_api2 = "https://api2.wrtn.ai/terry"; //api1
 var wrtn_william = "https://william.wow.wrtn.ai"; //william
 var scroll_all_amount = 300 // <  > 누를시 이동할 스크롤 양
 var scroll_amount = 10; // 끊어서 스크롤 되는 양
-var limit = 1000 // 불러올 캐챗수 (랭킹 플러스용)
+var limit = 30 // 불러올 캐챗수 (랭킹 플러스용)
+var load_limit = 30;
 var forced_limit = 10000;
 var likeCount_limit = 10 // 좋아요수가 10개 이상
 var chatCount_limit = 30 // 채팅수가 30개 이상 이면 올라옴
@@ -847,9 +848,32 @@ var plus_modal_front_html = "<div style=\"    position: fixed;\n" +
 var feed_struct_element_front_html = "<div display=\"flex\" class=\"css-1878569\"><div width=\"100%\" height=\"148px,156px\" class=\"css-12gw3o5\"><div class=\"character_avatar css-1w95giw\" overflow=\"hidden\" display=\"flex\" width=\"100%\" height=\"100%\"><img src=\"https://d394jeh9729epj.cloudfront.net/8BwuNilwTjW-GGKONkJEOUk2/b176b0a9-46e0-4d93-baff-7dace3602f6e_w600.webp\" alt=\"character_thumbnail\" style=\"width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0px; left: 0px; border-radius: inherit;\"></div><div class=\"character-card-overlay css-1w1m2cv\" width=\"100%\" height=\"100%\" display=\"none\"></div><div display=\"flex\" class=\"css-17z36ob\"><div width=\"28px\" height=\"28px\" display=\"flex\" class=\"css-1bygmye\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 16 16\" fill=\"none\"><mask id=\"mask0_8669_146020\" maskUnits=\"userSpaceOnUse\" x=\"0\" y=\"0\" width=\"16\" height=\"16\" style=\"mask-type: alpha;\"><rect width=\"16\" height=\"16\" fill=\"#D9D9D9\"></rect></mask><g mask=\"url(#mask0_8669_146020)\"><path d=\"M7.9974 8.66732C8.64184 8.66732 9.19184 8.43954 9.6474 7.98398C10.103 7.52843 10.3307 6.97843 10.3307 6.33398C10.3307 5.68954 10.103 5.13954 9.6474 4.68398C9.19184 4.22843 8.64184 4.00065 7.9974 4.00065C7.35295 4.00065 6.80295 4.22843 6.3474 4.68398C5.89184 5.13954 5.66406 5.68954 5.66406 6.33398C5.66406 6.97843 5.89184 7.52843 6.3474 7.98398C6.80295 8.43954 7.35295 8.66732 7.9974 8.66732ZM7.9974 14.6673C6.37517 14.2562 5.08073 13.3673 4.11406 12.0007C3.1474 10.634 2.66406 9.10065 2.66406 7.40065V3.33398L7.9974 1.33398L13.3307 3.33398V7.40065C13.3307 9.10065 12.8474 10.634 11.8807 12.0007C10.9141 13.3673 9.61962 14.2562 7.9974 14.6673ZM7.9974 13.2673C8.65295 13.0562 9.23351 12.7257 9.73906 12.2757C10.2446 11.8257 10.6863 11.3173 11.0641 10.7507C10.5863 10.5062 10.0891 10.3201 9.5724 10.1923C9.05573 10.0645 8.53073 10.0007 7.9974 10.0007C7.46406 10.0007 6.93906 10.0645 6.4224 10.1923C5.90573 10.3201 5.40851 10.5062 4.93073 10.7507C5.30851 11.3173 5.75017 11.8257 6.25573 12.2757C6.76129 12.7257 7.34184 13.0562 7.9974 13.2673Z\" fill=\"#FED4D3\"></path></g></svg></div><div width=\"28px\" height=\"28px\" display=\"flex\" class=\"css-1bygmye\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\" color=\"#ffffffff\"><mask id=\"mask0_13669_84\" maskUnits=\"userSpaceOnUse\" x=\"0\" y=\"0\" width=\"24\" height=\"24\" style=\"mask-type: alpha;\"><rect width=\"24\" height=\"24\" fill=\"currentColor\"></rect></mask><g mask=\"url(#mask0_13669_84)\"><path d=\"M11.951 13.4023L17.3804 9.78409L11.951 6.16591V13.4023ZM6.25011 20.9778C5.75241 21.0532 5.30373 20.9364 4.90406 20.6273C4.5044 20.3183 4.2744 19.915 4.21408 19.4175L3.01508 9.53534C2.95475 9.03784 3.07541 8.5931 3.37704 8.20113C3.67868 7.80916 4.07834 7.58303 4.57604 7.52272L5.61667 7.38704V14.7591C5.61667 15.7541 5.97109 16.6059 6.67993 17.3144C7.38877 18.023 8.24089 18.3773 9.23628 18.3773H17.6519C17.5614 18.7391 17.3804 19.0519 17.1089 19.3157C16.8375 19.5796 16.5057 19.7341 16.1135 19.7793L6.25011 20.9778ZM9.23628 16.5682C8.73858 16.5682 8.31253 16.391 7.95811 16.0368C7.60369 15.6825 7.42648 15.2566 7.42648 14.7591V4.80909C7.42648 4.31159 7.60369 3.8857 7.95811 3.53142C8.31253 3.17714 8.73858 3 9.23628 3H19.1902C19.6879 3 20.114 3.17714 20.4684 3.53142C20.8228 3.8857 21 4.31159 21 4.80909V14.7591C21 15.2566 20.8228 15.6825 20.4684 16.0368C20.114 16.391 19.6879 16.5682 19.1902 16.5682H9.23628Z\" fill=\"currentColor\"></path></g></svg></div></div></div><div display=\"flex\" class=\"css-19ssvua\"><p color=\"$color_text_primary\" class=\"css-sjt0pv\">NTR 오피스</p><p color=\"$color_text_secondary\" class=\"css-9xnb32\">[R18/이미지 30장] 부하직원의 상사가 되어 그의 아내를 NTR하자! (NTL) / 요즘 부장님이 내 아내를 보는 눈빛이 심상치 않다... 더군다나, 아내도 요즘 태도가 변하기 시작했다... (NTR)\n" +
         "\n" +
         "[스토리: 1일차~14일차, 8~11일차 온천 접대 이벤트]</p></div></div><div display=\"flex\" width=\"fit-content\" class=\"css-13rssxq\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 25 25\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\" color=\"#85837dff\"><path d=\"M12.5 22.437C11.1167 22.437 9.81667 22.1745 8.6 21.6495C7.38333 21.1245 6.325 20.412 5.425 19.512C4.525 18.612 3.8125 17.5537 3.2875 16.337C2.7625 15.1203 2.5 13.8203 2.5 12.437C2.5 11.0537 2.7625 9.75368 3.2875 8.53701C3.8125 7.32034 4.525 6.26201 5.425 5.36201C6.325 4.46201 7.38333 3.74951 8.6 3.22451C9.81667 2.69951 11.1167 2.43701 12.5 2.43701C13.8833 2.43701 15.1833 2.69951 16.4 3.22451C17.6167 3.74951 18.675 4.46201 19.575 5.36201C20.475 6.26201 21.1875 7.32034 21.7125 8.53701C22.2375 9.75368 22.5 11.0537 22.5 12.437V13.887C22.5 14.8703 22.1625 15.7078 21.4875 16.3995C20.8125 17.0912 19.9833 17.437 19 17.437C18.4167 17.437 17.8667 17.312 17.35 17.062C16.8333 16.812 16.4 16.4537 16.05 15.987C15.5667 16.4703 15.0208 16.8328 14.4125 17.0745C13.8042 17.3162 13.1667 17.437 12.5 17.437C11.1167 17.437 9.9375 16.9495 8.9625 15.9745C7.9875 14.9995 7.5 13.8203 7.5 12.437C7.5 11.0537 7.9875 9.87451 8.9625 8.89951C9.9375 7.92451 11.1167 7.43701 12.5 7.43701C13.8833 7.43701 15.0625 7.92451 16.0375 8.89951C17.0125 9.87451 17.5 11.0537 17.5 12.437V13.887C17.5 14.3203 17.6417 14.687 17.925 14.987C18.2083 15.287 18.5667 15.437 19 15.437C19.4333 15.437 19.7917 15.287 20.075 14.987C20.3583 14.687 20.5 14.3203 20.5 13.887V12.437C20.5 10.2037 19.725 8.31201 18.175 6.76201C16.625 5.21201 14.7333 4.43701 12.5 4.43701C10.2667 4.43701 8.375 5.21201 6.825 6.76201C5.275 8.31201 4.5 10.2037 4.5 12.437C4.5 14.6703 5.275 16.562 6.825 18.112C8.375 19.662 10.2667 20.437 12.5 20.437H17.5V22.437H12.5ZM12.5 15.437C13.3333 15.437 14.0417 15.1453 14.625 14.562C15.2083 13.9787 15.5 13.2703 15.5 12.437C15.5 11.6037 15.2083 10.8953 14.625 10.312C14.0417 9.72868 13.3333 9.43701 12.5 9.43701C11.6667 9.43701 10.9583 9.72868 10.375 10.312C9.79167 10.8953 9.5 11.6037 9.5 12.437C9.5 13.2703 9.79167 13.9787 10.375 14.562C10.9583 15.1453 11.6667 15.437 12.5 15.437Z\" fill=\"currentColor\"></path></svg><p color=\"$color_text_tertiary\" class=\"css-uoinwu\">야로망</p><svg width=\"16\" height=\"16\" viewBox=\"0 0 18 18\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" color=\"#f72f08ff\"><path d=\"M15.75 12.578V5.42297C15.75 5.25797 15.66 5.10047 15.5175 5.01797L9.2325 1.43297C9.09 1.35047 8.9175 1.35047 8.775 1.43297L2.4825 5.01797C2.34 5.10047 2.25 5.25797 2.25 5.42297V12.5855C2.25 12.7505 2.34 12.908 2.4825 12.9905L8.7675 16.5755C8.91 16.658 9.0825 16.658 9.225 16.5755L15.51 12.9905C15.6525 12.908 15.7425 12.7505 15.7425 12.5855L15.75 12.578Z\" fill=\"url(#paint0_linear_14670_273716)\"></path><g filter=\"url(#filter0_i_14670_273716)\"><path d=\"M12.4169 7.5382L10.2944 7.2907C10.2944 7.2907 10.2269 7.2682 10.2194 7.2307L9.32686 5.2882C9.19936 5.0107 8.80186 5.0107 8.67436 5.2882L7.78186 7.2307C7.78186 7.2307 7.73686 7.2832 7.70686 7.2907L5.58436 7.5382C5.27686 7.5757 5.15686 7.9507 5.38186 8.1607L6.94936 9.6082C6.94936 9.6082 6.98686 9.6682 6.97936 9.6982L6.55936 11.7907C6.49936 12.0907 6.82186 12.3232 7.08436 12.1732L8.94436 11.1232C8.94436 11.1232 9.01186 11.1082 9.04186 11.1232L10.9019 12.1732C11.1719 12.3232 11.4869 12.0907 11.4269 11.7907L11.0069 9.6982C11.0069 9.6982 11.0069 9.6307 11.0369 9.6082L12.6044 8.1607C12.8294 7.9507 12.7094 7.5757 12.4019 7.5382H12.4169Z\" fill=\"url(#paint1_linear_14670_273716)\"></path></g><defs><filter id=\"filter0_i_14670_273716\" x=\"5.26562\" y=\"5.08008\" width=\"7.45312\" height=\"7.14062\" filterUnits=\"userSpaceOnUse\" color-interpolation-filters=\"sRGB\"><feFlood flood-opacity=\"0\" result=\"BackgroundImageFix\"></feFlood><feBlend mode=\"normal\" in=\"SourceGraphic\" in2=\"BackgroundImageFix\" result=\"shape\"></feBlend><feColorMatrix in=\"SourceAlpha\" type=\"matrix\" values=\"0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0\" result=\"hardAlpha\"></feColorMatrix><feOffset></feOffset><feGaussianBlur stdDeviation=\"0.68175\"></feGaussianBlur><feComposite in2=\"hardAlpha\" operator=\"arithmetic\" k2=\"-1\" k3=\"1\"></feComposite><feColorMatrix type=\"matrix\" values=\"0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0\"></feColorMatrix><feBlend mode=\"normal\" in2=\"shape\" result=\"effect1_innerShadow_14670_273716\"></feBlend></filter><linearGradient id=\"paint0_linear_14670_273716\" x1=\"9\" y1=\"1.37109\" x2=\"9\" y2=\"16.6373\" gradientUnits=\"userSpaceOnUse\"><stop stop-color=\"#FE1571\"></stop><stop offset=\"1\" stop-color=\"#FF27B4\"></stop></linearGradient><linearGradient id=\"paint1_linear_14670_273716\" x1=\"8.99311\" y1=\"5.08008\" x2=\"8.99311\" y2=\"12.22\" gradientUnits=\"userSpaceOnUse\"><stop stop-color=\"#FFFDEF\"></stop><stop offset=\"1\" stop-color=\"#FFFBDD\"></stop></linearGradient></defs></svg></div>";
-
+//랭킹 플러스 필터링
+function filter_character_list(characterListElement,IsCe){
+    if (characterListElement.likeCount < likeCount_limit || characterListElement.chatCount < chatCount_limit){
+        return false;
+    }
+    else{
+        if (IsCe){
+            if (characterListElement.creator.isCertifiedCreator){
+                return true
+            }
+            else{
+                return false;
+            }
+        }
+        else{
+            if (!characterListElement.creator.isCertifiedCreator){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+    }
+}
 //플러스 랭크 내부 캐릭터 클릭시 팝업
-function plus_modal_func(Tfeed,character_list,CeCreator){
+function plus_modal_func(Tfeed,CeCreator){
     const feed_struct = Tfeed.childNodes.item(1).cloneNode(true); //피드의 제일위에서 2번째 요소를 가져와서 형식만 가져옴
     const feed_struct_text = feed_struct.childNodes[0].childNodes[0].childNodes.item(0); //랭킹 플러스 (Fast wrtn) <- 이거 들어간 텍스트 구역
     const feed_struct_scroll = feed_struct.childNodes[1].childNodes[0].childNodes.item(0); //스크롤 가져오기
@@ -878,91 +902,182 @@ function plus_modal_func(Tfeed,character_list,CeCreator){
     한번에 알잘딱갈센으로 삭제가 안됨 그래서 기존에 남아있던 캐챗이 전부 삭제될때까지 for문 돌림
     */
     //character_list에 불러와진 캐챗이 실제 랭킹플러스에 추가됬는지 확인하기위한 배열
-    var IsAppend = []
-    for (let i = 0; i < character_list.length; i++) {
-        IsAppend[i] = false
-    }
+    var character_list = [];
+    var loaded = 0;
+    var IsLoaded = false;
+    var cursor = "";
     var jm = setInterval(() => {
         if (document.URL != "https://wrtn.ai/character") {
             clearInterval(jm);
         }
         if (feed_struct_element.childNodes.length != 0) {
-            if (feed_struct_elements.childNodes.item(0).id == "") {
-                for (const feedStructElementElement of feed_struct_elements.childNodes) {
-                    if (feedStructElementElement.id == "") {
-                        feedStructElementElement.remove();
-                    } else {
-                        IsAppend[Number(feedStructElementElement.id)] = true;
+            if (feed_struct_elements.childNodes.item(0) != null){
+                if (feed_struct_elements.childNodes.item(0).id == "") {
+                    for (const feedStructElementElement of feed_struct_elements.childNodes) {
+                        if (feedStructElementElement.id == "") {
+                            feedStructElementElement.remove();
+                        }
+                    }
+                    if (!IsLoaded){
+                        fetch(wrtn_api + `/characters?limit=${limit}&sort=createdAt`,{
+                            method: "GET",
+                            headers: {
+                                "Authorization": `Bearer ${getCookie(token_key)}`,
+                        }}).then(res => res.json()).then(data => {
+                            for (const element of data.data.characters) {
+                                if(filter_character_list(element,CeCreator)){
+                                    character_list[character_list.length] = element;
+                                    const fe = feed_struct_element.cloneNode(true);
+                                    if (fe.childNodes[0].childNodes[0].childNodes[0].childNodes.item(1) != null) {
+                                        fe.childNodes[0].childNodes[0].childNodes[0].childNodes.item(1).remove();
+                                    }
+                                    fe.setAttribute("id", loaded);
+                                    fe.setAttribute("src", element._id)
+                                    try {
+                                        fe.childNodes[0].childNodes[0].childNodes[0].childNodes.item(0).src = element.profileImage.w600;
+                                    } catch {
+                                        console.log("image");
+                                    }
+                                    try {
+                                        fe.childNodes[0].childNodes[1].childNodes.item(0).textContent = element.name;
+                                    } catch {
+                                        console.log("name");
+                                    }
+                                    try {
+                                        fe.childNodes[0].childNodes[1].childNodes.item(1).textContent = element.description;
+                                    } catch {
+                                        console.log("info");
+                                    }
+                                    try {
+                                        fe.childNodes[1].childNodes.item(1).textContent = element.creator.nickname;
+                                    } catch {
+                                        console.log("creater");
+                                    }
+                                    try {
+                                        //팝업 이벤트 리스너
+                                        const fe_event_bar = fe.childNodes.item(0);
+                                        const fe_creator_event_bar = fe.childNodes.item(1);
+                                        fe_creator_event_bar.addEventListener('click',()=>{
+                                            window.location.href = `https://wrtn.ai/character/profile/${character_list[fe.id].creator.wrtnUid}`;
+                                        })
+                                        fe_event_bar.addEventListener("click", () => {
+                                            const isModal = document.getElementById("web-modal");
+                                            //모달 존재 여부
+                                            if (isModal == null){
+                                                plus_modal_yes(character_list,fe);
+                                            }
+                                            else{
+                                                plus_modal_no(isModal,character_list,fe);
+                                            }
+                                        })
+                                    } catch {
+                                        console.log("link");
+                                    }
+                                    try {
+                                        if (!character_list[loaded].creator.isCertifiedCreator) {
+                                            fe.childNodes[1].childNodes.item(2).remove();
+                                        }
+                                    } catch {
+                                        console.log("isCertifiedCreator");
+                                    }
+                                    try {
+                                        if (!character_list[loaded].isAdult) {
+                                            fe.childNodes[0].childNodes[0].childNodes[2].childNodes.item(0).remove();
+                                        }
+                                    } catch {
+                                        console.log("isCertifiedCreator");
+                                    }
+                                    feed_struct_elements.appendChild(fe);
+                                    loaded++;
+                                    debug(`added ${element.name}`);
+                                }
+                            }
+                            cursor = data.data.nextCursor;
+                            function loadF(cursorL){
+                                fetch(wrtn_api + `/characters?limit=${limit}&sort=createdAt&cursor=${cursorL}`,{
+                                    method: "GET",
+                                    headers: {
+                                        "Authorization": `Bearer ${getCookie(token_key)}`,
+                                }}).then(res => res.json()).then(data => {
+                                    for (const element of data.data.characters) {
+                                        if(filter_character_list(element,CeCreator)){
+                                            character_list[character_list.length] = element;
+                                            const fe = feed_struct_element.cloneNode(true);
+                                            if (fe.childNodes[0].childNodes[0].childNodes[0].childNodes.item(1) != null) {
+                                                fe.childNodes[0].childNodes[0].childNodes[0].childNodes.item(1).remove();
+                                            }
+                                            fe.setAttribute("id", loaded);
+                                            fe.setAttribute("src", element._id)
+                                            try {
+                                                fe.childNodes[0].childNodes[0].childNodes[0].childNodes.item(0).src = element.profileImage.w600;
+                                            } catch {
+                                                console.log("image");
+                                            }
+                                            try {
+                                                fe.childNodes[0].childNodes[1].childNodes.item(0).textContent = element.name;
+                                            } catch {
+                                                console.log("name");
+                                            }
+                                            try {
+                                                fe.childNodes[0].childNodes[1].childNodes.item(1).textContent = element.description;
+                                            } catch {
+                                                console.log("info");
+                                            }
+                                            try {
+                                                fe.childNodes[1].childNodes.item(1).textContent = element.creator.nickname;
+                                            } catch {
+                                                console.log("creater");
+                                            }
+                                            try {
+                                                //팝업 이벤트 리스너
+                                                const fe_event_bar = fe.childNodes.item(0);
+                                                const fe_creator_event_bar = fe.childNodes.item(1);
+                                                fe_creator_event_bar.addEventListener('click',()=>{
+                                                    window.location.href = `https://wrtn.ai/character/profile/${character_list[fe.id].creator.wrtnUid}`;
+                                                })
+                                                fe_event_bar.addEventListener("click", () => {
+                                                    const isModal = document.getElementById("web-modal");
+                                                    //모달 존재 여부
+                                                    if (isModal == null){
+                                                        plus_modal_yes(character_list,fe);
+                                                    }
+                                                    else{
+                                                        plus_modal_no(isModal,character_list,fe);
+                                                    }
+                                                })
+                                            } catch {
+                                                console.log("link");
+                                            }
+                                            try {
+                                                if (!character_list[loaded].creator.isCertifiedCreator) {
+                                                    fe.childNodes[1].childNodes.item(2).remove();
+                                                }
+                                            } catch {
+                                                console.log("isCertifiedCreator");
+                                            }
+                                            try {
+                                                if (!character_list[loaded].isAdult) {
+                                                    fe.childNodes[0].childNodes[0].childNodes[2].childNodes.item(0).remove();
+                                                }
+                                            } catch {
+                                                console.log("isCertifiedCreator");
+                                            }
+                                            feed_struct_elements.appendChild(fe);
+                                            loaded++;
+                                            debug(`added ${element.name}`);   
+                                        }
+                                    }
+                                    if (loaded < load_limit){
+                                        loadF(data.data.nextCursor);
+                                    }
+                                })
+                            }       
+                            loadF(cursor);
+                        })
+                        IsLoaded = true;
+                        debug("character");
                     }
                 }
-                i = 0;
-                for (const argument of IsAppend) {
-                    if (!argument) {
-                        const fe = feed_struct_element.cloneNode(true);
-                        if (fe.childNodes[0].childNodes[0].childNodes[0].childNodes.item(1) != null) {
-                            fe.childNodes[0].childNodes[0].childNodes[0].childNodes.item(1).remove();
-                        }
-                        fe.setAttribute("id", i);
-                        fe.setAttribute("src", character_list[i]._id)
-                        try {
-                            fe.childNodes[0].childNodes[0].childNodes[0].childNodes.item(0).src = character_list[i].profileImage.w600;
-                        } catch {
-                            console.log("image");
-                        }
-                        try {
-                            fe.childNodes[0].childNodes[1].childNodes.item(0).textContent = character_list[i].name;
-                        } catch {
-                            console.log("name");
-                        }
-                        try {
-                            fe.childNodes[0].childNodes[1].childNodes.item(1).textContent = character_list[i].description;
-                        } catch {
-                            console.log("info");
-                        }
-                        try {
-                            fe.childNodes[1].childNodes.item(1).textContent = character_list[i].creator.nickname;
-                        } catch {
-                            console.log("creater");
-                        }
-                        try {
-                            //팝업 이벤트 리스너
-                            const fe_event_bar = fe.childNodes.item(0);
-                            const fe_creator_event_bar = fe.childNodes.item(1);
-                            fe_creator_event_bar.addEventListener('click',()=>{
-                                window.location.href = `https://wrtn.ai/character/profile/${character_list[fe.id].creator.wrtnUid}`;
-                            })
-                            fe_event_bar.addEventListener("click", () => {
-                                const isModal = document.getElementById("web-modal");
-                                //모달 존재 여부
-                                if (isModal == null){
-                                    plus_modal_yes(character_list,fe);
-                                }
-                                else{
-                                    plus_modal_no(isModal,character_list,fe);
-                                }
-                            })
-                        } catch {
-                            console.log("link");
-                        }
-                        try {
-                            if (!character_list[i].creator.isCertifiedCreator) {
-                                fe.childNodes[1].childNodes.item(2).remove();
-                            }
-                        } catch {
-                            console.log("isCertifiedCreator");
-                        }
-                        try {
-                            if (!character_list[i].isAdult) {
-                                fe.childNodes[0].childNodes[0].childNodes[2].childNodes.item(0).remove();
-                            }
-                        } catch {
-                            console.log("isCertifiedCreator");
-                        }
-                        feed_struct_elements.appendChild(fe);
-                    }
-                    i++;
-                }
-                debug("for IsAppend");
             }
         }
     })
@@ -1208,47 +1323,13 @@ function character(){
     그것들의 상위 엘리먼트임 정확하게는
         */
     var Tfeed = document.getElementsByClassName("css-1go39bq").item(0); // 피드를 가져옴
-    var character_list; //캐릭터 리스트
     // 랭킹 플러스 기준
-    //캐릭터 리스트를 받아옴
-    var character_list = JSON.parse(getAfetch(wrtn_api + `/characters?limit=${limit}&sort=createdAt`)).data.characters;
-    var character_list_NoCe = character_list;
-    //랭킹플러스에 올라올 캐챗만 필터링(크레이터)
-    i=0;
-    var new_list = [];
-    for (const characterListElement of character_list) {
-        if (characterListElement.likeCount < likeCount_limit || characterListElement.chatCount < chatCount_limit){
-        }
-        else{
-            if (characterListElement.creator.isCertifiedCreator){
-                new_list[new_list.length] = characterListElement;
-            }
-        }
-        i++;
-    }
-    character_list = new_list;
-    debug("for character_list in character");
-    //랭킹플러스에 올라올 캐챗만 필터링(비크레이터)
-    i=0;
-    var new_list = [];
-    for (const characterListElement of character_list_NoCe) {
-        if (characterListElement.likeCount < likeCount_limit || characterListElement.chatCount < chatCount_limit){
-        }
-        else{
-            if (!characterListElement.creator.isCertifiedCreator){
-                new_list[new_list.length] = characterListElement;
-            }
-        }
-        i++;
-    }
-    character_list_NoCe = new_list;
-    debug("for character_list_NoCe in character");
     //랭킹 플러스
     if (Tfeed != null) {
         //비크레이터
-        plus_modal_func(Tfeed,character_list_NoCe,false);
+        plus_modal_func(Tfeed,false);
         //크레이터
-        plus_modal_func(Tfeed,character_list,true);
+        plus_modal_func(Tfeed,true);
     }
     debug("character",true);
 }
