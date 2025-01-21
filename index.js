@@ -26,10 +26,32 @@
 
 */
 
+
+//log on developer console
+//debug
+var IsDebug = true; 
+//debug function
+function debug(content,IsFunc = false,body = false,request = false){
+    if (IsDebug){
+        if (IsFunc){
+            console.log(`[FAST WRTN][DEBUG](function) ${content} loaded`);
+        }
+        else if(body){
+            console.log(`[FAST WRTN][DEBUG](body value) ${content} loaded`);
+        }
+        else if(request){
+            console.log(`[FAST WRTN][DEBUG](request) ${content} loaded`);
+        }
+        else{
+            console.log(`[FAST WRTN][DEBUG] ${content} loaded`);
+        }
+    }
+}
+
 //environment variables
-var wrtn_api = "https://api.wrtn.ai/be";
-var wrtn_api2 = "https://api2.wrtn.ai/terry";
-var wrtn_william = "https://william.wow.wrtn.ai";
+var wrtn_api = "https://api.wrtn.ai/be"; //api
+var wrtn_api2 = "https://api2.wrtn.ai/terry"; //api1
+var wrtn_william = "https://william.wow.wrtn.ai"; //william
 var scroll_all_amount = 300 // <  > 누를시 이동할 스크롤 양
 var scroll_amount = 10; // 끊어서 스크롤 되는 양
 var limit = 1000 // 불러올 캐챗수 (랭킹 플러스용)
@@ -37,20 +59,20 @@ var forced_limit = 10000;
 var likeCount_limit = 10 // 좋아요수가 10개 이상
 var chatCount_limit = 30 // 채팅수가 30개 이상 이면 올라옴
 var auto_summation_characterChatId = "6787aecf65c02321daf25b0d"; // 자동요약기능을 수행할 캐챗 id
-var local_saved_prompt = "saved_prompt";
-var local_usernote = "usernote";
-var token_key = "access_token";
+var local_saved_prompt = "saved_prompt"; //로컬스토리지 프롬프트 저장 위치
+var local_usernote = "usernote"; //로컬스토리지 유저노트용 캐챗방 id 저장 위치
+var token_key = "access_token"; //쿠키중 가져올 토큰값 (조회 및 수정용 토큰 정보를 수집하지 않음)
 
 //namespace
-var auto_summation = "자동요약";
-var auto_summation_update = "업데이트";
-var plus = "랭킹 플러스 (Fast wrtn)";
-var persona_name = "[페르소나]";
-var copyTojson = "copy to json";
-var pasteTojson = "paste to json";
-var publish = "publish";
-var usernote_description = "(Fast wrtn) 자동요약기능을 활용해 글자수를 절약해보세요! 업데이트는 가끔씩 해주시는게 좋아요!";
-var usernote_for_error = "(Fast wrtn) 유저노트 요약기능은 새로운 캐챗이 아닌 진행중인 캐챗에서만 적용됩니다.";
+var auto_summation = "자동요약"; //자동요약 버튼
+var auto_summation_update = "업데이트"; //업데이트 버튼
+var plus = "랭킹 플러스 (Fast wrtn)"; //랭킹플러스
+var persona_name = "페르소나"; //페르소나
+var copyTojson = "copy to json"; //캐릭터 복사기능
+var pasteTojson = "paste to json"; //캐릭터 븥여넣기 기능
+var publish = "publish"; //공개 기능
+var usernote_description = "(Fast wrtn) 자동요약기능을 활용해 글자수를 절약해보세요! 업데이트는 가끔씩 해주시는게 좋아요!"; //유저노트 설명칸
+var usernote_for_error = "(Fast wrtn) 유저노트 요약기능은 새로운 캐챗이 아닌 진행중인 캐챗에서만 적용됩니다."; //처음 사용 유저노트 설명칸
 
 //댓글 및 업데이트 날짜 front html + css
 var plus_modal_date_and_comment = "<div display=\"flex\" width=\"100%\" style=\"    display: flex;\n" +
@@ -836,6 +858,7 @@ function plus_modal_func(Tfeed,character_list,CeCreator){
     feed_struct_element.innerHTML = feed_struct_element_front_html;
     const feed_struct_scroll_btn = feed_struct.childNodes[1].childNodes[0].childNodes[1].childNodes.item(0); // > 버튼
     const feed_struct_scroll_btn_l = document.createElement("div"); // < 버튼
+    debug("plus_modal_func",false,true);
     feed_struct_scroll_btn_l.setAttribute("width", "61px");
     feed_struct_scroll_btn_l.setAttribute("style", "    width: 61px;\n" +
         "    height: 100%;\n" +
@@ -939,6 +962,7 @@ function plus_modal_func(Tfeed,character_list,CeCreator){
                     }
                     i++;
                 }
+                debug("for IsAppend");
             }
         }
     })
@@ -950,6 +974,7 @@ function plus_modal_func(Tfeed,character_list,CeCreator){
     }
     feed_struct_text.textContent = plus;
     Tfeed.prepend(feed_struct);
+    debug("plus_modal_func",true);
 }
 
 //< > 스크롤 기능 구현
@@ -982,6 +1007,7 @@ function scroll_func(feed_struct_scroll,feed_struct_six, feed_struct_scroll_btn_
                         clearInterval(j);
                     }
                 },)
+                debug("left croll_func",true);
             })
             // < 버튼을 만듦
             feed_struct_six.insertBefore(feed_struct_scroll_btn_l, feed_struct_six.childNodes.item(0));
@@ -992,6 +1018,7 @@ function scroll_func(feed_struct_scroll,feed_struct_six, feed_struct_scroll_btn_
             clearInterval(a);
         }
     },)
+    debug("scroll_func",true);
 }
 //제작자의 다른 캐릭터 보기 기능
 function plus_modal_recommand_creator_func(creator_character,plus_modal_recommand_creator,isModal){
@@ -1001,6 +1028,7 @@ function plus_modal_recommand_creator_func(creator_character,plus_modal_recomman
     const creator_character_scroll = creator_character_six.childNodes.item(0);
     const creator_character_btn = creator_character_six.childNodes[1].childNodes.item(0);
     const creater_character_struct_scroll_btn_l = document.createElement("div"); // < 버튼
+    debug("plus_modal_recommand_creator_func",false,true);
     creater_character_struct_scroll_btn_l.setAttribute("width", "61px");
     creater_character_struct_scroll_btn_l.setAttribute("style", "    width: 61px;\n" +
         "    height: 100%;\n" +
@@ -1038,6 +1066,7 @@ function plus_modal_recommand_creator_func(creator_character,plus_modal_recomman
         i++
     }
     creator_character_struct.remove();
+    debug("plus_modal_recommand_creator_func",true);
 }
 
 //팝업 내부의 업데이트와 댓글
@@ -1053,6 +1082,7 @@ function date_and_comment(plus_modal_date_and_comment_struct,comment){
         plus_modal_date_and_comment_struct.childNodes[1].childNodes[1].childNodes[0].childNodes.item(0).src = comment.writer.profileImage.w200;
     }
     plus_modal_date_and_comment_struct.childNodes[1].childNodes[1].childNodes.item(1).textContent = comment.content;
+    debug("date_and_comment",true);
 }
 
 //modal 팝업 구역이 존재할시
@@ -1065,6 +1095,7 @@ function plus_modal_yes(character_list,fe){
     plus_modal.innerHTML = plus_modal_front_html;
     plus_modal_no(plus_modal,character_list,fe);
     document.body.appendChild(plus_modal);
+    debug("plus_modal_yes",true);
 }
 
 //modal 팝업구역이 존재하지 않을시 (기능적 요소 포함)
@@ -1104,6 +1135,7 @@ function plus_modal_no(isModal,character_list,fe){
     const plus_modal_tags = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes[2].childNodes.item(1);
     //대화 한 유저수, 좋아요수, 댓글수 넣는부분
     const plus_modal_last = isModal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[1].childNodes.item(3);
+    debug("plus_modal",false,true);
     //제작자의 캐챗 불러오기
     var creator_character = JSON.parse(getAfetch(wrtn_api + `/character-profiles/${character_list[fe.id].wrtnUid}/characters?limit=10&sort=createdAt`)).data.characters;
     plus_modal_recommand_creator_func(creator_character,plus_modal_recommand_creator.childNodes.item(0),isModal);
@@ -1134,6 +1166,7 @@ function plus_modal_no(isModal,character_list,fe){
         new_tags.textContent = `#${element}`;
         plus_modal_tags.appendChild(new_tags);
     }
+    debug("for character_list");
     //언셒 마크
     plus_modal_IsAudult = document.createElement('div');
     plus_modal_IsAudult.innerHTML = plus_modal_front_html_IsAudlt;
@@ -1165,6 +1198,805 @@ function plus_modal_no(isModal,character_list,fe){
     plus_modal_btn.addEventListener('click',()=>{
         window.location.href = `https://wrtn.ai/character/u/${fe.getAttribute("src")}`;
     })
+    debug("plus_modal_no",true);
+}
+
+function character(){
+/*
+    정확한 명칭을 잘모르겠어서 일단 피드라고 했는데
+    처음 들어가면 태그 반뜨 뭐 이런거 뜨잖아?
+    그것들의 상위 엘리먼트임 정확하게는
+        */
+    var Tfeed = document.getElementsByClassName("css-1go39bq").item(0); // 피드를 가져옴
+    var character_list; //캐릭터 리스트
+    // 랭킹 플러스 기준
+    //캐릭터 리스트를 받아옴
+    var character_list = JSON.parse(getAfetch(wrtn_api + `/characters?limit=${limit}&sort=createdAt`)).data.characters;
+    var character_list_NoCe = character_list;
+    //랭킹플러스에 올라올 캐챗만 필터링(크레이터)
+    i=0;
+    var new_list = [];
+    for (const characterListElement of character_list) {
+        if (characterListElement.likeCount < likeCount_limit || characterListElement.chatCount < chatCount_limit){
+        }
+        else{
+            if (characterListElement.creator.isCertifiedCreator){
+                new_list[new_list.length] = characterListElement;
+            }
+        }
+        i++;
+    }
+    character_list = new_list;
+    debug("for character_list in character");
+    //랭킹플러스에 올라올 캐챗만 필터링(비크레이터)
+    i=0;
+    var new_list = [];
+    for (const characterListElement of character_list_NoCe) {
+        if (characterListElement.likeCount < likeCount_limit || characterListElement.chatCount < chatCount_limit){
+        }
+        else{
+            if (!characterListElement.creator.isCertifiedCreator){
+                new_list[new_list.length] = characterListElement;
+            }
+        }
+        i++;
+    }
+    character_list_NoCe = new_list;
+    debug("for character_list_NoCe in character");
+    //랭킹 플러스
+    if (Tfeed != null) {
+        //비크레이터
+        plus_modal_func(Tfeed,character_list_NoCe,false);
+        //크레이터
+        plus_modal_func(Tfeed,character_list,true);
+    }
+    debug("character",true);
+}
+
+function chatroom(){
+    try{
+        const targetDiv = document.getElementsByClassName("css-d7pngb").item(0); //채팅바
+        const NS = document.getElementsByClassName("css-13yljkq").item(0); // 파란색 -> 버튼
+        const NBS = NS.cloneNode(true); // + 버튼
+        const NBS_E = NS.cloneNode(true); // - 버튼
+        const Cm = NBS.childNodes.item(0).childNodes.item(0); // + 버튼 svg
+        const Cm_E = NBS_E.childNodes.item(0).childNodes.item(0); // - 버튼 svg
+        const bar = document.getElementsByClassName("css-1diwz7b").item(0); // 채팅방 메뉴바
+        const bar_c = bar.childNodes[1].childNodes[0].childNodes[1]; // 채팅방 메뉴 내부
+        const persona = bar.childNodes[1].childNodes[0].childNodes[1].childNodes.item(0).cloneNode(true); // 페르소나
+        var l = []
+        const persona_p = persona.childNodes.item(1); // 페르소나 내부 text
+        persona_p.textContent = persona_name;
+        const persona_svg = persona.childNodes.item(0); // 페르소나 svg
+        const persona_path = persona_svg.childNodes.item(0); // 페르소나 path
+        var personal_modal = document.createElement("div"); //모달팝업
+        debug("chatroom",false,true);
+        personal_modal.setAttribute("id","web-modal");
+        document.body.appendChild(personal_modal); // body에 모달팝업 추가
+
+        //페스로나 svg.path에 원래는 유저노트 svg.path가 존재해서 제거
+        for (let i = 0; i < 4; i++) {
+            persona_svg.childNodes[1].remove();
+        }
+
+        //페르소나 svg 추가
+        persona_path.setAttribute("d","M 12 2 C 7 2 4 4 4 7 V 11 C 4 16 8 20 12 20 C 16 20 20 16 20 11 V 7 C 20 4 17 2 12 2 Z Z Z M 9 14 C 9 13.5 10.5 13 12 13 C 13.5 13 15 13.5 15 14 C 15 14.5 14 15 12 15 C 10 15 9 14.5 9 14 Z M 6 9 L 8 8 C 8 8 9 8 10 9 C 9.3333 9.3333 9 10 8 10 L 8 10 C 7 10 6 10 6 9 C 6 9 6 9 6 9 C 6 9 7 8 8 8 M 14 9 C 15 8 16 8 16 8 C 17 8 18 9 18 9 C 18 10 17 10 16 10 C 15 10 14.6667 9.3333 14 9")
+        persona.addEventListener('click',persona_change);
+        bar_c.appendChild(persona);
+        //+버튼 추가
+        Cm.setAttribute("d","M 12 12 L 12 7 L 14 7 L 14 12 L 19 12 L 19 14 L 14 14 L 14 19 L 12 19 L 12 14 L 7 14 L 7 12 L 12 12");
+        targetDiv.appendChild(NBS);
+        NBS.addEventListener('click',clicked);
+        //-버튼 추가
+        Cm_E.setAttribute("d","M 12 12 L 7 12 L 7 14 L 19 14 L 19 12 L 12 12");
+        targetDiv.appendChild(NBS_E);
+        NBS_E.addEventListener('click',E_clicked);
+        //파란색 -> 버튼을 맨 끝으로
+        targetDiv.appendChild(NS);
+
+        //유저노트 자동 요약 기능
+        var km = setInterval(()=>{
+            const usernote_modal = document.getElementsByClassName("css-f3xxdk").item(0);//유저노트 클릭시 생기는 모달 팝업
+            if (usernote_modal != null){
+                //페르소나 모달 팝업인지 아닌지 판별
+                if (usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[0].childNodes.item(0).textContent == "유저 노트"){
+                    const usernote_modal_struct = usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes.item(0); //유저노트 모달팝업 구조 형식
+                    //버튼 추가가 1번만 실행될수있도록하는 조건문
+                    if (document.URL.split("/")[7] != undefined) {
+                        if (usernote_modal_struct.childNodes.length < 3) {
+                            usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes.item(1).textContent = usernote_description;
+                            fetch(wrtn_api2 + `/api/v2/chat-room/${document.URL.split("/")[7].split("?")[0]}`, {
+                                method: "GET",
+                                headers: {
+                                    "Authorization": `Bearer ${getCookie(token_key)}`,
+                                }
+                            }).then(res => res.json()).then(data => {
+                                usernote_modal_textarea.value = data.data.character.userNote.content;
+                            })
+                            /*
+                            textarea의 내부값을 수정해도 적용이 안되는 문제가 있어서
+                            모달 팝업 내의 모든 버튼 이벤트 리스너를 바꿔버림
+                            기능이 정상작동 가능하도록
+                             */
+                            const usernote_modal_btn_c = usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[2].childNodes.item(0); //닫기 버튼 형식
+                            const usernote_modal_btn_x = usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[0].childNodes.item(1); //x 버튼 형식
+                            const usernote_modal_x = usernote_modal_btn_x.cloneNode(true); // x 버튼 형식을 기반으로 버튼을 새로 만듦
+                            const usernote_modal_btn = usernote_modal_btn_c.cloneNode(true); // 닫기 버튼 형식 기반으로 버튼을 새로만듬
+                            const usernote_modal_textarea = usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes.item(1); //textarea
+                            const usernote_modal_apply_btn_struct = usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[2].childNodes.item(1); // 수정 버튼 형식
+                            /*
+                            닫기 버튼 기반으로 새로운 수정 버튼을 만드는 이유는 수정버튼을 기존 수정버튼 형식으로 만들시 이벤트 리스너가 적용되지 않는 문제가 있음
+                            수정 버튼을 누르고 모달팝업이 사라진후 유저노트의 이벤트 리스너가 사라지는 기이한 현상이 생김 그래서
+                            수정 버튼을 한번 누르고 난 후에는 유저노트에 모달팝업을 띄워주는 이벤트 리스너를 넣음
+                            그래서 모달팝업의 모든 버튼 이벤트는 확장프로그램이 제어하게 설정함
+                             */
+                            const usernote_modal_apply_btn = usernote_modal_btn.cloneNode(true); //닫기 버튼 형식 기반으로 수정 버튼을 새로만듦
+                            const usernote_modal_update_btn = usernote_modal_btn.cloneNode(true); //닫기 버튼 형식 기반으로 업데이트 버튼을 만듦
+                            const usernote_modal_new_close_btn = usernote_modal_btn.cloneNode(true); //닫기 버튼형식으로 새로운 닫기버튼을 만듦
+                            var modal = document.getElementById("web-modal"); //모달 팝업을 가져옴
+                            var usernote = document.getElementsByClassName("css-uxwch2").item(0).childNodes.item(0); //유저노트를 가져옴
+                            debug("usernote",false,true);
+                            //메뉴속 유저노트 버튼을 누를시 모달팝업을 띄워주는 함수
+                            function after_usernote_event() {
+                                {
+                                    modal.appendChild(usernote_modal);
+                                    fetch(wrtn_api2 + `/api/v2/chat-room/${document.URL.split("/")[7].split("?")[0]}`, {
+                                        method: "GET",
+                                        headers: {
+                                            "Authorization": `Bearer ${getCookie(token_key)}`,
+                                        }
+                                    }).then(res => res.json()).then(data => {
+                                        usernote_modal_textarea.value = data.data.character.userNote.content;
+                                    })
+                                }
+                            }
+                            //css 수동 동기화 (닫기 버튼을 수정버튼으로 만들기 위함)
+                            usernote_modal_apply_btn.removeAttribute("class");
+                            usernote_modal_apply_btn.setAttribute("style", "    border-radius: 5px;\n" +
+                                "    -webkit-box-pack: center;\n" +
+                                "    justify-content: center;\n" +
+                                "    -webkit-box-align: center;\n" +
+                                "    align-items: center;\n" +
+                                "    display: flex;\n" +
+                                "    flex-direction: row;\n" +
+                                "    gap: 8px;\n" +
+                                "    width: fit-content;\n" +
+                                "    border: 1px solid transparent;\n" +
+                                "    padding: 0px 20px;\n" +
+                                "    height: 40px;\n" +
+                                "    background-color: var(--color_surface_primary);\n" +
+                                "    color: var(--color_text_ivory);\n" +
+                                "    font-size: 16px;\n" +
+                                "    line-height: 100%;\n" +
+                                "    font-weight: 600;\n" +
+                                "    cursor: pointer;");
+                            //수정 버튼을 누를시
+                            usernote_modal_apply_btn.addEventListener('click', () => {
+                                //해당 채팅방에 할당된 유저노트의 값을 api로 변경
+                                putAfetch(wrtn_william + `/chat-room/${document.URL.split("/")[7].split("?")[0]}`, {
+                                    userNote: {"content": usernote_modal_textarea.value}
+                                })
+                                //메뉴의 유저노트 버튼에 이벤트 리스너 삽입
+                                usernote.removeEventListener('click', after_usernote_event);
+                                usernote.addEventListener('click', after_usernote_event);
+                                modal.childNodes.item(0).remove(); //모달 팝업 닫기
+                                alert("유저노트에 반영되었습니다!");
+                            })
+                            //닫기 버튼 누를시
+                            usernote_modal_new_close_btn.addEventListener('click', () => {
+                                //메뉴의 유저노트 버튼에 이벤트 리스너 삽입
+                                usernote.removeEventListener('click', after_usernote_event);
+                                usernote.addEventListener('click', after_usernote_event);
+                                modal.childNodes.item(0).remove(); //모달 팝업 닫기
+                            })
+                            //x 버튼 누를시
+                            usernote_modal_x.addEventListener('click', () => {
+                                //메뉴의 유저노트 버튼에 이벤트 리스너 삽입
+                                usernote.removeEventListener('click', after_usernote_event);
+                                usernote.addEventListener('click', after_usernote_event);
+                                modal.childNodes.item(0).remove(); //모달 팝업 닫기
+                            })
+                            usernote_modal_apply_btn.childNodes.item(0).textContent = "수정"; //버튼 이름을 변경
+                            //자동생성 버튼을 누를시
+                            usernote_modal_btn.addEventListener('click', () => {
+                                /* 작동방식
+                                설정해둔 자동요약을 수행할 캐챗 id이랑 연동이 가능하도록 방을 만듦
+                                그리고 생성버튼을 누를시 요약할 유저노트내용을 textarea에서 가져온 후 캐챗에게 전송
+                                캐챗에게 응답을 받아온 후 그걸 다시 textarea에 기입하는 방식
+                                로컬스토리지에는 판 방의 id가 저장됨 그렇게 안하면 매번 방을 파서 보내야 하잖음
+                                업데이트 버튼은 캐챗이 업데이트 됬을경우 그걸 적용하기 위해서
+                                기존의 방을 버리고 새방을 파서 그 방의 id를 로컬 스토리지에 저장함
+                                 */
+                                //처음 사용하면 로컬스토리지에 chatid가 없을꺼니 추가하기위해 판별하는 조건문
+                                if (localStorage.getItem(local_usernote) == null) {
+                                    // auto_summation_characterChatId의 캐챗방을 팜
+                                    var created_chatId = JSON.parse(postAfetch(wrtn_api + "/chat", {
+                                        unitId: auto_summation_characterChatId,
+                                        type: "character",
+                                        userNote: {"content": usernote_modal_textarea.textContent}
+                                    })).data._id;
+                                    //로컬스토리지에 판 방의 id를 저장
+                                    localStorage.setItem(local_usernote, created_chatId);
+                                    //메세지를 보냄
+                                    var created_msg = JSON.parse(postAfetch(wrtn_api2 + `/characters/chat/${created_chatId}/message`, {
+                                        message: usernote_modal_textarea.textContent,
+                                        reroll: false,
+                                        images: [],
+                                        isSuperMode: false
+                                    })).data;
+                                    getAfetch(wrtn_api2 + `/characters/chat/${created_chatId}/message/${created_msg}`);
+                                    var res_msg = JSON.parse(getAfetch(wrtn_api2 + `/characters/chat/${created_chatId}/message/${created_msg}/result`)).data.content;
+                                    usernote_modal_textarea.value = res_msg; //textarea에 값을 반영
+                                } else {
+                                    var created_chatId = localStorage.getItem(local_usernote); //이미 파진 채팅방을 가져옴
+                                    //그 방에 textarea값 즉 요약할 유저노트내용을 보냄
+                                    var created_msg = JSON.parse(postAfetch(wrtn_api2 + `/characters/chat/${created_chatId}/message`, {
+                                        message: usernote_modal_textarea.textContent,
+                                        reroll: false,
+                                        images: [],
+                                        isSuperMode: false
+                                    })).data;
+                                    getAfetch(wrtn_api2 + `/characters/chat/${created_chatId}/message/${created_msg}`);
+                                    var res_msg = JSON.parse(getAfetch(wrtn_api2 + `/characters/chat/${created_chatId}/message/${created_msg}/result`)).data.content;
+                                    usernote_modal_textarea.value = res_msg; //textarea에 값을 반영
+                                }
+                            })
+                            usernote_modal_update_btn.addEventListener('click', () => {
+                                //새로운 방을 팜
+                                var created_chatId = JSON.parse(postAfetch(wrtn_api + "/chat", {
+                                    unitId: auto_summation_characterChatId,
+                                    type: "character",
+                                    userNote: {"content": ""}
+                                })).data._id;
+                                localStorage.setItem(local_usernote, created_chatId); //스토리지에 방 id 저장
+                                alert("업데이트 되었습니다! (채팅방 확인)");
+                            })
+                            /*
+                            밑의 코드는 기존 버튼들을 삭제후 새로운 버튼으로 대체하는 내용임
+                             */
+                            usernote_modal_btn_c.remove();
+                            usernote_modal_apply_btn_struct.remove();
+                            usernote_modal_btn_x.remove();
+                            usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes.item(0).appendChild(usernote_modal_x);
+                            usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes.item(2).appendChild(usernote_modal_new_close_btn);
+                            usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes.item(2).appendChild(usernote_modal_apply_btn);
+                            usernote_modal_btn.childNodes.item(0).textContent = auto_summation;
+                            usernote_modal_update_btn.childNodes.item(0).textContent = auto_summation_update;
+                            usernote_modal_struct.appendChild(usernote_modal_update_btn);
+                            usernote_modal_struct.appendChild(usernote_modal_btn);
+                        }
+                    }
+                    else{
+                        var e = usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes.item(1);
+                        if (e.textContent == "캐릭터가 이 채팅방에서 반드시 기억해 줬으면 하는 내용을 적어주세요"){
+                            e.textContent = usernote_for_error;
+                        }
+                    }
+                    debug("usernote event");
+                }
+            }
+            else if (document.URL.split("/")[4] != "u"){
+                clearTimeout(km);//현재 접속한 url이 대화url이 아닐경우 반복 끝냄
+                debug("else usernote");
+            }
+        },100)
+
+        //+버튼 클릭시
+        function clicked() {
+            if (l.length == 9){
+                return alert("9개가 최대 입니다.");
+            }
+            const vsm = document.getElementsByTagName("textarea").item(0); //채팅바
+            if (vsm.value == ''){
+                return alert("내용 입력후 추가해주세요");
+            }
+            const vsmc = document.createElement("div"); // 1~9버튼 추가
+            vsmc.setAttribute("display","flex");
+            vsmc.setAttribute("class","css-13yljkq");
+            vsmc.setAttribute("id",`${l.length}`);
+            vsmc.append(`${l.length + 1}`);
+            l[l.length] = [l.length,vsm.value]
+            // 1~9 버튼 클릭시
+            function v_clicked() {
+                const vsm2 = document.getElementsByTagName("textarea").item(0);
+                vsm2.value = l[vsmc.id][1];
+                debug(`${vsmc.id + 1} button event`);
+            }
+            vsmc.addEventListener("click",v_clicked);
+            targetDiv.appendChild(vsmc);
+            targetDiv.appendChild(NBS_E);
+            targetDiv.appendChild(NS);
+            debug("+ button event");
+        }
+
+        //-버튼 클릭시
+        function E_clicked() {
+            const a = document.getElementById(`${l.length-1}`);
+            a.remove();
+            l.pop();
+            debug("- button event");
+        }
+
+        window.addEventListener("keydown", keysPressed, false);
+        window.addEventListener("keyup", keysReleased, false);
+
+        var keys = [];
+
+        function keysPressed(e) {
+            keys[e.keyCode] = true;
+
+            for (let i = 0; i < 58; i++) {
+                 if (keys[17] && keys[49 + i] && l.length > i) {
+                    const vsm = document.getElementsByTagName("textarea").item(0);
+                    vsm.value = l[i][1];
+                    e.preventDefault();	 // prevent default browser behavior
+                }
+            }
+        }
+        function keysReleased(e) {
+            keys[e.keyCode] = false;
+        }
+        //페르소나 버튼 누를시
+        function persona_change(){
+            //유저 wrtnUid가져오기
+            fetch(wrtn_api + '/user',{
+              method: "GET",
+              headers: {
+                "Authorization": `Bearer ${getCookie(token_key)}`,
+              }}).then(res => res.json()).then(data => {
+                  //유저 id가져오기
+                  fetch(wrtn_api + `/character-profiles/${data.data.wrtnUid}`,{
+                      method: "GET",
+                      headers: {
+                        "Authorization": `Bearer ${getCookie(token_key)}`,
+                      }
+                }).then(res=>res.json()).then(data=>{
+                    const pid = data.data._id;
+                    //유저 id를 사용해 페르소나 목록 조회
+                    fetch(wrtn_api + `/character-profiles/${data.data._id}/character-chat-profiles`,{
+                      method: "GET",
+                      headers: {
+                        "Authorization": `Bearer ${getCookie(token_key)}`,
+                      }
+                    }).then(res=>res.json()).then(data=>{
+                        if (bar_c.childNodes.length > 1){
+                            for (let i = bar_c.childNodes.length - 1; i > 1 ; i--) {
+                                bar_c.childNodes[2].remove();
+                            }
+                        }
+                        c = 0;
+                        for (const datum of data.data.characterChatProfiles) {
+                            const personaL = persona.cloneNode(true); //페르소나 목록 요소
+                            const for_personaL = document.createElement("div");//페르소나 한칸 띄우기
+                            personaL.insertBefore(for_personaL,personaL.childNodes[0]);
+                            const personaL_p = personaL.childNodes.item(2); //페르소나 text
+                            //대표 프로필일 경우 '<-' 붙이기 아니면 없음
+                            if (datum.isRepresentative){
+                             personaL_p.textContent = `${datum.name} <-`;
+                            }
+                            else {
+                                personaL_p.textContent = datum.name;
+                            }
+                            personaL.setAttribute("id",`${c}`) //페르소나 요소 id 지정
+                            //페르소나 목록을 누를시
+                            function personaL_change(){
+                                var mpid = "";
+                                m_i = 0;
+                                for (m of data.data.characterChatProfiles) {
+                                    if (`${m_i}` == personaL.id) {
+                                        var mpid = m._id; //뭔지 모르겠지만 혹시몰라서 안지움
+                                        var name = m.name; //페르소나 이름 가져오기
+                                        var information = m.information; //페르소나 정보 가져오기
+                                    }
+                                    m_i++;
+                                }
+                                var personaL_change_modal = document.createElement("modal");//페르소나 모달 팝업
+                                personaL_change_modal.innerHTML = persona_modal_html;
+                                personal_modal.setAttribute("style","position: relative !important;\n" +
+                                    "    z-index: 11 !important;") //이게 있어야 모달이 작동함
+                                personal_modal.appendChild(personaL_change_modal.firstChild);
+                                var personal_modal_name = document.getElementById("W_name"); //모달 내부 이름 textarea
+                                personal_modal_name.value = name;
+                                var personal_modal_info = document.getElementById("W_info"); //모달 내부 정보 textarea
+                                personal_modal_info.value = information;
+                                var personal_modal_Sbtn = document.getElementById("W_sumbit"); //모달 내부 등록 버튼
+                                var personal_modal_Cbtn = document.getElementById("W_close"); //모달 내부 닫기 버튼
+                                var personal_modal_x = document.getElementById("W_x"); //모달 내부 x버튼
+                                //모달 등록버튼을 눌렀을시
+                                personal_modal_Sbtn.addEventListener("click",()=>{
+                                    //모달의 내용을 조합해 페르소나 등록 및 대표프로필로 설정
+                                    fetch(wrtn_api + `/character-profiles/${pid}/character-chat-profiles/${mpid}`,{
+                                     method: "PATCH",
+                                      headers: {
+                                        "Authorization": `Bearer ${getCookie(token_key)}`,
+                                          "Content-Type": "application/json",
+                                      },
+                                      body: JSON.stringify({
+                                        isRepresentative: true,
+                                          name: personal_modal_name.value,
+                                          information: personal_modal_info.value,
+                                      })
+                                    }).then(res=>res.json()).then(data=>{
+                                        if (data.result == "SUCCESS"){
+                                            alert("페르소나 등록 성공!");
+                                            personal_modal.childNodes.item(0).remove();
+                                            persona_change();
+                                        }
+                                        else{
+                                            alert("페르소나 등록 실패!");
+                                            personal_modal.childNodes.item(0).remove();
+                                        }
+                                    })
+                                })
+                                //모달 내부 닫기버튼 눌렀을시
+                                personal_modal_Cbtn.addEventListener("click",()=>{
+                                    personal_modal.childNodes.item(0).remove();
+                                })
+                                //모달 내부 x버튼 눌렀을시
+                                personal_modal_x.addEventListener("click",()=>{
+                                    personal_modal.childNodes.item(0).remove();
+                                })
+                            }
+                            personaL.addEventListener('click',personaL_change);
+                            bar_c.appendChild(personaL);
+                            c++;
+                        }
+                      })
+                  })
+            });
+        debug("persona",true);
+    }
+    }catch (e){
+        console.log(e);
+    }
+    debug("chatroom",true);
+}
+
+function my(){
+    /*
+    여러번 수정 끝에 만들어 낸거임
+    계속 copy to json,copy to paste 버튼을 누르면 selected가 요소 인덱스 범위보다 1더 커지는
+    개애미뒤진 병신같은 쓰레기 조자년 버그가 발생함
+    진짜 눈물 질질 새면서 처만드느라 뒤질뻔 했네 시발
+    고친거 라기 보다는 현재도 opend 변수가 없으면 생기는 버그임 시발
+    도대체 왜?
+        */
+    var selected = 0; //점 세개 퍼튼이 어떤 요소의 버튼인지 판별하는 번수
+    opend=false; //구원자
+    setInterval(()=>{
+        var myTdiv = document.getElementsByClassName("css-j7qwjs"); //점 세개 버튼
+        var tipbar = document.getElementsByClassName("css-1w2weol"); //dropdown 목록
+        //드랍다운이 있는지 없는지
+        if (tipbar != null){
+            var tipbar_struct = document.getElementsByClassName("css-1wh9bd4").item(0); //드랍다운 내부 요소 (형식용)
+            //화이트 테마일시
+            if (tipbar_struct == null){
+                tipbar_struct = document.getElementsByClassName("css-zklud").item(0); //화이트 테마용 드랍다운 내부요소 (형식용)
+            }
+            //드랍다운 내부에 copy to json, copy to paste, publish 추가
+            if (tipbar_struct != null){
+                //드랍다운이 일정 개수 이상 늘어나지 않도록 하는 조건문 5 가 아니라 3이여도 작동할듯
+                if (tipbar.item(0).childNodes.length < 5) {
+                    var tipbar_copy = tipbar_struct.cloneNode(true); //copy to json 버튼
+                    var tipbar_paste = tipbar_struct.cloneNode(true); //copy to paste 버튼
+                    var tipbar_clone = tipbar_struct.cloneNode(true); //publish 버튼
+                    //copy to json
+                    //copy to json가 현재 없다면
+                    if (tipbar.item(0).childNodes.item(2) == null){
+                        tipbar_copy.childNodes.item(0).textContent = copyTojson;
+                        //copy to json 클릭시
+                        tipbar_copy.addEventListener('click',()=>{
+                            //유저가 제작한 캐챗 목록을 10000개 조회함 (설마 이것보다 많이 만든 사람이 있겠어?)
+                            fetch(wrtn_api + `/characters/me?limit=${forced_limit}`,{
+                                method: "GET",
+                                headers: {
+                                    "Authorization": `Bearer ${getCookie(token_key)}`,
+                                },
+                            }).then(res => res.json()).then(data => {
+                                i=0;
+                                for (const datum of data.data.characters) {
+                                    //조회한 캐챗을 가져옴
+                                    if (i == selected){
+                                        //캐챗 id를 사용해서 캐챗의 모든 정보를 가져온후 클립보드에 복사
+                                        fetch(wrtn_api + `/characters/me/${datum._id}`,{
+                                            method: "GET",
+                                            headers: {
+                                                "Authorization": `Bearer ${getCookie(token_key)}`,
+                                            },
+                                        }).then(res => res.json()).then(data => {
+                                            copyToClipboard(JSON.stringify(data.data));
+                                            alert('클립보드에 복사되었습니다!');
+                                        })
+                                    }
+                                    i++;
+                                }
+                            })
+                            debug(`${copyTojson} button event`);
+                        })
+                        tipbar.item(0).appendChild(tipbar_copy);
+                    }
+                    //paste to json
+                    //paste to json가 없다면
+                    if (tipbar.item(0).childNodes.item(3) == null){
+                        tipbar_paste.childNodes.item(0).textContent = pasteTojson;
+                        //paste to json 클릭시
+                        tipbar_paste.addEventListener('click',()=>{
+                            //유저가 제작한 캐챗 목록을 10000개 조회함 (설마 이것보다 많이 만든 사람이 있겠어?)
+                            fetch(wrtn_api + `/characters/me?limit=${forced_limit}`,{
+                                method: "GET",
+                                headers: {
+                                    "Authorization": `Bearer ${getCookie(token_key)}`,
+                                },
+                            }).then(res => res.json()).then(data => {
+                                i = 0;
+                                for (const datum of data.data.characters) {
+                                    //조회한 캐챗을 가져옴
+                                    if (i == selected) {
+                                        //클립보드를 가져옴
+                                        getClipboardTextModern().then(function (clipboardContent) {
+                                            json_data = JSON.parse(clipboardContent); //클립보드 내용 json화
+                                            //startingSets에 _id 항목이 있는데 이게 있으면 안되서 지우는거
+                                            for (const a of json_data.startingSets) {
+                                                delete a._id;
+                                            }
+                                            //json화 시킨 캐릭터챗 정보를 덮어 씌움
+                                            fetch(wrtn_api + `/characters/${datum._id}`, {
+                                                method: "PATCH",
+                                                headers: {
+                                                    "Authorization": `Bearer ${getCookie(token_key)}`,
+                                                    "Content-Type": "application/json",
+                                                },
+                                                body: JSON.stringify({
+                                                    name: json_data.name,
+                                                    description: json_data.description,
+                                                    profileImageUrl: json_data.profileImage.origin,
+                                                    model: json_data.model,
+                                                    initialMessages: json_data.initialMessages,
+                                                    characterDetails: json_data.characterDetails,
+                                                    replySuggestions: json_data.replySuggestions,
+                                                    chatExamples: json_data.chatExamples,
+                                                    situationImages: json_data.situationImages,
+                                                    categoryIds: [json_data.categories[0]._id],
+                                                    tags: json_data.tags,
+                                                    visibility: json_data.visibility,
+                                                    promptTemplate: json_data.promptTemplate.template,
+                                                    isCommentBlocked: json_data.isCommentBlocked,
+                                                    defaultStartingSetName: json_data.defaultStartingSetName,
+                                                    startingSets: json_data.startingSets,
+                                                    keywordBook: json_data.keywordBook,
+                                                    customPrompt: json_data.customPrompt,
+                                                    defaultStartingSetSituationPrompt: json_data.defaultStartingSetSituationPrompt,
+                                                })
+                                            }).then(res => res.json).then(data => {
+                                                alert("캐챗 변경 성공! (새로고침 후 적용됩니다.)");
+                                            })
+                                        })
+                                    }
+                                    i++
+                                }
+                            })
+                            debug(`${pasteTojson} button event`);
+                        })
+                        tipbar.item(0).appendChild(tipbar_paste);
+                    }
+                    //publish
+                    //publish가 없다면
+                    if (tipbar.item(0).childNodes.item(4) == null){
+                        tipbar_clone.childNodes.item(0).textContent = publish;
+                        tipbar_clone.addEventListener("click",()=> {
+                            //유저가 제작한 캐챗 목록을 10000개 조회함 (설마 이것보다 많이 만든 사람이 있겠어?)
+                            fetch(wrtn_api + `/characters/me?limit=${forced_limit}`,{
+                                method: "GET",
+                                headers: {
+                                    "Authorization": `Bearer ${getCookie(token_key)}`,
+                                },
+                            }).then(res => res.json()).then(data => {
+                                i=0;
+                                for (const datum of data.data.characters) {
+                                    //조회한 캐챗을 가져옴
+                                    if (i == selected){
+                                        //새 캐챗을 만듬
+                                        fetch(wrtn_api + `/characters/me/${datum._id}`,{
+                                            method: "GET",
+                                            headers: {
+                                                "Authorization": `Bearer ${getCookie(token_key)}`,
+                                            },
+                                        }).then(res => res.json()).then(data => {
+                                            json_data = data.data; //기본 캐챗의 json데이터
+                                            //startingSets의 _id가 있으면 안되서 지움
+                                            for (const a of json_data.startingSets) {
+                                                delete a._id;
+                                            }
+                                            /*
+                                            새로운 캐릭터챗을 만들때랑
+                                            기존 캐릭터챗을 수정하는거랑
+                                            보내야되는 json 데이터가 다름
+                                            거기다 보내야 되는 내용에 startingSets가 []이면 안되더라
+                                            startingSets가 없거나 아면 요소가 하나 이상 있어야됨
+                                                */
+                                            //위의 내용에 의거하여 startingSets가 []인지 아닌지 판별
+                                            if (json_data.startingSets.length == 0){
+                                                json_body = JSON.stringify({
+                                                    name: json_data.name,
+                                                    description: json_data.description,
+                                                    profileImageUrl: json_data.profileImage.origin,
+                                                    model: json_data.model,
+                                                    initialMessages: json_data.initialMessages,
+                                                    characterDetails: json_data.characterDetails,
+                                                    replySuggestions: json_data.replySuggestions,
+                                                    chatExamples: json_data.chatExamples,
+                                                    situationImages: json_data.situationImages,
+                                                    categoryIds: [json_data.categories[0]._id],
+                                                    tags: json_data.tags,
+                                                    visibility: "public",
+                                                    promptTemplate: json_data.promptTemplate.template,
+                                                    isCommentBlocked: json_data.isCommentBlocked,
+                                                    defaultStartingSetName: json_data.defaultStartingSetName,
+                                                    keywordBook: json_data.keywordBook,
+                                                    customPrompt: json_data.customPrompt,
+                                                    defaultStartingSetSituationPrompt: json_data.defaultStartingSetSituationPrompt,
+                                                    isAdult: json_data.isAdult,
+                                                })
+                                            }
+                                            else{
+                                                json_body = JSON.stringify({
+                                                    name: json_data.name,
+                                                    description: json_data.description,
+                                                    profileImageUrl: json_data.profileImage.origin,
+                                                    model: json_data.model,
+                                                    initialMessages: json_data.initialMessages,
+                                                    characterDetails: json_data.characterDetails,
+                                                    replySuggestions: json_data.replySuggestions,
+                                                    chatExamples: json_data.chatExamples,
+                                                    situationImages: json_data.situationImages,
+                                                    categoryIds: [json_data.categories[0]._id],
+                                                    tags: json_data.tags,
+                                                    visibility: "public",
+                                                    promptTemplate: json_data.promptTemplate.template,
+                                                    isCommentBlocked: json_data.isCommentBlocked,
+                                                    defaultStartingSetName: json_data.defaultStartingSetName,
+                                                    startingSets: json_data.startingSets,
+                                                    keywordBook: json_data.keywordBook,
+                                                    customPrompt: json_data.customPrompt,
+                                                    defaultStartingSetSituationPrompt: json_data.defaultStartingSetSituationPrompt,
+                                                    isAdult: json_data.isAdult,
+                                                })
+                                            }
+                                            //캐릭터챗 만들기
+                                            fetch(wrtn_api + "/characters",{
+                                                method: "POST",
+                                                headers: {
+                                                    "Authorization": `Bearer ${getCookie(token_key)}`,
+                                                    "Content-Type": "application/json",
+                                                },
+                                                body: json_body,
+                                            }).then(res => res.json()).then(data => {
+                                                alert("캐챗 공개 성공! (새로고침 후 적용됩니다.)");
+                                            })
+                                        })
+                                    }
+                                    i++;
+                                }
+                            })
+                            debug(`${publish} button event`);
+                        })
+                        tipbar.item(0).appendChild(tipbar_clone);
+                    }
+                }
+                opend=true;
+                debug("dropdown event");
+            }
+            else {
+                opend = false;
+            }
+        }
+        else{
+        }
+        //모든 점세개에 클릭 이벤트리스너를 추가
+        i=0;
+        for (const myTdivElement of myTdiv) {
+            if (myTdivElement.id == ""){
+                myTdivElement.setAttribute("id",i)
+                myTdivElement.addEventListener('click',()=>{
+                    j=0;
+                    var myTdiv2 = document.getElementsByClassName("css-j7qwjs");
+                    for (const argument of myTdiv2) {
+                        if (argument==myTdivElement){
+                            if (j != myTdiv2.length){
+                                if (!opend){
+                                    selected = j;
+                                }
+                            }
+                        }
+                        j++;
+                    }
+                    debug("three dot button event");
+                })
+            }
+            i++;
+        }
+    },500)
+    debug("my",true);
+}
+
+function builder (){
+    setInterval(()=>{
+        const Topbar = document.getElementsByClassName("css-xxmugq").item(0).childNodes; // 맨위의 프로필, 상세설정, 시작설정, 미디어, 키워드북, 등록 있는 바
+        i=0;
+        //현재 Topbar 내부의 어느 탭에 있는지 확인
+        for (const topbarElement of Topbar) {
+            //상세설정 탭에 있을경우
+            if (topbarElement.classList.contains("css-6bz0qb") && i == 1){
+                const setting = document.getElementsByClassName("css-9jqaga").item(0); //프롬프트랑 그 설명 + ?있는 칸
+                const setting_deafult_btn = document.getElementsByClassName("css-2ueqwe").item(0); //파란색 자동생성 버튼
+                //setting에 아무것도 적용안되있을시
+                if (setting != null && 4 > setting.childNodes.length){
+                    var recommand_prompt_plus_btn = document.createElement("div"); //+버튼 (양식 겸용)
+                    recommand_prompt_plus_btn.innerHTML = recommand_prompt_html;
+                    const recommand_prompt_minus_btn = recommand_prompt_plus_btn.cloneNode(true); // - 버튼
+                    var json_data = JSON.parse(localStorage.getItem(local_saved_prompt)); //localstorage에 저장된 프롬프트 들고오기
+                    recommand_prompt_minus_btn.childNodes.item(0).textContent = "-";
+                    // + 버튼 누를시
+                    recommand_prompt_plus_btn.addEventListener('click',()=>{
+                        const text = document.getElementsByClassName("css-1vu2uq1").item(0); //textarea 의 내용 들고옴
+                        var json_data = JSON.parse(localStorage.getItem(local_saved_prompt)); //localstorage에 저장된 내용 들고오기
+                        const recommand_promt_btn_add = recommand_prompt_plus_btn.cloneNode(true);//1~9버튼을 만들기
+                        recommand_promt_btn_add.childNodes.item(0).textContent = json_data.prompt.length + 1;
+                        recommand_promt_btn_add.setAttribute("id",json_data.prompt.length);
+                        //1~9버튼 누를시
+                        recommand_promt_btn_add.addEventListener('click',()=>{
+                            var json_data2 = JSON.parse(localStorage.getItem(local_saved_prompt));//localstorage에 저장된 프롬프트 들고오기
+                            copyToClipboard(json_data2.prompt[recommand_promt_btn_add.id]); //클립보드에 저장된 프롬프트 복사
+                            alert("클립보드에 복사되었습니다.");
+                            debug(`${recommand_promt_btn_add.id + 1} button event`);
+                        })
+                        json_data.prompt[json_data.prompt.length] = text.textContent;//프롬프트 추가
+                        setting.insertBefore(recommand_promt_btn_add,recommand_prompt_minus_btn);
+                        localStorage.setItem(local_saved_prompt,JSON.stringify(json_data)); //추가한 프롬프트를 localstorage에 등록
+                        debug("+ button event")
+                    })
+                    // - 버튼 누를시
+                    recommand_prompt_minus_btn.addEventListener('click',()=>{
+                        //이미 1~9버튼을 전부 삭제한 상태에서 누르면 작동 안되게끔하는 조건문
+                        if (setting.childNodes.length > 5){
+                            const json_data = JSON.parse(localStorage.getItem(local_saved_prompt)); //localstorage에 저장된 프롬프트 들고오기
+                            setting.childNodes.item(setting.childNodes.length-3).remove(); //1~9 버튼중 마지막 숫자 버튼 삭제
+                            json_data.prompt.pop(); //저장 된프롬프트 삭제
+                            localStorage.setItem(local_saved_prompt,JSON.stringify(json_data)); //삭제한 프롬프트를 localstorage에 등록 및 적용
+                        }
+                        else{
+                            alert("삭제할 항목이 존재하지 않습니다.");
+                        }
+                        debug("- button event");
+                    })
+                    setting.appendChild(recommand_prompt_plus_btn)
+                    i = 0
+                    //탭 들어가자마자 localstorage에 이미 등록해놓은 프롬프트 불러오기
+                    for (const jsonDatum of json_data.prompt) {
+                        const recommand_promt_add_btn = recommand_prompt_plus_btn.cloneNode(true); //추가할 버튼
+                        recommand_promt_add_btn.childNodes.item(0).textContent = i + 1;
+                        recommand_promt_add_btn.setAttribute("id",i);
+                        //1~9 버튼 누를시
+                        recommand_promt_add_btn.addEventListener('click',()=>{
+                            var json_data = JSON.parse(localStorage.getItem(local_saved_prompt)); //localstorage에 저장된 프롬프트 들고오기
+                            copyToClipboard(json_data.prompt[recommand_promt_add_btn.id]); //가져온 프롬프트를 클립보드에 복사
+                            alert("클립보드에 복사되었습니다.");
+                        })
+                        setting.appendChild(recommand_promt_add_btn);
+                        i++;
+                    }
+                    debug("for json_data.promt");
+                    setting.appendChild(recommand_prompt_minus_btn);
+                    //커스텀 프롬프트 템플릿에는 자동 생성 버튼없어서 없는경우 추가 안함
+                    if (setting_deafult_btn != null){
+                        setting.appendChild(setting_deafult_btn);
+                    }
+                }
+            }
+            i++;
+        }
+    },100)
+    debug("builder",true);
 }
 
 //쿠키 가져오는 함수
@@ -1184,6 +2016,7 @@ function getAfetch (url){
     xhr.setRequestHeader("Authorization", `Bearer ${getCookie(token_key)}`);
     xhr.send();
     if (xhr.status == 200) { //GET 요청에 대해 성공적인경우
+        debug(`GET ${url}`,false,false,true);
         return xhr.responseText // 서버로부터 받은 데이터를 출력
     }
     else{
@@ -1201,6 +2034,7 @@ function postAfetch (url,data){
     //POST 요청에 보낼 데이터 작성
     xhr.send(JSON.stringify(data)); //JSON 형태로 변환하여 서버에 전송
     if (xhr.status == 201){
+        debug(`POST ${url}`,false,false,true);
         return xhr.responseText;
     }
     else{
@@ -1218,19 +2052,43 @@ function putAfetch (url,data){
     //PUT 요청에 보낼 데이터 작성
     xhr.send(JSON.stringify(data)); //JSON 형태로 변환하여 서버에 전송
     if (xhr.status == 200){
+        debug(`PUT ${url}`,false,false,true);
         return xhr.responseText;
     }
     else{
         alert(`api put 요청 실패 ${url} | ${JSON.stringify(data)}`);
     }
 }
+
+// 클립보드의 텍스트를 가져오기
+function getClipboardTextModern() {
+    debug("getClipboardTextModern",true);
+    return navigator.clipboard.readText(); // 붙여넣기
+}
+
+// 텍스트를 클립보드에 복사하기
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text); // 복사하기
+    debug("copyToClipboard",true);
+}
 //real-time apply
 var lastest = "";
 setInterval(()=>{
     if (getCookie(token_key) != undefined){
-        //character
         if (lastest != document.URL){
+            //character
             if (document.URL == "https://wrtn.ai/character"){
+                main();
+            }
+            //character/builder
+            if (document.URL.split("/")[4] != undefined){
+                if (document.URL.split("/")[4].split("?")[0] == "builder"){
+                    main();
+                }
+            }
+            debug(`${lastest} -> ${document.URL}`);
+            //character/my
+            if (document.URL.split("/")[4] == "my"){
                 main();
             }
         }
@@ -1238,21 +2096,8 @@ setInterval(()=>{
         const targetDiv = document.getElementsByClassName("css-d7pngb").item(0);
         if (targetDiv != null) {
             if (targetDiv.childNodes.length < 5) {
+                debug(`if targetDiv != null`);
                 main();
-            }
-        }
-        //character/my
-        if (lastest != document.URL){
-            if (document.URL.split("/")[4] == "my"){
-                main();
-            }
-        }
-        //character/builder
-        if (lastest != document.URL){
-            if (document.URL.split("/")[4] != undefined){
-                if (document.URL.split("/")[4].split("?")[0] == "builder"){
-                    main();
-                }
             }
         }
     }
@@ -1262,721 +2107,17 @@ setInterval(()=>{
 function main(){
     //캐릭터 플러스 랭킹 기능
     if (document.URL.split("/")[3] == "character" && document.URL.split("/").length == 4){
-        /*
-        정확한 명칭을 잘모르겠어서 일단 피드라고 했는데
-        처음 들어가면 태그 반뜨 뭐 이런거 뜨잖아?
-        그것들의 상위 엘리먼트임 정확하게는
-         */
-        var Tfeed = document.getElementsByClassName("css-1go39bq").item(0); // 피드를 가져옴
-        var character_list; //캐릭터 리스트
-        // 랭킹 플러스 기준
-        //캐릭터 리스트를 받아옴
-        var character_list = JSON.parse(getAfetch(wrtn_api + `/characters?limit=${limit}&sort=createdAt`)).data.characters;
-        var character_list_NoCe = character_list;
-        //랭킹플러스에 올라올 캐챗만 필터링(크레이터)
-        i=0;
-        var new_list = [];
-        for (const characterListElement of character_list) {
-            if (characterListElement.likeCount < likeCount_limit || characterListElement.chatCount < chatCount_limit){
-            }
-            else{
-                if (characterListElement.creator.isCertifiedCreator){
-                    new_list[new_list.length] = characterListElement;
-                }
-            }
-            i++;
-        }
-        character_list = new_list;
-        //랭킹플러스에 올라올 캐챗만 필터링(비크레이터)
-        i=0;
-        var new_list = [];
-        for (const characterListElement of character_list_NoCe) {
-            if (characterListElement.likeCount < likeCount_limit || characterListElement.chatCount < chatCount_limit){
-            }
-            else{
-                if (!characterListElement.creator.isCertifiedCreator){
-                    new_list[new_list.length] = characterListElement;
-                }
-            }
-            i++;
-        }
-        character_list_NoCe = new_list;
-        //랭킹 플러스
-        if (Tfeed != null) {
-            //비크레이터
-            plus_modal_func(Tfeed,character_list_NoCe,false);
-            //크레이터
-            plus_modal_func(Tfeed,character_list,true);
-        }
+        character();
     }
+
     //채팅방 기능
     if (document.URL.split("/")[4] == "u"){
-        try{
-            const targetDiv = document.getElementsByClassName("css-d7pngb").item(0); //채팅바
-            const NS = document.getElementsByClassName("css-13yljkq").item(0); // 파란색 -> 버튼
-            const NBS = NS.cloneNode(true); // + 버튼
-            const NBS_E = NS.cloneNode(true); // - 버튼
-            const Cm = NBS.childNodes.item(0).childNodes.item(0); // + 버튼 svg
-            const Cm_E = NBS_E.childNodes.item(0).childNodes.item(0); // - 버튼 svg
-            const bar = document.getElementsByClassName("css-1diwz7b").item(0); // 채팅방 메뉴바
-            const bar_c = bar.childNodes[1].childNodes[0].childNodes[1]; // 채팅방 메뉴 내부
-            const persona = bar.childNodes[1].childNodes[0].childNodes[1].childNodes.item(0).cloneNode(true); // 페르소나
-            var l = []
-            const persona_p = persona.childNodes.item(1); // 페르소나 내부 text
-            persona_p.textContent = persona_name;
-            const persona_svg = persona.childNodes.item(0); // 페르소나 svg
-            const persona_path = persona_svg.childNodes.item(0); // 페르소나 path
-            var personal_modal = document.createElement("div"); //모달팝업
-            personal_modal.setAttribute("id","web-modal");
-            document.body.appendChild(personal_modal); // body에 모달팝업 추가
-
-            //페스로나 svg.path에 원래는 유저노트 svg.path가 존재해서 제거
-            for (let i = 0; i < 4; i++) {
-                persona_svg.childNodes[1].remove();
-            }
-
-            //페르소나 svg 추가
-            persona_path.setAttribute("d","M 12 2 C 7 2 4 4 4 7 V 11 C 4 16 8 20 12 20 C 16 20 20 16 20 11 V 7 C 20 4 17 2 12 2 Z Z Z M 9 14 C 9 13.5 10.5 13 12 13 C 13.5 13 15 13.5 15 14 C 15 14.5 14 15 12 15 C 10 15 9 14.5 9 14 Z M 6 9 L 8 8 C 8 8 9 8 10 9 C 9.3333 9.3333 9 10 8 10 L 8 10 C 7 10 6 10 6 9 C 6 9 6 9 6 9 C 6 9 7 8 8 8 M 14 9 C 15 8 16 8 16 8 C 17 8 18 9 18 9 C 18 10 17 10 16 10 C 15 10 14.6667 9.3333 14 9")
-            persona.addEventListener('click',persona_change);
-            bar_c.appendChild(persona);
-            //+버튼 추가
-            Cm.setAttribute("d","M 12 12 L 12 7 L 14 7 L 14 12 L 19 12 L 19 14 L 14 14 L 14 19 L 12 19 L 12 14 L 7 14 L 7 12 L 12 12");
-            targetDiv.appendChild(NBS);
-            NBS.addEventListener('click',clicked);
-            //-버튼 추가
-            Cm_E.setAttribute("d","M 12 12 L 7 12 L 7 14 L 19 14 L 19 12 L 12 12");
-            targetDiv.appendChild(NBS_E);
-            NBS_E.addEventListener('click',E_clicked);
-            //파란색 -> 버튼을 맨 끝으로
-            targetDiv.appendChild(NS);
-
-            //유저노트 자동 요약 기능
-            var km = setInterval(()=>{
-                const usernote_modal = document.getElementsByClassName("css-f3xxdk").item(0);//유저노트 클릭시 생기는 모달 팝업
-                if (usernote_modal != null){
-                    //페르소나 모달 팝업인지 아닌지 판별
-                    if (usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[0].childNodes.item(0).textContent == "유저 노트"){
-                        const usernote_modal_struct = usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes.item(0); //유저노트 모달팝업 구조 형식
-                        //버튼 추가가 1번만 실행될수있도록하는 조건문
-                        if (document.URL.split("/")[7] != undefined) {
-                            if (usernote_modal_struct.childNodes.length < 3) {
-                                usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes.item(1).textContent = usernote_description;
-                                fetch(wrtn_api2 + `/api/v2/chat-room/${document.URL.split("/")[7].split("?")[0]}`, {
-                                    method: "GET",
-                                    headers: {
-                                        "Authorization": `Bearer ${getCookie(token_key)}`,
-                                    }
-                                }).then(res => res.json()).then(data => {
-                                    usernote_modal_textarea.value = data.data.character.userNote.content;
-                                })
-                                /*
-                                textarea의 내부값을 수정해도 적용이 안되는 문제가 있어서
-                                모달 팝업 내의 모든 버튼 이벤트 리스너를 바꿔버림
-                                기능이 정상작동 가능하도록
-                                 */
-                                const usernote_modal_btn_c = usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[2].childNodes.item(0); //닫기 버튼 형식
-                                const usernote_modal_btn_x = usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[0].childNodes.item(1); //x 버튼 형식
-                                const usernote_modal_x = usernote_modal_btn_x.cloneNode(true); // x 버튼 형식을 기반으로 버튼을 새로 만듦
-                                const usernote_modal_btn = usernote_modal_btn_c.cloneNode(true); // 닫기 버튼 형식 기반으로 버튼을 새로만듬
-                                const usernote_modal_textarea = usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes.item(1); //textarea
-                                const usernote_modal_apply_btn_struct = usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[2].childNodes.item(1); // 수정 버튼 형식
-                                /*
-                                닫기 버튼 기반으로 새로운 수정 버튼을 만드는 이유는 수정버튼을 기존 수정버튼 형식으로 만들시 이벤트 리스너가 적용되지 않는 문제가 있음
-                                수정 버튼을 누르고 모달팝업이 사라진후 유저노트의 이벤트 리스너가 사라지는 기이한 현상이 생김 그래서
-                                수정 버튼을 한번 누르고 난 후에는 유저노트에 모달팝업을 띄워주는 이벤트 리스너를 넣음
-                                그래서 모달팝업의 모든 버튼 이벤트는 확장프로그램이 제어하게 설정함
-                                 */
-                                const usernote_modal_apply_btn = usernote_modal_btn.cloneNode(true); //닫기 버튼 형식 기반으로 수정 버튼을 새로만듦
-                                const usernote_modal_update_btn = usernote_modal_btn.cloneNode(true); //닫기 버튼 형식 기반으로 업데이트 버튼을 만듦
-                                const usernote_modal_new_close_btn = usernote_modal_btn.cloneNode(true); //닫기 버튼형식으로 새로운 닫기버튼을 만듦
-                                var modal = document.getElementById("web-modal"); //모달 팝업을 가져옴
-                                var usernote = document.getElementsByClassName("css-uxwch2").item(0).childNodes.item(0); //유저노트를 가져옴
-                                //메뉴속 유저노트 버튼을 누를시 모달팝업을 띄워주는 함수
-                                function after_usernote_event() {
-                                    {
-                                        modal.appendChild(usernote_modal);
-                                        fetch(wrtn_api2 + `/api/v2/chat-room/${document.URL.split("/")[7].split("?")[0]}`, {
-                                            method: "GET",
-                                            headers: {
-                                                "Authorization": `Bearer ${getCookie(token_key)}`,
-                                            }
-                                        }).then(res => res.json()).then(data => {
-                                            usernote_modal_textarea.value = data.data.character.userNote.content;
-                                        })
-                                    }
-                                }
-                                //css 수동 동기화 (닫기 버튼을 수정버튼으로 만들기 위함)
-                                usernote_modal_apply_btn.removeAttribute("class");
-                                usernote_modal_apply_btn.setAttribute("style", "    border-radius: 5px;\n" +
-                                    "    -webkit-box-pack: center;\n" +
-                                    "    justify-content: center;\n" +
-                                    "    -webkit-box-align: center;\n" +
-                                    "    align-items: center;\n" +
-                                    "    display: flex;\n" +
-                                    "    flex-direction: row;\n" +
-                                    "    gap: 8px;\n" +
-                                    "    width: fit-content;\n" +
-                                    "    border: 1px solid transparent;\n" +
-                                    "    padding: 0px 20px;\n" +
-                                    "    height: 40px;\n" +
-                                    "    background-color: var(--color_surface_primary);\n" +
-                                    "    color: var(--color_text_ivory);\n" +
-                                    "    font-size: 16px;\n" +
-                                    "    line-height: 100%;\n" +
-                                    "    font-weight: 600;\n" +
-                                    "    cursor: pointer;");
-                                //수정 버튼을 누를시
-                                usernote_modal_apply_btn.addEventListener('click', () => {
-                                    //해당 채팅방에 할당된 유저노트의 값을 api로 변경
-                                    putAfetch(wrtn_william + `/chat-room/${document.URL.split("/")[7].split("?")[0]}`, {
-                                        userNote: {"content": usernote_modal_textarea.value}
-                                    })
-                                    //메뉴의 유저노트 버튼에 이벤트 리스너 삽입
-                                    usernote.removeEventListener('click', after_usernote_event);
-                                    usernote.addEventListener('click', after_usernote_event);
-                                    modal.childNodes.item(0).remove(); //모달 팝업 닫기
-                                    alert("유저노트에 반영되었습니다!");
-                                })
-                                //닫기 버튼 누를시
-                                usernote_modal_new_close_btn.addEventListener('click', () => {
-                                    //메뉴의 유저노트 버튼에 이벤트 리스너 삽입
-                                    usernote.removeEventListener('click', after_usernote_event);
-                                    usernote.addEventListener('click', after_usernote_event);
-                                    modal.childNodes.item(0).remove(); //모달 팝업 닫기
-                                })
-                                //x 버튼 누를시
-                                usernote_modal_x.addEventListener('click', () => {
-                                    //메뉴의 유저노트 버튼에 이벤트 리스너 삽입
-                                    usernote.removeEventListener('click', after_usernote_event);
-                                    usernote.addEventListener('click', after_usernote_event);
-                                    modal.childNodes.item(0).remove(); //모달 팝업 닫기
-                                })
-                                usernote_modal_apply_btn.childNodes.item(0).textContent = "수정"; //버튼 이름을 변경
-                                //자동생성 버튼을 누를시
-                                usernote_modal_btn.addEventListener('click', () => {
-                                    /* 작동방식
-                                    설정해둔 자동요약을 수행할 캐챗 id이랑 연동이 가능하도록 방을 만듦
-                                    그리고 생성버튼을 누를시 요약할 유저노트내용을 textarea에서 가져온 후 캐챗에게 전송
-                                    캐챗에게 응답을 받아온 후 그걸 다시 textarea에 기입하는 방식
-                                    로컬스토리지에는 판 방의 id가 저장됨 그렇게 안하면 매번 방을 파서 보내야 하잖음
-                                    업데이트 버튼은 캐챗이 업데이트 됬을경우 그걸 적용하기 위해서
-                                    기존의 방을 버리고 새방을 파서 그 방의 id를 로컬 스토리지에 저장함
-                                     */
-                                    //처음 사용하면 로컬스토리지에 chatid가 없을꺼니 추가하기위해 판별하는 조건문
-                                    if (localStorage.getItem(local_usernote) == null) {
-                                        // auto_summation_characterChatId의 캐챗방을 팜
-                                        var created_chatId = JSON.parse(postAfetch(wrtn_api + "/chat", {
-                                            unitId: auto_summation_characterChatId,
-                                            type: "character",
-                                            userNote: {"content": usernote_modal_textarea.textContent}
-                                        })).data._id;
-                                        //로컬스토리지에 판 방의 id를 저장
-                                        localStorage.setItem(local_usernote, created_chatId);
-                                        //메세지를 보냄
-                                        var created_msg = JSON.parse(postAfetch(wrtn_api2 + `/characters/chat/${created_chatId}/message`, {
-                                            message: usernote_modal_textarea.textContent,
-                                            reroll: false,
-                                            images: [],
-                                            isSuperMode: false
-                                        })).data;
-                                        getAfetch(wrtn_api2 + `/characters/chat/${created_chatId}/message/${created_msg}`);
-                                        var res_msg = JSON.parse(getAfetch(wrtn_api2 + `/characters/chat/${created_chatId}/message/${created_msg}/result`)).data.content;
-                                        usernote_modal_textarea.value = res_msg; //textarea에 값을 반영
-                                    } else {
-                                        var created_chatId = localStorage.getItem(local_usernote); //이미 파진 채팅방을 가져옴
-                                        //그 방에 textarea값 즉 요약할 유저노트내용을 보냄
-                                        var created_msg = JSON.parse(postAfetch(wrtn_api2 + `/characters/chat/${created_chatId}/message`, {
-                                            message: usernote_modal_textarea.textContent,
-                                            reroll: false,
-                                            images: [],
-                                            isSuperMode: false
-                                        })).data;
-                                        getAfetch(wrtn_api2 + `/characters/chat/${created_chatId}/message/${created_msg}`);
-                                        var res_msg = JSON.parse(getAfetch(wrtn_api2 + `/characters/chat/${created_chatId}/message/${created_msg}/result`)).data.content;
-                                        usernote_modal_textarea.value = res_msg; //textarea에 값을 반영
-                                    }
-                                })
-                                usernote_modal_update_btn.addEventListener('click', () => {
-                                    //새로운 방을 팜
-                                    var created_chatId = JSON.parse(postAfetch(wrtn_api + "/chat", {
-                                        unitId: auto_summation_characterChatId,
-                                        type: "character",
-                                        userNote: {"content": ""}
-                                    })).data._id;
-                                    localStorage.setItem(local_usernote, created_chatId); //스토리지에 방 id 저장
-                                    alert("업데이트 되었습니다! (채팅방 확인)");
-                                })
-                                /*
-                                밑의 코드는 기존 버튼들을 삭제후 새로운 버튼으로 대체하는 내용임
-                                 */
-                                usernote_modal_btn_c.remove();
-                                usernote_modal_apply_btn_struct.remove();
-                                usernote_modal_btn_x.remove();
-                                usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes.item(0).appendChild(usernote_modal_x);
-                                usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes.item(2).appendChild(usernote_modal_new_close_btn);
-                                usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes.item(2).appendChild(usernote_modal_apply_btn);
-                                usernote_modal_btn.childNodes.item(0).textContent = auto_summation;
-                                usernote_modal_update_btn.childNodes.item(0).textContent = auto_summation_update;
-                                usernote_modal_struct.appendChild(usernote_modal_update_btn);
-                                usernote_modal_struct.appendChild(usernote_modal_btn);
-                            }
-                        }
-                        else{
-                            var e = usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes.item(1);
-                            if (e.textContent == "캐릭터가 이 채팅방에서 반드시 기억해 줬으면 하는 내용을 적어주세요"){
-                                e.textContent = usernote_for_error;
-                            }
-                        }
-                    }
-                }
-                else if (document.URL.split("/")[4] != "u"){
-                    clearTimeout(km);//현재 접속한 url이 대화url이 아닐경우 반복 끝냄
-                }
-            },100)
-
-            //+버튼 클릭시
-            function clicked() {
-                if (l.length == 9){
-                    return alert("9개가 최대 입니다.");
-                }
-                const vsm = document.getElementsByTagName("textarea").item(0); //채팅바
-                if (vsm.value == ''){
-                    return alert("내용 입력후 추가해주세요");
-                }
-                const vsmc = document.createElement("div"); // 1~9버튼 추가
-                vsmc.setAttribute("display","flex");
-                vsmc.setAttribute("class","css-13yljkq");
-                vsmc.setAttribute("id",`${l.length}`);
-                vsmc.append(`${l.length + 1}`);
-                l[l.length] = [l.length,vsm.value]
-                // 1~9 버튼 클릭시
-                function v_clicked() {
-                    const vsm2 = document.getElementsByTagName("textarea").item(0);
-                    vsm2.value = l[vsmc.id][1];
-                }
-                vsmc.addEventListener("click",v_clicked);
-                targetDiv.appendChild(vsmc);
-                targetDiv.appendChild(NBS_E);
-                targetDiv.appendChild(NS);
-            }
-
-            //-버튼 클릭시
-            function E_clicked() {
-                const a = document.getElementById(`${l.length-1}`);
-                a.remove();
-                l.pop();
-            }
-
-            window.addEventListener("keydown", keysPressed, false);
-            window.addEventListener("keyup", keysReleased, false);
-
-            var keys = [];
-
-            function keysPressed(e) {
-                keys[e.keyCode] = true;
-
-                for (let i = 0; i < 58; i++) {
-                     if (keys[17] && keys[49 + i] && l.length > i) {
-                        const vsm = document.getElementsByTagName("textarea").item(0);
-                        vsm.value = l[i][1];
-                        e.preventDefault();	 // prevent default browser behavior
-                    }
-                }
-            }
-            function keysReleased(e) {
-                keys[e.keyCode] = false;
-            }
-            //페르소나 버튼 누를시
-            function persona_change(){
-                //유저 wrtnUid가져오기
-                fetch(wrtn_api + '/user',{
-                  method: "GET",
-                  headers: {
-                    "Authorization": `Bearer ${getCookie(token_key)}`,
-                  }}).then(res => res.json()).then(data => {
-                      //유저 id가져오기
-                      fetch(wrtn_api + `/character-profiles/${data.data.wrtnUid}`,{
-                          method: "GET",
-                          headers: {
-                            "Authorization": `Bearer ${getCookie(token_key)}`,
-                          }
-                    }).then(res=>res.json()).then(data=>{
-                        const pid = data.data._id;
-                        //유저 id를 사용해 페르소나 목록 조회
-                        fetch(wrtn_api + `/character-profiles/${data.data._id}/character-chat-profiles`,{
-                          method: "GET",
-                          headers: {
-                            "Authorization": `Bearer ${getCookie(token_key)}`,
-                          }
-                        }).then(res=>res.json()).then(data=>{
-                            if (bar_c.childNodes.length > 1){
-                                for (let i = bar_c.childNodes.length - 1; i > 1 ; i--) {
-                                    bar_c.childNodes[2].remove();
-                                }
-                            }
-                            c = 0;
-                            for (const datum of data.data.characterChatProfiles) {
-                                const personaL = persona.cloneNode(true); //페르소나 목록 요소
-                                const for_personaL = document.createElement("div");//페르소나 한칸 띄우기
-                                personaL.insertBefore(for_personaL,personaL.childNodes[0]);
-                                const personaL_p = personaL.childNodes.item(2); //페르소나 text
-                                //대표 프로필일 경우 '<-' 붙이기 아니면 없음
-                                if (datum.isRepresentative){
-                                 personaL_p.textContent = `${datum.name} <-`;
-                                }
-                                else {
-                                    personaL_p.textContent = datum.name;
-                                }
-                                personaL.setAttribute("id",`${c}`) //페르소나 요소 id 지정
-                                //페르소나 목록을 누를시
-                                function personaL_change(){
-                                    var mpid = "";
-                                    m_i = 0;
-                                    for (m of data.data.characterChatProfiles) {
-                                        if (`${m_i}` == personaL.id) {
-                                            var mpid = m._id; //뭔지 모르겠지만 혹시몰라서 안지움
-                                            var name = m.name; //페르소나 이름 가져오기
-                                            var information = m.information; //페르소나 정보 가져오기
-                                        }
-                                        m_i++;
-                                    }
-                                    var personaL_change_modal = document.createElement("modal");//페르소나 모달 팝업
-                                    personaL_change_modal.innerHTML = persona_modal_html;
-                                    personal_modal.setAttribute("style","position: relative !important;\n" +
-                                        "    z-index: 11 !important;") //이게 있어야 모달이 작동함
-                                    personal_modal.appendChild(personaL_change_modal.firstChild);
-                                    var personal_modal_name = document.getElementById("W_name"); //모달 내부 이름 textarea
-                                    personal_modal_name.value = name;
-                                    var personal_modal_info = document.getElementById("W_info"); //모달 내부 정보 textarea
-                                    personal_modal_info.value = information;
-                                    var personal_modal_Sbtn = document.getElementById("W_sumbit"); //모달 내부 등록 버튼
-                                    var personal_modal_Cbtn = document.getElementById("W_close"); //모달 내부 닫기 버튼
-                                    var personal_modal_x = document.getElementById("W_x"); //모달 내부 x버튼
-                                    //모달 등록버튼을 눌렀을시
-                                    personal_modal_Sbtn.addEventListener("click",()=>{
-                                        //모달의 내용을 조합해 페르소나 등록 및 대표프로필로 설정
-                                        fetch(wrtn_api + `/character-profiles/${pid}/character-chat-profiles/${mpid}`,{
-                                         method: "PATCH",
-                                          headers: {
-                                            "Authorization": `Bearer ${getCookie(token_key)}`,
-                                              "Content-Type": "application/json",
-                                          },
-                                          body: JSON.stringify({
-                                            isRepresentative: true,
-                                              name: personal_modal_name.value,
-                                              information: personal_modal_info.value,
-                                          })
-                                        }).then(res=>res.json()).then(data=>{
-                                            if (data.result == "SUCCESS"){
-                                                alert("페르소나 등록 성공!");
-                                                personal_modal.childNodes.item(0).remove();
-                                                persona_change();
-                                            }
-                                            else{
-                                                alert("페르소나 등록 실패!");
-                                                personal_modal.childNodes.item(0).remove();
-                                            }
-                                        })
-                                    })
-                                    //모달 내부 닫기버튼 눌렀을시
-                                    personal_modal_Cbtn.addEventListener("click",()=>{
-                                        personal_modal.childNodes.item(0).remove();
-                                    })
-                                    //모달 내부 x버튼 눌렀을시
-                                    personal_modal_x.addEventListener("click",()=>{
-                                        personal_modal.childNodes.item(0).remove();
-                                    })
-                                }
-                                personaL.addEventListener('click',personaL_change);
-                                bar_c.appendChild(personaL);
-                                c++;
-                            }
-                          })
-                      })
-                });
-        }
-        }catch (e){
-            console.log(e);
-        }
-    }
-
-    // 클립보드의 텍스트를 가져오기
-    function getClipboardTextModern() {
-        return navigator.clipboard.readText(); // 붙여넣기
-    }
-
-    // 텍스트를 클립보드에 복사하기
-    function copyToClipboard(text) {
-        navigator.clipboard.writeText(text) // 복사하기
-            .then(() => {
-                console.log('클립보드에 복사되었습니다.');
-            })
-            .catch(err => {
-                console.error('클립보드 복사에 실패했습니다:', err);
-            });
+        chatroom();
     }
 
     //캐릭터 관리
     if (document.URL.split("/")[4] == "my"){
-        /*
-        여러번 수정 끝에 만들어 낸거임
-        계속 copy to json,copy to paste 버튼을 누르면 selected가 요소 인덱스 범위보다 1더 커지는
-        개애미뒤진 병신같은 쓰레기 조자년 버그가 발생함
-        진짜 눈물 질질 새면서 처만드느라 뒤질뻔 했네 시발
-        고친거 라기 보다는 현재도 opend 변수가 없으면 생기는 버그임 시발
-        도대체 왜?
-         */
-        var selected = 0; //점 세개 퍼튼이 어떤 요소의 버튼인지 판별하는 번수
-        opend=false; //구원자
-        setInterval(()=>{
-            var myTdiv = document.getElementsByClassName("css-j7qwjs"); //점 세개 버튼
-            var tipbar = document.getElementsByClassName("css-1w2weol"); //dropdown 목록
-            //드랍다운이 있는지 없는지
-            if (tipbar != null){
-                var tipbar_struct = document.getElementsByClassName("css-1wh9bd4").item(0); //드랍다운 내부 요소 (형식용)
-                //화이트 테마일시
-                if (tipbar_struct == null){
-                    tipbar_struct = document.getElementsByClassName("css-zklud").item(0); //화이트 테마용 드랍다운 내부요소 (형식용)
-                }
-                //드랍다운 내부에 copy to json, copy to paste, publish 추가
-                if (tipbar_struct != null){
-                    //드랍다운이 일정 개수 이상 늘어나지 않도록 하는 조건문 5 가 아니라 3이여도 작동할듯
-                    if (tipbar.item(0).childNodes.length < 5) {
-                        var tipbar_copy = tipbar_struct.cloneNode(true); //copy to json 버튼
-                        var tipbar_paste = tipbar_struct.cloneNode(true); //copy to paste 버튼
-                        var tipbar_clone = tipbar_struct.cloneNode(true); //publish 버튼
-                        //copy to json
-                        //copy to json가 현재 없다면
-                        if (tipbar.item(0).childNodes.item(2) == null){
-                            tipbar_copy.childNodes.item(0).textContent = copyTojson;
-                            //copy to json 클릭시
-                            tipbar_copy.addEventListener('click',()=>{
-                                //유저가 제작한 캐챗 목록을 10000개 조회함 (설마 이것보다 많이 만든 사람이 있겠어?)
-                                fetch(wrtn_api + `/characters/me?limit=${forced_limit}`,{
-                                    method: "GET",
-                                    headers: {
-                                        "Authorization": `Bearer ${getCookie(token_key)}`,
-                                    },
-                                }).then(res => res.json()).then(data => {
-                                    i=0;
-                                    for (const datum of data.data.characters) {
-                                        //조회한 캐챗을 가져옴
-                                        if (i == selected){
-                                            //캐챗 id를 사용해서 캐챗의 모든 정보를 가져온후 클립보드에 복사
-                                            fetch(wrtn_api + `/characters/me/${datum._id}`,{
-                                                method: "GET",
-                                                headers: {
-                                                    "Authorization": `Bearer ${getCookie(token_key)}`,
-                                                },
-                                            }).then(res => res.json()).then(data => {
-                                                console.log(data);
-                                                copyToClipboard(JSON.stringify(data.data));
-                                                alert('클립보드에 복사되었습니다!');
-                                            })
-                                        }
-                                        i++;
-                                    }
-                                })
-                            })
-                            tipbar.item(0).appendChild(tipbar_copy);
-                        }
-                        //paste to json
-                        //paste to json가 없다면
-                        if (tipbar.item(0).childNodes.item(3) == null){
-                            tipbar_paste.childNodes.item(0).textContent = pasteTojson;
-                            //paste to json 클릭시
-                            tipbar_paste.addEventListener('click',()=>{
-                                //유저가 제작한 캐챗 목록을 10000개 조회함 (설마 이것보다 많이 만든 사람이 있겠어?)
-                                fetch(wrtn_api + `/characters/me?limit=${forced_limit}`,{
-                                    method: "GET",
-                                    headers: {
-                                        "Authorization": `Bearer ${getCookie(token_key)}`,
-                                    },
-                                }).then(res => res.json()).then(data => {
-                                    i = 0;
-                                    for (const datum of data.data.characters) {
-                                        //조회한 캐챗을 가져옴
-                                        if (i == selected) {
-                                            //클립보드를 가져옴
-                                            getClipboardTextModern().then(function (clipboardContent) {
-                                                json_data = JSON.parse(clipboardContent); //클립보드 내용 json화
-                                                //startingSets에 _id 항목이 있는데 이게 있으면 안되서 지우는거
-                                                for (const a of json_data.startingSets) {
-                                                    delete a._id;
-                                                }
-                                                //json화 시킨 캐릭터챗 정보를 덮어 씌움
-                                                fetch(wrtn_api + `/characters/${datum._id}`, {
-                                                    method: "PATCH",
-                                                    headers: {
-                                                        "Authorization": `Bearer ${getCookie(token_key)}`,
-                                                        "Content-Type": "application/json",
-                                                    },
-                                                    body: JSON.stringify({
-                                                        name: json_data.name,
-                                                        description: json_data.description,
-                                                        profileImageUrl: json_data.profileImage.origin,
-                                                        model: json_data.model,
-                                                        initialMessages: json_data.initialMessages,
-                                                        characterDetails: json_data.characterDetails,
-                                                        replySuggestions: json_data.replySuggestions,
-                                                        chatExamples: json_data.chatExamples,
-                                                        situationImages: json_data.situationImages,
-                                                        categoryIds: [json_data.categories[0]._id],
-                                                        tags: json_data.tags,
-                                                        visibility: json_data.visibility,
-                                                        promptTemplate: json_data.promptTemplate.template,
-                                                        isCommentBlocked: json_data.isCommentBlocked,
-                                                        defaultStartingSetName: json_data.defaultStartingSetName,
-                                                        startingSets: json_data.startingSets,
-                                                        keywordBook: json_data.keywordBook,
-                                                        customPrompt: json_data.customPrompt,
-                                                        defaultStartingSetSituationPrompt: json_data.defaultStartingSetSituationPrompt,
-                                                    })
-                                                }).then(res => res.json).then(data => {
-                                                    alert("캐챗 변경 성공! (새로고침 후 적용됩니다.)");
-                                                })
-                                            })
-                                        }
-                                        i++
-                                    }
-                                })
-                            })
-                            tipbar.item(0).appendChild(tipbar_paste);
-                        }
-                        //publish
-                        //publish가 없다면
-                        if (tipbar.item(0).childNodes.item(4) == null){
-                            tipbar_clone.childNodes.item(0).textContent = publish;
-                            tipbar_clone.addEventListener("click",()=> {
-                                //유저가 제작한 캐챗 목록을 10000개 조회함 (설마 이것보다 많이 만든 사람이 있겠어?)
-                                fetch(wrtn_api + `/characters/me?limit=${forced_limit}`,{
-                                    method: "GET",
-                                    headers: {
-                                        "Authorization": `Bearer ${getCookie(token_key)}`,
-                                    },
-                                }).then(res => res.json()).then(data => {
-                                    i=0;
-                                    for (const datum of data.data.characters) {
-                                        //조회한 캐챗을 가져옴
-                                        if (i == selected){
-                                            //새 캐챗을 만듬
-                                            fetch(wrtn_api + `/characters/me/${datum._id}`,{
-                                                method: "GET",
-                                                headers: {
-                                                    "Authorization": `Bearer ${getCookie(token_key)}`,
-                                                },
-                                            }).then(res => res.json()).then(data => {
-                                                json_data = data.data; //기본 캐챗의 json데이터
-                                                //startingSets의 _id가 있으면 안되서 지움
-                                                for (const a of json_data.startingSets) {
-                                                    delete a._id;
-                                                }
-                                                /*
-                                                새로운 캐릭터챗을 만들때랑
-                                                기존 캐릭터챗을 수정하는거랑
-                                                보내야되는 json 데이터가 다름
-                                                거기다 보내야 되는 내용에 startingSets가 []이면 안되더라
-                                                startingSets가 없거나 아면 요소가 하나 이상 있어야됨
-                                                 */
-                                                //위의 내용에 의거하여 startingSets가 []인지 아닌지 판별
-                                                if (json_data.startingSets.length == 0){
-                                                    json_body = JSON.stringify({
-                                                        name: json_data.name,
-                                                        description: json_data.description,
-                                                        profileImageUrl: json_data.profileImage.origin,
-                                                        model: json_data.model,
-                                                        initialMessages: json_data.initialMessages,
-                                                        characterDetails: json_data.characterDetails,
-                                                        replySuggestions: json_data.replySuggestions,
-                                                        chatExamples: json_data.chatExamples,
-                                                        situationImages: json_data.situationImages,
-                                                        categoryIds: [json_data.categories[0]._id],
-                                                        tags: json_data.tags,
-                                                        visibility: "public",
-                                                        promptTemplate: json_data.promptTemplate.template,
-                                                        isCommentBlocked: json_data.isCommentBlocked,
-                                                        defaultStartingSetName: json_data.defaultStartingSetName,
-                                                        keywordBook: json_data.keywordBook,
-                                                        customPrompt: json_data.customPrompt,
-                                                        defaultStartingSetSituationPrompt: json_data.defaultStartingSetSituationPrompt,
-                                                        isAdult: json_data.isAdult,
-                                                    })
-                                                }
-                                                else{
-                                                    json_body = JSON.stringify({
-                                                        name: json_data.name,
-                                                        description: json_data.description,
-                                                        profileImageUrl: json_data.profileImage.origin,
-                                                        model: json_data.model,
-                                                        initialMessages: json_data.initialMessages,
-                                                        characterDetails: json_data.characterDetails,
-                                                        replySuggestions: json_data.replySuggestions,
-                                                        chatExamples: json_data.chatExamples,
-                                                        situationImages: json_data.situationImages,
-                                                        categoryIds: [json_data.categories[0]._id],
-                                                        tags: json_data.tags,
-                                                        visibility: "public",
-                                                        promptTemplate: json_data.promptTemplate.template,
-                                                        isCommentBlocked: json_data.isCommentBlocked,
-                                                        defaultStartingSetName: json_data.defaultStartingSetName,
-                                                        startingSets: json_data.startingSets,
-                                                        keywordBook: json_data.keywordBook,
-                                                        customPrompt: json_data.customPrompt,
-                                                        defaultStartingSetSituationPrompt: json_data.defaultStartingSetSituationPrompt,
-                                                        isAdult: json_data.isAdult,
-                                                    })
-                                                }
-                                                //캐릭터챗 만들기
-                                                fetch(wrtn_api + "/characters",{
-                                                    method: "POST",
-                                                    headers: {
-                                                        "Authorization": `Bearer ${getCookie(token_key)}`,
-                                                        "Content-Type": "application/json",
-                                                    },
-                                                    body: json_body,
-                                                }).then(res => res.json()).then(data => {
-                                                    alert("캐챗 공개 성공! (새로고침 후 적용됩니다.)");
-                                                })
-                                            })
-                                        }
-                                        i++;
-                                    }
-                                })
-                            })
-                            tipbar.item(0).appendChild(tipbar_clone);
-                        }
-                    }
-                    opend=true;
-                }
-                else {
-                    opend = false;
-                }
-            }
-            else{
-            }
-            //모든 점세개에 클릭 이벤트리스너를 추가
-            i=0;
-            for (const myTdivElement of myTdiv) {
-                if (myTdivElement.id == ""){
-                    myTdivElement.setAttribute("id",i)
-                    myTdivElement.addEventListener('click',()=>{
-                        j=0;
-                        var myTdiv2 = document.getElementsByClassName("css-j7qwjs");
-                        for (const argument of myTdiv2) {
-                            if (argument==myTdivElement){
-                                if (j != myTdiv2.length){
-                                    if (!opend){
-                                        selected = j;
-                                    }
-                                }
-                            }
-                            j++;
-                        }
-                    })
-                }
-                i++;
-            }
-        },500)
+        my();
     }
     //로컬 스토리지 초기설정
     if (localStorage.getItem(local_saved_prompt) == null){
@@ -1988,80 +2129,10 @@ function main(){
     //캐릭터 만들기
     if (document.URL.split("/")[4] != undefined){
         if (document.URL.split("/")[4].split("?")[0] == "builder"){
-            setInterval(()=>{
-                const Topbar = document.getElementsByClassName("css-xxmugq").item(0).childNodes; // 맨위의 프로필, 상세설정, 시작설정, 미디어, 키워드북, 등록 있는 바
-                i=0;
-                //현재 Topbar 내부의 어느 탭에 있는지 확인
-                for (const topbarElement of Topbar) {
-                    //상세설정 탭에 있을경우
-                    if (topbarElement.classList.contains("css-6bz0qb") && i == 1){
-                        const setting = document.getElementsByClassName("css-9jqaga").item(0); //프롬프트랑 그 설명 + ?있는 칸
-                        const setting_deafult_btn = document.getElementsByClassName("css-2ueqwe").item(0); //파란색 자동생성 버튼
-                        //setting에 아무것도 적용안되있을시
-                        if (setting != null && 4 > setting.childNodes.length){
-                            var recommand_prompt_plus_btn = document.createElement("div"); //+버튼 (양식 겸용)
-                            recommand_prompt_plus_btn.innerHTML = recommand_prompt_html;
-                            const recommand_prompt_minus_btn = recommand_prompt_plus_btn.cloneNode(true); // - 버튼
-                            var json_data = JSON.parse(localStorage.getItem(local_saved_prompt)); //localstorage에 저장된 프롬프트 들고오기
-                            recommand_prompt_minus_btn.childNodes.item(0).textContent = "-";
-                            // + 버튼 누를시
-                            recommand_prompt_plus_btn.addEventListener('click',()=>{
-                                const text = document.getElementsByClassName("css-1vu2uq1").item(0); //textarea 의 내용 들고옴
-                                var json_data = JSON.parse(localStorage.getItem(local_saved_prompt)); //localstorage에 저장된 내용 들고오기
-                                const recommand_promt_btn_add = recommand_prompt_plus_btn.cloneNode(true);//1~9버튼을 만들기
-                                recommand_promt_btn_add.childNodes.item(0).textContent = json_data.prompt.length + 1;
-                                recommand_promt_btn_add.setAttribute("id",json_data.prompt.length);
-                                //1~9버튼 누를시
-                                recommand_promt_btn_add.addEventListener('click',()=>{
-                                    var json_data2 = JSON.parse(localStorage.getItem(local_saved_prompt));//localstorage에 저장된 프롬프트 들고오기
-                                    copyToClipboard(json_data2.prompt[recommand_promt_btn_add.id]); //클립보드에 저장된 프롬프트 복사
-                                    alert("클립보드에 복사되었습니다.");
-                                })
-                                json_data.prompt[json_data.prompt.length] = text.textContent;//프롬프트 추가
-                                setting.insertBefore(recommand_promt_btn_add,recommand_prompt_minus_btn);
-                                localStorage.setItem(local_saved_prompt,JSON.stringify(json_data)); //추가한 프롬프트를 localstorage에 등록
-                            })
-                            // - 버튼 누를시
-                            recommand_prompt_minus_btn.addEventListener('click',()=>{
-                                //이미 1~9버튼을 전부 삭제한 상태에서 누르면 작동 안되게끔하는 조건문
-                                if (setting.childNodes.length > 5){
-                                    const json_data = JSON.parse(localStorage.getItem(local_saved_prompt)); //localstorage에 저장된 프롬프트 들고오기
-                                    setting.childNodes.item(setting.childNodes.length-3).remove(); //1~9 버튼중 마지막 숫자 버튼 삭제
-                                    json_data.prompt.pop(); //저장 된프롬프트 삭제
-                                    localStorage.setItem(local_saved_prompt,JSON.stringify(json_data)); //삭제한 프롬프트를 localstorage에 등록 및 적용
-                                }
-                                else{
-                                    alert("삭제할 항목이 존재하지 않습니다.");
-                                }
-                            })
-                            setting.appendChild(recommand_prompt_plus_btn)
-                            i = 0
-                            //탭 들어가자마자 localstorage에 이미 등록해놓은 프롬프트 불러오기
-                            for (const jsonDatum of json_data.prompt) {
-                                const recommand_promt_add_btn = recommand_prompt_plus_btn.cloneNode(true); //추가할 버튼
-                                recommand_promt_add_btn.childNodes.item(0).textContent = i + 1;
-                                recommand_promt_add_btn.setAttribute("id",i);
-                                //1~9 버튼 누를시
-                                recommand_promt_add_btn.addEventListener('click',()=>{
-                                    var json_data = JSON.parse(localStorage.getItem(local_saved_prompt)); //localstorage에 저장된 프롬프트 들고오기
-                                    copyToClipboard(json_data.prompt[recommand_promt_add_btn.id]); //가져온 프롬프트를 클립보드에 복사
-                                    alert("클립보드에 복사되었습니다.");
-                                })
-                                setting.appendChild(recommand_promt_add_btn);
-                                i++;
-                            }
-                            setting.appendChild(recommand_prompt_minus_btn);
-                            //커스텀 프롬프트 템플릿에는 자동 생성 버튼없어서 없는경우 추가 안함
-                            if (setting_deafult_btn != null){
-                                setting.appendChild(setting_deafult_btn);
-                            }
-                        }
-                    }
-                    i++;
-                }
-            },100)
+            builder();
         }
     }
+    debug('main',true);
 }
 
 
