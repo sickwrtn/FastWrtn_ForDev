@@ -1,18 +1,83 @@
-var s= document.getElementById("copy");
+var review_bar = document.createElement("div");
+document.body.appendChild(review_bar);
+var review_struct = document.createElement("div");
+var server_status = document.getElementsByTagName("h1").item(0);
+review_struct.setAttribute("class","review");
+review_struct.innerHTML = "<h2></h2><p></p><p></p><p></p><p></p><button>추천</button></div>";
+var fastwrtn_api_url = "http://api.fastwrtn.kro.kr";
+var limit = 20;
 
-fetch("https://status.anthropic.com").then(res => res.text()).then(html => {
-    const anthropic_dom = new DOMParser().parseFromString(html, 'text/html');
-    anthropic_dom.getElementsByClassName("masthead-container basic").item(0).remove();
-    anthropic_dom.getElementsByClassName("page-status status-none").item(0).remove();
-    anthropic_dom.getElementsByClassName("incidents-list format-expanded").item(0).remove();
-    anthropic_dom.getElementsByClassName("page-footer border-color font-small").item(0).remove();
-    const lg = anthropic_dom.getElementsByClassName("layout-content status status-index starter");
-    const lgm = anthropic_dom.getElementsByClassName("component-container border-color");
-    const Acss = document.createElement('link');
-    document.body.setAttribute("class","status index status-none");
-    document.body.style.backgroundColor = "white";
-    Acss.setAttribute("rel","stylesheet");
-    Acss.setAttribute("href","https://dka575ofm4ao0.cloudfront.net/assets/status/status_manifest-260e48dd9b8c9b04e8d6c6286f76aecb8ac22f273beea6dba3eee902141bcbfe.css");
-    document.head.appendChild(Acss);
-    document.body.appendChild(lg.item(0));
+document.getElementById("submit-button").addEventListener('click',()=>{
+    fetch(fastwrtn_api_url + `/comment`,{
+        method: "post",
+        headers: {
+            "Content-Type":"application/json"
+        },
+        body: JSON.stringify({
+            name: document.getElementById("name").value,
+            comment: document.getElementById("review-text").value,
+            star:  Number(document.getElementById("rating").value)
+        })
+    }).then(res => res.json()).then(data => {
+        if (data.result == "SUSSES"){
+            alert("등록성공!");
+        }
+        if (data.result == "FAIL"){
+            alert(data.data);
+        }
+    })
 })
+
+fetch(fastwrtn_api_url + `/history?limit=${limit}`)
+    .then(res => res.json())
+    .then(data => {
+        for (const content of data.data) {
+            const review = review_struct.cloneNode(true);
+            review.setAttribute("id",content.id)
+            review.childNodes.item(0).textContent = `별점 : ${content.star}`;
+            review.childNodes.item(1).textContent = content.comment;
+            review.childNodes.item(2).textContent = `작성자 : ${content.name}(${content.ip})`;
+            review.childNodes.item(3).textContent = `작성일 : ${content.date}`; 
+            review.childNodes.item(4).textContent = `리뷰 아이디 : ${content.id}`; 
+            review.childNodes.item(5).textContent = `추천 : ${content.likeCount}`; 
+            review.childNodes.item(5).addEventListener('click',()=>{
+                fetch(fastwrtn_api_url + `/comment/action`,{
+                    method: "post",
+                    headers: {
+                        "Content-Type":"application/json"
+                    },
+                    body: JSON.stringify({
+                        type: "like",
+                        id : Number(review.id)
+                    })
+                }).then(res => res.json()).then(data => {
+                    if (data.result == "FAIL"){
+                        alert(data.data);
+                    }
+                    else{
+                        fetch(fastwrtn_api_url + `/history`)
+                            .then(res => res.json())
+                            .then(data => {
+                                review.childNodes.item(5).textContent = `추천 : ${data.data[review.id].likeCount}`;
+                            })
+                        alert("추천되었습니다!");
+                    }
+                })
+            }) 
+            review_bar.insertAdjacentElement("afterbegin",review);  
+        }
+    })
+
+fetch(fastwrtn_api_url + `/server`)
+    .then(res => res.json())
+    .then(data => {
+        server_status.textContent = "서버상태:";
+        for (let index = 0; index < 5 ; index++) {
+            if ((Math.round(data.data)) > index){
+                server_status.textContent = server_status.textContent + "★";
+            }
+            else{
+                server_status.textContent = server_status.textContent + "☆";
+            }
+        }
+    })
