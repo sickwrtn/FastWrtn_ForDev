@@ -3,7 +3,7 @@ document.body.appendChild(review_bar);
 var review_struct = document.createElement("div");
 var server_status = document.getElementsByTagName("h1").item(0);
 review_struct.setAttribute("class","review");
-review_struct.innerHTML = "<h2></h2><p></p><p></p><p></p><p></p><button>추천</button></div>";
+review_struct.innerHTML = "<h2></h2><p class='content'></p><p></p><p></p><p></p><button>추천</button></div>";
 var fastwrtn_api_url = "http://api.fastwrtn.kro.kr";
 var limit = 20;
 
@@ -34,7 +34,15 @@ fetch(fastwrtn_api_url + `/history?limit=${limit}`)
         for (const content of data.data) {
             const review = review_struct.cloneNode(true);
             review.setAttribute("id",content.id)
-            review.childNodes.item(0).textContent = `별점 : ${content.star}`;
+            review.childNodes.item(0).textContent = `별점 : `
+            for (let index = 0; index < 5 ; index++) {
+                if ((Math.round(content.star)) > index){
+                    review.childNodes.item(0).textContent = review.childNodes.item(0).textContent + "★";
+                }
+                else{
+                    review.childNodes.item(0).textContent = review.childNodes.item(0).textContent + "☆";
+                }
+            }
             review.childNodes.item(1).textContent = content.comment;
             review.childNodes.item(2).textContent = `작성자 : ${content.name}(${content.ip})`;
             review.childNodes.item(3).textContent = `작성일 : ${content.date}`; 

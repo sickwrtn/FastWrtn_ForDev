@@ -6,38 +6,47 @@
     margin-bottom: 10px;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-  
+  }
+
+.content { /* 첫 번째 <p> 태그에 스타일 적용 */
+    font-weight: bold; 
+}  
+
 .review h2 {
     margin-bottom: 5px;
+    color: #333; /* Set heading color */
+    font-size: 16px; /* Increase heading size */
 }
 
 .review p {
     margin: 0;
+    color: #666; /* Set paragraph color */
+    font-size: 14px; /* Increase paragraph size */
 }
+
 .review button {
     background-color: #4CAF50;
     color: white;
-    padding: 5px 10px; /* padding 값을 줄여 버튼 크기 축소 */
+    padding: 5px 10px; /* Padding for smaller button */
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 12px; /* 글자 크기 축소 */
+    font-size: 12px; /* Smaller font size */
     margin: 4px 2px;
     cursor: pointer;
     border: none;
     border-radius: 4px;
 }
-  
+
 .review button:hover {
-    background-color: #3e8e41; /* 마우스 호버 시 배경색 변경 */
+    background-color: #3e8e41;
 }
 
 .review button:active {
-    background-color: #3e8e41; /* 버튼 클릭 시 배경색 변경 */
+    background-color: #3e8e41;
     box-shadow: 0 5px #666;
     transform: translateY(4px);
-}
+    }
 
 h1{
     display: flex;
