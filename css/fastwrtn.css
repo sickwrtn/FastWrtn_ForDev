@@ -25,7 +25,6 @@
 }
 
 .review button {
-    background-color: #4CAF50;
     color: white;
     padding: 5px 10px; /* Padding for smaller button */
     text-align: center;
@@ -38,15 +37,33 @@
     border-radius: 4px;
 }
 
-.review button:hover {
+.recommand {
+    background-color: #4CAF50;
+}
+
+.report {
+    background-color: #c81515;
+}
+
+.recommand:hover {
     background-color: #3e8e41;
 }
 
-.review button:active {
+.recommand:active {
     background-color: #3e8e41;
     box-shadow: 0 5px #666;
     transform: translateY(4px);
-    }
+}
+
+.report:hover {
+    background-color: #9b0b0bb2;
+}
+
+.report:active {
+    background-color: #9b0b0bb2;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+}
 
 h1{
     display: flex;

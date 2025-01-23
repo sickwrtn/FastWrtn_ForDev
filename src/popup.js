@@ -3,7 +3,7 @@ document.body.appendChild(review_bar);
 var review_struct = document.createElement("div");
 var server_status = document.getElementsByTagName("h1").item(0);
 review_struct.setAttribute("class","review");
-review_struct.innerHTML = "<h2></h2><p class='content'></p><p></p><p></p><p></p><button>추천</button></div>";
+review_struct.innerHTML = "<h2></h2><p class='content'></p><p></p><p></p><p></p><button class='recommand'>추천</button><button class='report'>신고</button></div>";
 var fastwrtn_api_url = "http://api.fastwrtn.kro.kr";
 var limit = 20;
 
@@ -72,6 +72,16 @@ fetch(fastwrtn_api_url + `/history?limit=${limit}`)
                     }
                 })
             }) 
+            review.childNodes.item(6).addEventListener('click',()=>{
+                fetch(fastwrtn_api_url + `/report?id=${review.id}`).then(res => res.json()).then(data => {
+                    if (data.result == "FAIL"){
+                        alert(data.data);
+                    }
+                    else{
+                        alert("신고되었습니다.")
+                    }
+                })
+            })
             review_bar.insertAdjacentElement("afterbegin",review);  
         }
     })
