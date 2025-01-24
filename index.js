@@ -20,6 +20,23 @@
 
 */
 
+/* CODE MAP
+
+-> : case move
+
+=> : move
+
+setInterval => main() {
+    ->  character() : 메인화면 기능 /character (랭킹 플러스, debug)
+
+    ->  chatroom() : 채팅방 기능 /character/u (단축기능,페르소나,유저노트 요약)
+
+    ->  my() : 캐릭터챗 제작 편의기능 /character/me (copy to json, paste to json, publish)
+
+    ->  builder() : 캐릭터챗 제작 편의기능 /character/builder (프롬프트 저장)
+}
+*/
+
 //environment variables
 var wrtn_api = "https://api.wrtn.ai/be"; //api
 var wrtn_api2 = "https://api2.wrtn.ai/terry"; //api1
@@ -27,12 +44,12 @@ var wrtn_william = "https://william.wow.wrtn.ai"; //william
 var scroll_all_amount = 300 // <  > 누를시 이동할 스크롤 양
 var scroll_amount = 10; // 끊어서 스크롤 되는 양
 var limit = 30 // 불러올 캐챗수 (랭킹 플러스용)
-var load_limit = 50;
-var forced_limit = 40;
+var load_limit = 50; //불러올 기준을 만족하는 캐챗수
+var forced_limit = 40; //me?limite={}
 var likeCount_limit = 10 // 좋아요수가 10개 이상
 var chatCount_limit = 30 // 채팅수가 30개 이상 이면 올라옴
 var auto_summation_characterChatId = "6787aecf65c02321daf25b0d"; // 자동요약기능을 수행할 캐챗 id
-var local_IsDebug = "debug";
+var local_IsDebug = "debug"; //로컬스토리지 디버그 위치
 var local_saved_prompt = "saved_prompt"; //로컬스토리지 프롬프트 저장 위치
 var local_usernote = "usernote"; //로컬스토리지 유저노트용 캐챗방 id 저장 위치
 var token_key = "access_token"; //쿠키중 가져올 토큰값 (조회 및 수정용 토큰 정보를 수집하지 않음)
@@ -899,6 +916,12 @@ function filter_character_list(characterListElement,IsCe){
 }
 
 function load_character_func(cursorL,feed_struct_element,CeCreator,character_list,loaded,feed_struct_elements){
+    /* /character response
+    {
+        "result":"SUCCESS",
+        "data":{[{data},{data},],"nextCursor":null/cursor}
+    }
+    */
     fetch(wrtn_api + `/characters?limit=${limit}&sort=createdAt&cursor=${cursorL}`,{
         method: "GET",
         headers: {
@@ -1206,11 +1229,17 @@ function scroll_func(feed_struct_scroll,feed_struct_six, feed_struct_scroll_btn_
 }
 //제작자의 다른 캐릭터 보기 기능
 function plus_modal_recommand_creator_func(creator_character,plus_modal_recommand_creator,isModal){
+    //최상위 엘리먼트
     const creator_character_top = plus_modal_recommand_creator.childNodes[1].childNodes.item(0);
+    //캐챗엘리먼트 구조
     const creator_character_struct = creator_character_top.childNodes.item(0);
+    // < 버튼,캐챗,> 버튼 상위 엘리먼트
     const creator_character_six = plus_modal_recommand_creator.childNodes.item(1);
+    // 스크롤 양
     const creator_character_scroll = creator_character_six.childNodes.item(0);
+    // > 버튼
     const creator_character_btn = creator_character_six.childNodes[1].childNodes.item(0);
+    // < 버튼
     const creater_character_struct_scroll_btn_l = document.createElement("div"); // < 버튼
     debug("plus_modal_recommand_creator_func",1);
     creater_character_struct_scroll_btn_l.setAttribute("width", "61px");
@@ -1222,11 +1251,13 @@ function plus_modal_recommand_creator_func(creator_character,plus_modal_recomman
         "    z-index: 2;\n" +
         "    background: linear-gradient(90deg, rgb(26, 25, 24) 0%, rgba(26, 25, 24, 0) 100%);");
     creater_character_struct_scroll_btn_l.innerHTML = feed_front_html_scroll;
+    //버튼 클릭시 scroll 되게끔
     creator_character_btn.addEventListener('click',()=>{
         scroll_func(creator_character_scroll,creator_character_six,creater_character_struct_scroll_btn_l,scroll_all_amount,scroll_amount);
         debug("creator_character_btn",3)
     })
     i = 0;
+    //내부에 캐릭터 삽입
     for (const element of creator_character) {
         const creator_character_elment = creator_character_struct.cloneNode(true);
         creator_character_elment.setAttribute("id",i);
@@ -1259,14 +1290,18 @@ function plus_modal_recommand_creator_func(creator_character,plus_modal_recomman
 function date_and_comment(plus_modal_date_and_comment_struct,comment){
     if (comment.writer.profileImage == undefined){
         var guest = document.createElement('div');
+        //프로필사진 없는 유저의 프로필사진 대용 svg
         guest.innerHTML = "<svg width=\"24\" height=\"24\" viewBox=\"0 0 24 25\" fill=\"currentColor\" xmlns=\"http://www.w3.org/2000/svg\" color=\"#85837dff\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M21.7968 14.4524C20.8644 19.0092 16.8325 22.437 12 22.437C11.6548 22.437 11.3137 22.4195 10.9776 22.3854C5.935 21.8733 2 17.6147 2 12.437C2 6.91416 6.47715 2.43701 12 2.43701C17.5228 2.43701 22 6.91416 22 12.437C22 13.1274 21.93 13.8014 21.7968 14.4524ZM16 9.43701C16 11.6462 14.2091 13.437 12 13.437C9.79086 13.437 8 11.6462 8 9.43701C8 7.22787 9.79086 5.43701 12 5.43701C14.2091 5.43701 16 7.22787 16 9.43701ZM18.5786 16.9904C17.1344 19.0731 14.7265 20.437 12 20.437C9.27351 20.437 6.86558 19.0731 5.42131 16.9903C5.79777 16.4264 6.28345 15.9604 6.86686 15.5891C8.2895 14.6837 10.1521 14.437 11.9999 14.437C13.8478 14.437 15.7104 14.6837 17.133 15.5891C17.7165 15.9604 18.2022 16.4264 18.5786 16.9904Z\" fill=\"currentColor\"></path></svg>";
         guest = guest.childNodes.item(0);
+        //기존 프로필사진이 들어가는 공간 삭제
         plus_modal_date_and_comment_struct.childNodes[1].childNodes[1].childNodes[0].remove();
         plus_modal_date_and_comment_struct.childNodes[1].childNodes[1].insertBefore(guest,plus_modal_date_and_comment_struct.childNodes[1].childNodes[1].childNodes.item(0));
     }
     else{
+        //모달에 뜨는 댓글의 이미지
         plus_modal_date_and_comment_struct.childNodes[1].childNodes[1].childNodes[0].childNodes.item(0).src = comment.writer.profileImage.w200;
     }
+    //댓글 내용
     plus_modal_date_and_comment_struct.childNodes[1].childNodes[1].childNodes.item(1).textContent = comment.content;
     debug("date_and_comment",0);
 }
@@ -1409,6 +1444,14 @@ function character(){
 
 //제작한 캐챗 불러오기
 function load_my_character_func(cursor="",my_character_list,w_func){
+    /* /character/me response
+    {
+        "result":"SUCCESS",
+        "data":{[{data},{data},],"nextCursor":null/cursor}
+    }
+    */
+   //cursor 구현은 재귀함수로 구현함cursor가 null일때까지 반복
+   //아직 테스트는 못해봄
     if (cursor == ""){
         path = `/characters/me?limit=${forced_limit}`;
     }
@@ -2281,6 +2324,7 @@ setInterval(()=>{
     lastest = document.URL;
 },500)
 
+//main()
 function main(){
     //캐릭터 플러스 랭킹 기능
     if (document.URL.split("/")[3] == "character" && document.URL.split("/").length == 4){
