@@ -905,6 +905,85 @@ function filter_character_list(characterListElement,IsCe){
     }
 }
 
+function load_character_func(cursorL,feed_struct_element,CeCreator,character_list,loaded,feed_struct_elements){
+    fetch(wrtn_api + `/characters?limit=${limit}&sort=createdAt&cursor=${cursorL}`,{
+        method: "GET",
+        headers: {
+            "Authorization": `Bearer ${getCookie(token_key)}`,
+    }}).then(res => res.json()).then(data => {
+        for (const element of data.data.characters) {
+            if(filter_character_list(element,CeCreator)){
+                character_list[character_list.length] = element;
+                const fe = feed_struct_element.cloneNode(true);
+                if (fe.childNodes[0].childNodes[0].childNodes[0].childNodes.item(1) != null) {
+                    fe.childNodes[0].childNodes[0].childNodes[0].childNodes.item(1).remove();
+                }
+                fe.setAttribute("id", loaded);
+                fe.setAttribute("src", element._id)
+                try {
+                    fe.childNodes[0].childNodes[0].childNodes[0].childNodes.item(0).src = element.profileImage.w600;
+                } catch {
+                    console.log("image");
+                }
+                try {
+                    fe.childNodes[0].childNodes[1].childNodes.item(0).textContent = element.name;
+                } catch {
+                    console.log("name");
+                }
+                try {
+                    fe.childNodes[0].childNodes[1].childNodes.item(1).textContent = element.description;
+                } catch {
+                    console.log("info");
+                }
+                try {
+                    fe.childNodes[1].childNodes.item(1).textContent = element.creator.nickname;
+                } catch {
+                    console.log("creater");
+                }
+                try {
+                    //팝업 이벤트 리스너
+                    const fe_event_bar = fe.childNodes.item(0);
+                    const fe_creator_event_bar = fe.childNodes.item(1);
+                    fe_creator_event_bar.addEventListener('click',()=>{
+                        window.location.href = `https://wrtn.ai/character/profile/${character_list[fe.id].creator.wrtnUid}`;
+                    })
+                    fe_event_bar.addEventListener("click", () => {
+                        const isModal = document.getElementById("web-modal");
+                        //모달 존재 여부
+                        if (isModal == null){
+                            plus_modal_yes(character_list,fe);
+                        }
+                        else{
+                            plus_modal_no(isModal,character_list,fe);
+                        }
+                    })
+                } catch {
+                    console.log("link");
+                }
+                try {
+                    if (!character_list[loaded].creator.isCertifiedCreator) {
+                        fe.childNodes[1].childNodes.item(2).remove();
+                    }
+                } catch {
+                    console.log("isCertifiedCreator");
+                }
+                try {
+                    if (!character_list[loaded].isAdult) {
+                        fe.childNodes[0].childNodes[0].childNodes[2].childNodes.item(0).remove();
+                    }
+                } catch {
+                    console.log("isCertifiedCreator");
+                }
+                feed_struct_elements.appendChild(fe);
+                loaded++;  
+            }
+        }
+        if (loaded < load_limit){
+            load_character_func(data.data.nextCursor,feed_struct_element,CeCreator,character_list,loaded,feed_struct_elements);
+        }
+    })
+}    
+
 //디버그 버튼
 function debug_btn(){
     var debug_Interval = setInterval(()=>{
@@ -1069,85 +1148,7 @@ function plus_modal_func(Tfeed,CeCreator){
                             }
                             debug("first_charcter_section",2)
                             cursor = data.data.nextCursor;
-                            function loadF(cursorL){
-                                fetch(wrtn_api + `/characters?limit=${limit}&sort=createdAt&cursor=${cursorL}`,{
-                                    method: "GET",
-                                    headers: {
-                                        "Authorization": `Bearer ${getCookie(token_key)}`,
-                                }}).then(res => res.json()).then(data => {
-                                    for (const element of data.data.characters) {
-                                        if(filter_character_list(element,CeCreator)){
-                                            character_list[character_list.length] = element;
-                                            const fe = feed_struct_element.cloneNode(true);
-                                            if (fe.childNodes[0].childNodes[0].childNodes[0].childNodes.item(1) != null) {
-                                                fe.childNodes[0].childNodes[0].childNodes[0].childNodes.item(1).remove();
-                                            }
-                                            fe.setAttribute("id", loaded);
-                                            fe.setAttribute("src", element._id)
-                                            try {
-                                                fe.childNodes[0].childNodes[0].childNodes[0].childNodes.item(0).src = element.profileImage.w600;
-                                            } catch {
-                                                console.log("image");
-                                            }
-                                            try {
-                                                fe.childNodes[0].childNodes[1].childNodes.item(0).textContent = element.name;
-                                            } catch {
-                                                console.log("name");
-                                            }
-                                            try {
-                                                fe.childNodes[0].childNodes[1].childNodes.item(1).textContent = element.description;
-                                            } catch {
-                                                console.log("info");
-                                            }
-                                            try {
-                                                fe.childNodes[1].childNodes.item(1).textContent = element.creator.nickname;
-                                            } catch {
-                                                console.log("creater");
-                                            }
-                                            try {
-                                                //팝업 이벤트 리스너
-                                                const fe_event_bar = fe.childNodes.item(0);
-                                                const fe_creator_event_bar = fe.childNodes.item(1);
-                                                fe_creator_event_bar.addEventListener('click',()=>{
-                                                    window.location.href = `https://wrtn.ai/character/profile/${character_list[fe.id].creator.wrtnUid}`;
-                                                })
-                                                fe_event_bar.addEventListener("click", () => {
-                                                    const isModal = document.getElementById("web-modal");
-                                                    //모달 존재 여부
-                                                    if (isModal == null){
-                                                        plus_modal_yes(character_list,fe);
-                                                    }
-                                                    else{
-                                                        plus_modal_no(isModal,character_list,fe);
-                                                    }
-                                                })
-                                            } catch {
-                                                console.log("link");
-                                            }
-                                            try {
-                                                if (!character_list[loaded].creator.isCertifiedCreator) {
-                                                    fe.childNodes[1].childNodes.item(2).remove();
-                                                }
-                                            } catch {
-                                                console.log("isCertifiedCreator");
-                                            }
-                                            try {
-                                                if (!character_list[loaded].isAdult) {
-                                                    fe.childNodes[0].childNodes[0].childNodes[2].childNodes.item(0).remove();
-                                                }
-                                            } catch {
-                                                console.log("isCertifiedCreator");
-                                            }
-                                            feed_struct_elements.appendChild(fe);
-                                            loaded++;  
-                                        }
-                                    }
-                                    if (loaded < load_limit){
-                                        loadF(data.data.nextCursor);
-                                    }
-                                })
-                            }       
-                            loadF(cursor);
+                            load_character_func(cursor,feed_struct_element,CeCreator,character_list,loaded,feed_struct_elements);
                         })
                         IsLoaded = true;
                         debug("character");
@@ -1410,6 +1411,33 @@ function character(){
         plus_modal_func(Tfeed,true);
     }
     debug("character",0);
+}
+
+
+//제작한 캐챗 불러오기
+function load_my_character_func(cursor="",my_character_list,w_func){
+    if (cursor == ""){
+        path = `/characters/me?limit=${forced_limit}`;
+    }
+    else if (cursor == null){
+        w_func(my_character_list);
+        return true;
+    }
+    else{
+        path = `/characters/me?limit=${forced_limit}cursor=${cursor}`;
+    }
+    fetch(wrtn_api + path,{
+        method: "GET",
+        headers: {
+            "Authorization": `Bearer ${getCookie(token_key)}`,
+        },
+    }).then(res => res.json()).then(data => {
+        for (const element of data.data.characters) {
+            my_character_list[my_character_list.length] = element;
+        }
+        load_my_character_func(data.data.nextCursor,my_character_list,w_func);
+        debug("GET " + wrtn_api + `/characters/me?limit=${forced_limit}`,2);
+    })
 }
 
 function chatroom(){
@@ -1853,15 +1881,10 @@ function my(){
                         tipbar_copy.childNodes.item(0).textContent = copyTojson;
                         //copy to json 클릭시
                         tipbar_copy.addEventListener('click',()=>{
-                            //유저가 제작한 캐챗 목록을 10000개 조회함 (설마 이것보다 많이 만든 사람이 있겠어?)
-                            fetch(wrtn_api + `/characters/me?limit=${forced_limit}`,{
-                                method: "GET",
-                                headers: {
-                                    "Authorization": `Bearer ${getCookie(token_key)}`,
-                                },
-                            }).then(res => res.json()).then(data => {
+                            my_character_list = [];
+                            load_my_character_func(cursor="",my_character_list,(my_character_list)=>{
                                 i=0;
-                                for (const datum of data.data.characters) {
+                                for (const datum of my_character_list) {
                                     //조회한 캐챗을 가져옴
                                     if (i == selected){
                                         //캐챗 id를 사용해서 캐챗의 모든 정보를 가져온후 클립보드에 복사
@@ -1877,7 +1900,6 @@ function my(){
                                     }
                                     i++;
                                 }
-                                debug("GET" + wrtn_api + `/characters/me?limit=${forced_limit}`,2);
                             })
                             debug(`tipbar_copy`,3);
                         })
@@ -1889,15 +1911,11 @@ function my(){
                         tipbar_paste.childNodes.item(0).textContent = pasteTojson;
                         //paste to json 클릭시
                         tipbar_paste.addEventListener('click',()=>{
+                            my_character_list = [];
                             //유저가 제작한 캐챗 목록을 10000개 조회함 (설마 이것보다 많이 만든 사람이 있겠어?)
-                            fetch(wrtn_api + `/characters/me?limit=${forced_limit}`,{
-                                method: "GET",
-                                headers: {
-                                    "Authorization": `Bearer ${getCookie(token_key)}`,
-                                },
-                            }).then(res => res.json()).then(data => {
+                            load_my_character_func(cursor="",my_character_list,(my_character_list)=>{
                                 i = 0;
-                                for (const datum of data.data.characters) {
+                                for (const datum of my_character_list) {
                                     //조회한 캐챗을 가져옴
                                     if (i == selected) {
                                         //클립보드를 가져옴
@@ -1943,7 +1961,6 @@ function my(){
                                     }
                                     i++
                                 }
-                                debug("GET " + wrtn_api + `/characters/me?limit=${forced_limit}`,2);
                             })
                             debug(`tipbar_paste`,3);
                         })
@@ -1954,15 +1971,10 @@ function my(){
                     if (tipbar.item(0).childNodes.item(4) == null){
                         tipbar_clone.childNodes.item(0).textContent = publish;
                         tipbar_clone.addEventListener("click",()=> {
-                            //유저가 제작한 캐챗 목록을 10000개 조회함 (설마 이것보다 많이 만든 사람이 있겠어?)
-                            fetch(wrtn_api + `/characters/me?limit=${forced_limit}`,{
-                                method: "GET",
-                                headers: {
-                                    "Authorization": `Bearer ${getCookie(token_key)}`,
-                                },
-                            }).then(res => res.json()).then(data => {
+                            my_character_list = [];
+                            load_my_character_func(cursor="",my_character_list,(my_character_list)=>{
                                 i=0;
-                                for (const datum of data.data.characters) {
+                                for (const datum of my_character_list) {
                                     //조회한 캐챗을 가져옴
                                     if (i == selected){
                                         //새 캐챗을 만듬
@@ -2048,7 +2060,6 @@ function my(){
                                     }
                                     i++;
                                 }
-                                debug("GET " + wrtn_api + `/characters/me?limit=${forced_limit}`,2);
                             })
                             debug(`tipbar_clone`,3);
                         })
