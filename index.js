@@ -1460,7 +1460,7 @@ function load_my_character_func(cursor="",my_character_list,w_func){
         return true;
     }
     else{
-        path = `/characters/me?limit=${forced_limit}cursor=${cursor}`;
+        path = `/characters/me?limit=${forced_limit}&cursor=${cursor}`;
     }
     fetch(wrtn_api + path,{
         method: "GET",
@@ -1472,7 +1472,7 @@ function load_my_character_func(cursor="",my_character_list,w_func){
             my_character_list[my_character_list.length] = element;
         }
         load_my_character_func(data.data.nextCursor,my_character_list,w_func);
-        debug("GET " + wrtn_api + `/characters/me?limit=${forced_limit}`,2);
+        debug("GET " + wrtn_api + path,2);
     })
 }
 
