@@ -1862,12 +1862,24 @@ function chatroom(){
                 }
                 alert("시간이 많이 소요되니 당황하시지말고 기다려 주세요...");
                 //현재 상태 로컬스토리지 저장
-                localStorage.setItem(local_Gemini_api_key,JSON.stringify({
-                    key : AfterMemory_textarea.value,
-                    model : AfterMemory_model_textarea.value,
-                    limit : AfterMemory_limit_textarea.value,
-                    select : AfterMemory_select.value
-                }));
+                if (AfterMemory_select.value == "2"){
+                    localStorage.setItem(local_Gemini_api_key,JSON.stringify({
+                        key : AfterMemory_textarea.value,
+                        model : AfterMemory_model_textarea.value,
+                        limit : AfterMemory_limit_textarea.value,
+                        select : AfterMemory_select.value,
+                        prompt : AfterMemory_tabs.childNodes[2].childNodes[0].childNodes.item(1).value
+                    }));
+                }
+                else{
+                    localStorage.setItem(local_Gemini_api_key,JSON.stringify({
+                        key : AfterMemory_textarea.value,
+                        model : AfterMemory_model_textarea.value,
+                        limit : AfterMemory_limit_textarea.value,
+                        select : AfterMemory_select.value,
+                        prompt : null
+                    }));
+                }
                 debug(`limited ${AfterMemory_limit_textarea.value}`);
                 //채팅내역 + 페르소나 불러오기
                 var chatlog = JSON.parse(getAfetch(wrtn_api2 + `/api/v2/chat-room/${document.URL.split("/")[7].split("?")[0]}/messages?limit=${Number(AfterMemory_limit_textarea.value) * 2}`)).data.list;
