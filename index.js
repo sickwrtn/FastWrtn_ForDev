@@ -1938,6 +1938,7 @@ function chatroom(){
                     }
                 })).candidates[0].content.parts[0].text;
                 debug("gemini compeleted");
+                //뤼튼 메시지 전송은 2000자 이상 보낼시 too large request 에러가 발생해서 예외처리
                 if (result.length > 2000){
                     copyToClipboard(result);
                     alert("요약본이 2000자가 넘어갑니다. 클립보드에 복사되었으니 압축해주세요.");
