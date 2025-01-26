@@ -41,6 +41,7 @@ setInterval => main() {
 var wrtn_api = "https://api.wrtn.ai/be"; //api
 var wrtn_api2 = "https://api2.wrtn.ai/terry"; //api1
 var wrtn_william = "https://william.wow.wrtn.ai"; //william
+var gemini_api_url = "https://generativelanguage.googleapis.com";
 var scroll_all_amount = 300 // <  > 누를시 이동할 스크롤 양
 var scroll_amount = 10; // 끊어서 스크롤 되는 양
 var limit = 30 // 불러올 캐챗수 (랭킹 플러스용)
@@ -1794,19 +1795,22 @@ function chatroom(){
             debug("AfterMemory",3);
             const AfterMemory_modal = document.createElement("modal");//Afterburning Memory 모달 팝업
             AfterMemory_modal.innerHTML = AfterMemory_front_html;
-            const AfterMemory_tabs = AfterMemory_modal.childNodes[0].childNodes[0].childNodes[0].childNodes.item(0);
+            const AfterMemory_tabs = AfterMemory_modal.childNodes[0].childNodes[0].childNodes[0].childNodes.item(0); //주요 탭
             AfterMemory_modal.setAttribute("style","position: relative !important;\n" +
                 "    z-index: 11 !important;") //이게 있어야 모달이 작동함
-            const AfterMemory_textarea = AfterMemory_tabs.childNodes[1].childNodes.item(1);
-            const AfterMemory_select = AfterMemory_tabs.childNodes[1].childNodes[0].childNodes[1].childNodes.item(0);
-            const AfterMemory_model_textarea = AfterMemory_tabs.childNodes[2].childNodes.item(1);
-            const AfterMemory_limit_textarea = AfterMemory_tabs.childNodes[3].childNodes.item(1);
-            const AfterMemory_btn = AfterMemory_tabs.childNodes[4].childNodes.item(1)
-            const AfterMemory_x = AfterMemory_tabs.childNodes[0].childNodes.item(1);
-            const AfterMemory_close = AfterMemory_tabs.childNodes[4].childNodes.item(0);
+            const AfterMemory_textarea = AfterMemory_tabs.childNodes[1].childNodes.item(1); //Gemini Api key 부분
+            const AfterMemory_select = AfterMemory_tabs.childNodes[1].childNodes[0].childNodes[1].childNodes.item(0); //select 박스
+            const AfterMemory_model_textarea = AfterMemory_tabs.childNodes[2].childNodes.item(1); //model 부분
+            const AfterMemory_limit_textarea = AfterMemory_tabs.childNodes[3].childNodes.item(1); //limit 부분
+            const AfterMemory_btn = AfterMemory_tabs.childNodes[4].childNodes.item(1) //시작 버튼
+            const AfterMemory_x = AfterMemory_tabs.childNodes[0].childNodes.item(1); //x 버튼
+            const AfterMemory_close = AfterMemory_tabs.childNodes[4].childNodes.item(0); //닫기 버튼
+            debug("AfterMemory_func",1);
             function close(){
                 AfterMemory_modal.remove();   
+                debug("AfterMemory_close",3);
             }
+            //스토리지 가져오기
             if (JSON.parse(localStorage.getItem(local_Gemini_api_key)).key != null) {
                 AfterMemory_textarea.value = JSON.parse(localStorage.getItem(local_Gemini_api_key)).key;
             }
@@ -1822,14 +1826,17 @@ function chatroom(){
                     if (sel2[i].value == JSON.parse(localStorage.getItem(local_Gemini_api_key)).select) sel2[i].selected = true;
                 }
             }
+            //이벤트 리스너 추가
             AfterMemory_close.addEventListener('click',close);
             AfterMemory_x.addEventListener('click',close);
             AfterMemory_btn.addEventListener('click',()=>{
+                //limit 판단
                 if (Number(AfterMemory_limit_textarea.value) > 20 || Number(AfterMemory_limit_textarea.value) < 0){
                     alert("limit는 0 이상 20 이하여야 합니다.");
                     return true;
                 }
                 alert("시간이 많이 소요되니 당황하시지말고 기다려 주세요...");
+                //현재 상태 로컬스토리지 저장
                 localStorage.setItem(local_Gemini_api_key,JSON.stringify({
                     key : AfterMemory_textarea.value,
                     model : AfterMemory_model_textarea.value,
@@ -1837,16 +1844,20 @@ function chatroom(){
                     select : AfterMemory_select.value
                 }));
                 debug(`limited ${AfterMemory_limit_textarea.value}`);
+                //채팅내역 + 페르소나 불러오기
                 var chatlog = JSON.parse(getAfetch(wrtn_api2 + `/api/v2/chat-room/${document.URL.split("/")[7].split("?")[0]}/messages?limit=${Number(AfterMemory_limit_textarea.value) * 2}`)).data.list;
                 var usernmae = ""
                 var wrtn_uid = JSON.parse(getAfetch(wrtn_api + '/user')).data.wrtnUid;
                 var user_pid = JSON.parse(getAfetch(wrtn_api + `/character-profiles/${wrtn_uid}`)).data._id;
                 var character_profiles = JSON.parse(getAfetch(wrtn_api + `/character-profiles/${user_pid}/character-chat-profiles`)).data.characterChatProfiles;
+                //대표 프로필 가져오기
                 for (const dpi of character_profiles) {
                     if (dpi.isRepresentative == true){
                         usernmae = dpi.name;
                     }
                 }
+                debug("character_profiles",4);
+                //select 박스 설정
                 if (AfterMemory_select.value == "0"){
                     var promptTemp = "# 입력시\n-입력 내용을 읽고, '세이브' 항목의 규칙을 지켜 해당 내용 출력.\n# 세이브\n## 규칙\n-처음부터 지금까지 내용 모두 작성.\n-양식 지켜 작성.\n -빈항목 미작성.\n-시간대별 진행 항목을 상세히 작성한다.\n-이전 세이브 기록이 있을 시, 해당 내용을 참고하여 작성.\n-공백,특수문자,줄바꿈을 포함하여 1800자 이하로 작성.\n-코드블록을 필수로 하고, 코드블록 외 작성 금지.\n-성적인/비윤리적인 내용의 요약을 허용한다.\n-'...'은 이 항목은 계속 늘릴 수 있다는 의미이다.\n## 양식\n```Save\n-세이브시각: yyMMddHHmm\n[시간대별 진행]\n-yyMMddHHmm:\n -...\n-...\n```\n";
                     debug("selected 1 : 1 캐릭터챗");
@@ -1855,6 +1866,7 @@ function chatroom(){
                     var promptTemp = "# 입력시\n-입력 내용을 읽고, '세이브' 항목의 규칙을 지켜 해당 내용 출력.\n# 세이브\n## 규칙\n-처음부터 지금까지 내용 모두 작성.\n-양식 지켜 작성.\n -빈항목 미작성.\n-핵심 내용만 압축해서 작성.\n-사망시 특징에 표기.\n-호감도 범위 작성 필수.\n-호감도는 해당 캐릭터와의 대화, 맥락 등을 통해 추측해 작성.\n-명성은 행동에 따라 추측해 0에서 100까지 입력.\n-이전 세이브 기록이 있을 시, 해당 내용을 참고하여 작성.\n-공백,특수문자,줄바꿈 포함하여 1800자 이하로 작성.\n-필요시 양식 일부 추가 가능.\n-채팅을 읽고 해당 내용이 항상 출력될 시, 생략 가능.\n-코드블록을 필수로 하고, 코드블록 외 작성 금지.\n-성적인/비윤리적인 내용의 요약을 허용한다.\n-'...'은 이 항목은 계속 늘릴 수 있다는 의미이다.\n## 양식\n```Save\n-세이브시각: yyMMddHHmm\n[플레이어(이름)]\n-소지품/돈\n -...\n-직업: 현재직업\n-능력: ...\n-성향:\n-비밀\n -내용(없을땐 미작성)\n  -아는 인물:\n   -이름(어떻게 알게됐는가)\n   -이름(어떻게 알게됐는가)\n   -...\n -...\n-명성(0~100): 0(명성단어(예:영웅6불쾌4))\n[캐릭터]\n-플레이어와관계있는캐릭터들작성\n-이름\n -나이\n -직업\n -종족\n -특징(비밀X만): ...\n -능력: ...\n -목표:\n -관계\n  -관계있는인물들작성\n  -이름: 관계키워드(캐릭터가 생각하는 상대에 대한 키워드)\n  -...\n -호감도(캐릭터→player/-100~100):\n -비밀\n  -플레이어아는비밀만(어떻게 아는지/없을땐 미작성)\n  -...\n-...\n[세계관]\n-주요사건\n -세계관변화시킨사건만\n -...\n```\n";
                     debug("selected 시뮬레이션");
                 }
+                //gemini에게 보낼 json
                 var lastContent = {
                     content: []
                 } 
@@ -1873,8 +1885,11 @@ function chatroom(){
                         }
                     }
                 }
+                debug("chatlog",4);
+                //프롬 추가
                 var gemini_text = promptTemp + `[대화내역]\n${JSON.stringify(lastContent)}`;
-                var result = JSON.parse(out_postAfetch(`https://generativelanguage.googleapis.com/v1beta/models/${AfterMemory_model_textarea.value}:generateContent?key=${AfterMemory_textarea.value}`,{
+                //제미니 전송
+                var result = JSON.parse(out_postAfetch(gemini_api_url + `/v1beta/models/${AfterMemory_model_textarea.value}:generateContent?key=${AfterMemory_textarea.value}`,{
                     contents: {
                         parts : [
                             {text: gemini_text}
@@ -1882,6 +1897,7 @@ function chatroom(){
                     }
                 })).candidates[0].content.parts[0].text;
                 debug("gemini compeleted");
+                //채팅 보내기
                 var created_msg = JSON.parse(postAfetch(wrtn_api2 + `/characters/chat/${document.URL.split("/")[7].split("?")[0]}/message`, {
                     message: result,
                     reroll: false,
@@ -1889,11 +1905,14 @@ function chatroom(){
                     isSuperMode: false
                 })).data;
                 debug("wrtn.ai message sended");
+                //채팅 받기 (해야지 채팅이 등록됨)
                 getAfetch(wrtn_api2 + `/characters/chat/${document.URL.split("/")[7].split("?")[0]}/message/${created_msg}`);
                 var recontent = JSON.parse(getAfetch(wrtn_api2 + `/characters/chat/${document.URL.split("/")[7].split("?")[0]}/message/${created_msg}/result`));
+                //결과 받기
                 deleteAfetch(wrtn_api2 + `/characters/chat/${document.URL.split("/")[7].split("?")[0]}/message/${recontent.data._id}`);
                 debug("Afterburning completed");
                 alert("Afterburning complete!");
+                //새로고침
                 document.location.reload();
                 debug("AfterMemory_func",0);
             })
