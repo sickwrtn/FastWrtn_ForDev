@@ -1525,6 +1525,7 @@ function chatroom(){
         for (let i = 0; i < 4; i++) {
             summation_svg.childNodes[1].remove();
         }
+        //AfterMemory 버튼 이벤트 + svg 추가
         AfterMemory.addEventListener('click',AfterMemory_func);
         summation_path.setAttribute("d","M12 2.5l2.66 6.46 6.91.6c.81.07 1.14 1.06.55 1.58l-5.21 4.53 1.56 6.73c.18.78-.68 1.42-1.35.97L12 18.86l-5.12 3.51c-.67.46-1.53-.19-1.35-.97l1.56-6.73-5.21-4.53c-.59-.51-.26-1.5.55-1.58l6.91-.6L12 2.5z");
         summation_path.setAttribute("fill","yellow");
