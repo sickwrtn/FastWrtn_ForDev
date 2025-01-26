@@ -83,7 +83,8 @@ if (localStorage.getItem(local_Gemini_api_key) == null){
         key : null,
         model : "gemini-2.0-flash-exp",
         limit: 10,
-        select: null
+        select: null,
+        prompt: null
     }))
 }
 
@@ -1838,6 +1839,9 @@ function chatroom(){
                     if (AfterMemory_tabs.childNodes.length < 6){
                         var AfterMemoryPrompt = document.createElement("div");
                         AfterMemoryPrompt.innerHTML = AfterMemory_textarea_front_html;
+                        if (JSON.parse(localStorage.getItem(local_Gemini_api_key)).prompt != null){
+                            AfterMemory.childNodes[0].childNodes.item(1).value = JSON.parse(localStorage.getItem(local_Gemini_api_key)).prompt;
+                        }
                         AfterMemory_tabs.insertBefore(AfterMemoryPrompt,AfterMemory_tabs.childNodes.item(2));
                     }
                 }
