@@ -81,7 +81,7 @@ if (localStorage.getItem(local_saved_prompt) == null){
 if (localStorage.getItem(local_Gemini_api_key) == null){
     localStorage.setItem(local_Gemini_api_key,JSON.stringify({
         key : null,
-        model : null,
+        model : "gemini-2.0-flash-exp",
         limit: 10,
         select: null
     }))
