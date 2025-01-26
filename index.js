@@ -51,7 +51,7 @@ var likeCount_limit = 10; // 좋아요수가 10개 이상
 var chatCount_limit = 30; // 채팅수가 30개 이상 이면 올라옴
 var auto_summation_characterChatId = "6787aecf65c02321daf25b0d"; // 자동요약기능을 수행할 캐챗 id
 var local_IsDebug = "debug"; //로컬스토리지 디버그 위치
-var local_Gemini_api_key = "Gemini Api Key";
+var local_Gemini_api_key = "Gemini Api Key"; //로컬스토리지 제미니 키 + 모델 + limit + select 저장위치
 var local_saved_prompt = "saved_prompt"; //로컬스토리지 프롬프트 저장 위치
 var local_usernote = "usernote"; //로컬스토리지 유저노트용 캐챗방 id 저장 위치
 var token_key = "access_token"; //쿠키중 가져올 토큰값 (조회 및 수정용 토큰 정보를 수집하지 않음)
@@ -62,6 +62,7 @@ var auto_summation = "자동요약"; //자동요약 버튼
 var auto_summation_update = "업데이트"; //업데이트 버튼
 var plus = "랭킹 플러스 (Fast wrtn)"; //랭킹플러스
 var persona_name = "페르소나"; //페르소나
+var AfterMemory_name = "Memory Afterburner"; //AfterMemory 버튼
 var copyTojson = "copy to json"; //캐릭터 복사기능
 var pasteTojson = "paste to json"; //캐릭터 븥여넣기 기능
 var publish = "publish"; //공개 기능
@@ -1506,11 +1507,11 @@ function chatroom(){
         const persona_svg = persona.childNodes.item(0); // 페르소나 svg
         const persona_path = persona_svg.childNodes.item(0); // 페르소나 path
         var personal_modal = document.createElement("div"); //모달팝업
-        const AfterMemory = bar.childNodes[1].childNodes[0].childNodes[1].childNodes.item(0).cloneNode(true); // 채팅 요약기능
-        const summation_p = AfterMemory.childNodes.item(1);
-        const summation_svg = AfterMemory.childNodes.item(0);
-        const summation_path = summation_svg.childNodes.item(0);
-        summation_p.textContent = "Afterburning Memory";
+        const AfterMemory = bar.childNodes[1].childNodes[0].childNodes[1].childNodes.item(0).cloneNode(true); // After Memory 기능
+        const summation_p = AfterMemory.childNodes.item(1); //AftetMemory text
+        const summation_svg = AfterMemory.childNodes.item(0); //AfterMemoy svg
+        const summation_path = summation_svg.childNodes.item(0); //AfterMemory path
+        summation_p.textContent = AfterMemory_name;
         debug("chatroom",1);
         personal_modal.setAttribute("id","web-modal");
         document.body.appendChild(personal_modal); // body에 모달팝업 추가
