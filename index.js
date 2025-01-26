@@ -2246,11 +2246,10 @@ function chatroom(){
 function my(){
     /*
     여러번 수정 끝에 만들어 낸거임
-    계속 copy to json,copy to paste 버튼을 누르면 selected가 요소 인덱스 범위보다 1더 커지는
-    개애미뒤진 병신같은 쓰레기 조자년 버그가 발생함
-    진짜 눈물 질질 새면서 처만드느라 뒤질뻔 했네 시발
-    고친거 라기 보다는 현재도 opend 변수가 없으면 생기는 버그임 시발
+    계속 copy to json,copy to paste 버튼을 누르면 selected가 요소 인덱스 범위보다 1더 커지는 문제가 생김
+    이유를 알수가 없음
     도대체 왜?
+    open 변수로 커버함
         */
     var selected = 0; //점 세개 퍼튼이 어떤 요소의 버튼인지 판별하는 번수
     opend=false; //구원자
