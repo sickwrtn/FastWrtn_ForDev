@@ -1938,6 +1938,11 @@ function chatroom(){
                     }
                 })).candidates[0].content.parts[0].text;
                 debug("gemini compeleted");
+                if (result.length > 2000){
+                    copyToClipboard(result);
+                    alert("요약본이 2000자가 넘어갑니다. 클립보드에 복사되었으니 압축해주세요.");
+                    return true;
+                }
                 //채팅 보내기
                 var created_msg = JSON.parse(postAfetch(wrtn_api2 + `/characters/chat/${document.URL.split("/")[7].split("?")[0]}/message`, {
                     message: result,
