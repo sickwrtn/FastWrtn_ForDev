@@ -149,6 +149,11 @@ class my_struct {
     constructor(data){
         this.json = data;
     }
+    reload(){
+        var request = JSON.parse(getAfetch(wrtn_api + `/characters/me/${this.json._id}`));
+        this.json = request.data;
+        return request;
+    }
     get(){
         var request = JSON.parse(getAfetch(wrtn_api + `/characters/me/${this.json._id}`));
         return request.data;
@@ -250,10 +255,45 @@ class my_struct {
     }
 }
 
+class character_struct {
+    constructor(data){
+        this.getHeader = {method : "GET", headers : {"Authorization": `Bearer ${getCookie(token_key)}`}};
+        this.postHeader = {method : "POST",headers : {"Authorization": `Bearer ${getCookie(token_key)}`,"Content-Type": "application/json"},body:null};
+        this.json = data;
+    }
+    reload(){
+        var request = JSON.parse(getAfetch(wrtn_api + `/characters/${this.json._id}`));
+        this.json = request.data;
+        return request;
+    }
+    get(){
+        var request = JSON.parse(getAfetch(wrtn_api + `/characters/${this.json._id}`));
+        return request;
+    }
+    async getComments(cursor="",sort="likeCount",load_limit=40){
+        if (cursor != "") {
+            var request = await fetch(wrtn_api + `/characters/${this.json._id}/comments?sort=${sort}&cursor=${cursor}&limit=${load_limit}`, this.getHeader);
+        }
+        if (cursor == null){
+            return null;
+        }
+        else {
+            var request = await fetch(wrtn_api + `/characters/${this.json._id}/comments?sort=${sort}&&limit=${load_limit}`, this.getHeader);
+        }
+        var comment = await request.json();
+        return comment;
+    }
+}
+
 //메세지
 class message_struct {
     constructor(data){
         this.json = data;
+    }
+    reload(){
+        var request = JSON.parse(putAfetch(wrtn_api + `/message/${this.json._id}`,{}));
+        this.json = request.data;
+        return request;
     }
     get(){
         var request = JSON.parse(putAfetch(wrtn_api + `/message/${this.json._id}`,{}));
@@ -277,6 +317,11 @@ class chatroom_struct {
         this.getHeader = {method : "GET", headers : {"Authorization": `Bearer ${getCookie(token_key)}`}};
         this.postHeader = {method : "POST",headers : {"Authorization": `Bearer ${getCookie(token_key)}`,"Content-Type": "application/json"},body:null};
         this.json = data;
+    }
+    reload() {
+        var request = JSON.parse(getAfetch(wrtn_api2 + `/api/v2/chat-room/${this.json._id}`));
+        this.json = request.data;
+        return request;
     }
     remove(){
         var request = JSON.parse(putAfetch(wrtn_api + '/api/v2/chat/delete',{chatIds:[this.json._id]}));
@@ -416,6 +461,10 @@ class wrtn_api_class {
             userNote: {"content": ""}
         })).data._id;
         return this.getChatroom(created_chatId);
+    }
+    getCharacter(charId) {
+        var request = JSON.parse(getAfetch(wrtn_api + `/characters/${charId}`));
+        return new character_struct(request.data);
     }
     //제작한 캐릭터 불러오기
     getMycharacter(charId){
