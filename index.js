@@ -539,6 +539,14 @@ class wrtn_api_class {
         var result = await request.json();
         return result;
     }
+    createChatroom(charId){
+        var created_chatId = JSON.parse(postAfetch(wrtn_api + "/chat", {
+            unitId: charId,
+            type: "character",
+            userNote: {"content": ""}
+        })).data._id;
+        return this.getChatroom(created_chatId);
+    }
     //제작한 캐릭터 불러오기
     getMycharacter(charId){
         var request = JSON.parse(getAfetch(wrtn_api + `/characters/me/${charId}`));
@@ -1992,15 +2000,6 @@ function chatroom(){
                     if (document.URL.split("/")[7] != undefined) {
                         if (usernote_modal_struct.childNodes.length < 3) {
                             usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes.item(1).textContent = usernote_description;
-                            fetch(wrtn_api2 + `/api/v2/chat-room/${document.URL.split("/")[7].split("?")[0]}`, {
-                                method: "GET",
-                                headers: {
-                                    "Authorization": `Bearer ${getCookie(token_key)}`,
-                                }
-                            }).then(res => res.json()).then(data => {
-                                usernote_modal_textarea.value = data.data.character.userNote.content;
-                                debug("GET " + wrtn_api2 + `/api/v2/chat-room/${document.URL.split("/")[7].split("?")[0]}`,2);
-                            })
                             /*
                             textarea의 내부값을 수정해도 적용이 안되는 문제가 있어서
                             모달 팝업 내의 모든 버튼 이벤트 리스너를 바꿔버림
@@ -2011,6 +2010,7 @@ function chatroom(){
                             const usernote_modal_x = usernote_modal_btn_x.cloneNode(true); // x 버튼 형식을 기반으로 버튼을 새로 만듦
                             const usernote_modal_btn = usernote_modal_btn_c.cloneNode(true); // 닫기 버튼 형식 기반으로 버튼을 새로만듬
                             const usernote_modal_textarea = usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes.item(1); //textarea
+                            usernote_modal_textarea.value = wrtn.getChatroom(document.URL.split("/")[7].split("?")[0]).getUsernote();
                             const usernote_modal_apply_btn_struct = usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[2].childNodes.item(1); // 수정 버튼 형식
                             /*
                             닫기 버튼 기반으로 새로운 수정 버튼을 만드는 이유는 수정버튼을 기존 수정버튼 형식으로 만들시 이벤트 리스너가 적용되지 않는 문제가 있음
@@ -2027,15 +2027,7 @@ function chatroom(){
                             //메뉴속 유저노트 버튼을 누를시 모달팝업을 띄워주는 함수
                             function after_usernote_event() {
                                 modal.appendChild(usernote_modal);
-                                fetch(wrtn_api2 + `/api/v2/chat-room/${document.URL.split("/")[7].split("?")[0]}`, {
-                                    method: "GET",
-                                    headers: {
-                                        "Authorization": `Bearer ${getCookie(token_key)}`,
-                                    }
-                                }).then(res => res.json()).then(data => {
-                                    usernote_modal_textarea.value = data.data.character.userNote.content;
-                                    debug("GET " + wrtn_api2 + `/api/v2/chat-room/${document.URL.split("/")[7].split("?")[0]}`,2);
-                                })
+                                usernote_modal_textarea.value = wrtn.getChatroom(document.URL.split("/")[7].split("?")[0]).getUsernote();
                                 debug("after_usernote_event",0);
                             }
                             //css 수동 동기화 (닫기 버튼을 수정버튼으로 만들기 위함)
@@ -2061,9 +2053,7 @@ function chatroom(){
                             //수정 버튼을 누를시
                             usernote_modal_apply_btn.addEventListener('click', () => {
                                 //해당 채팅방에 할당된 유저노트의 값을 api로 변경
-                                putAfetch(wrtn_william + `/chat-room/${document.URL.split("/")[7].split("?")[0]}`, {
-                                    userNote: {"content": usernote_modal_textarea.value}
-                                })
+                                usernote_modal_textarea.value = wrtn.getChatroom(document.URL.split("/")[7].split("?")[0]).setUsernote(usernote_modal_textarea.value);
                                 //메뉴의 유저노트 버튼에 이벤트 리스너 삽입
                                 usernote.removeEventListener('click', after_usernote_event);
                                 usernote.addEventListener('click', after_usernote_event);
@@ -2101,46 +2091,24 @@ function chatroom(){
                                 //처음 사용하면 로컬스토리지에 chatid가 없을꺼니 추가하기위해 판별하는 조건문
                                 if (localStorage.getItem(local_usernote) == null) {
                                     // auto_summation_characterChatId의 캐챗방을 팜
-                                    var created_chatId = JSON.parse(postAfetch(wrtn_api + "/chat", {
-                                        unitId: auto_summation_characterChatId,
-                                        type: "character",
-                                        userNote: {"content": usernote_modal_textarea.textContent}
-                                    })).data._id;
+                                    var new_chatroom = wrtn.createChatroom(auto_summation_characterChatId);
                                     //로컬스토리지에 판 방의 id를 저장
-                                    localStorage.setItem(local_usernote, created_chatId);
+                                    localStorage.setItem(local_usernote, new_chatroom.json._id);
                                     //메세지를 보냄
-                                    var created_msg = JSON.parse(postAfetch(wrtn_api2 + `/characters/chat/${created_chatId}/message`, {
-                                        message: usernote_modal_textarea.textContent,
-                                        reroll: false,
-                                        images: [],
-                                        isSuperMode: false
-                                    })).data;
-                                    getAfetch(wrtn_api2 + `/characters/chat/${created_chatId}/message/${created_msg}`);
-                                    var res_msg = JSON.parse(getAfetch(wrtn_api2 + `/characters/chat/${created_chatId}/message/${created_msg}/result`)).data.content;
-                                    usernote_modal_textarea.value = res_msg; //textarea에 값을 반영
+                                    var created_msg = new_chatroom.send(usernote_modal_textarea.textContent);
+                                    usernote_modal_textarea.value = created_msg.get(); //textarea에 값을 반영
                                 } else {
                                     var created_chatId = localStorage.getItem(local_usernote); //이미 파진 채팅방을 가져옴
                                     //그 방에 textarea값 즉 요약할 유저노트내용을 보냄
-                                    var created_msg = JSON.parse(postAfetch(wrtn_api2 + `/characters/chat/${created_chatId}/message`, {
-                                        message: usernote_modal_textarea.textContent,
-                                        reroll: false,
-                                        images: [],
-                                        isSuperMode: false
-                                    })).data;
-                                    getAfetch(wrtn_api2 + `/characters/chat/${created_chatId}/message/${created_msg}`);
-                                    var res_msg = JSON.parse(getAfetch(wrtn_api2 + `/characters/chat/${created_chatId}/message/${created_msg}/result`)).data.content;
-                                    usernote_modal_textarea.value = res_msg; //textarea에 값을 반영
+                                    var created_msg = wrtn.getChatroom(created_chatId).send(usernote_modal_textarea.textContent);
+                                    usernote_modal_textarea.value = created_msg.get(); //textarea에 값을 반영
                                 }
                                 debug("usernote_modal_btn",3);
                             })
                             usernote_modal_update_btn.addEventListener('click', () => {
                                 //새로운 방을 팜
-                                var created_chatId = JSON.parse(postAfetch(wrtn_api + "/chat", {
-                                    unitId: auto_summation_characterChatId,
-                                    type: "character",
-                                    userNote: {"content": ""}
-                                })).data._id;
-                                localStorage.setItem(local_usernote, created_chatId); //스토리지에 방 id 저장
+                                var new_chatroom = wrtn.createChatroom(auto_summation_characterChatId);
+                                localStorage.setItem(local_usernote, new_chatroom.json._id); //스토리지에 방 id 저장
                                 debug("usernote_modal_update_btn",3);
                                 alert("업데이트 되었습니다! (채팅방 확인)");
                             })

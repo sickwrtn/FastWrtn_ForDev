@@ -409,6 +409,14 @@ class wrtn_api_class {
         var result = await request.json();
         return result;
     }
+    createChatroom(charId){
+        var created_chatId = JSON.parse(postAfetch(wrtn_api + "/chat", {
+            unitId: charId,
+            type: "character",
+            userNote: {"content": ""}
+        })).data._id;
+        return this.getChatroom(created_chatId);
+    }
     //제작한 캐릭터 불러오기
     getMycharacter(charId){
         var request = JSON.parse(getAfetch(wrtn_api + `/characters/me/${charId}`));
