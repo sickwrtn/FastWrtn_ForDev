@@ -65,6 +65,9 @@ ctl + 1~9 단축키 사용 가능합니다.
 
 ![제작 기능](https://github.com/user-attachments/assets/bd43b088-efaa-4840-b49f-047c56fb2024)
 
+# sdk
+![]
+
 # 패치노트
 
 [2.0.1v] 캐릭터 관리 cursor 조회 추가, Memory Afterburner 기능 추가
