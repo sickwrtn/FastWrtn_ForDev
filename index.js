@@ -273,7 +273,290 @@ function debug(content,code = null){
     }
 }
 
+//Wrtn Api Control Class
+//캐챗
+class my_struct {
+    constructor(data){
+        this.json = data;
+    }
+    get(){
+        var request = JSON.parse(getAfetch(wrtn_api + `/characters/me/${this.json._id}`));
+        return request.data;
+    }
+    set(json_data){
+        for (const a of json_data.startingSets) {
+            delete a._id;
+        }
+        var request = JSON.parse(patchAfetch(wrtn_api + `/characters/${this.json._id}`,{
+            name: json_data.name,
+            description: json_data.description,
+            profileImageUrl: json_data.profileImage.origin,
+            model: json_data.model,
+            initialMessages: json_data.initialMessages,
+            characterDetails: json_data.characterDetails,
+            replySuggestions: json_data.replySuggestions,
+            chatExamples: json_data.chatExamples,
+            situationImages: json_data.situationImages,
+            categoryIds: [json_data.categories[0]._id],
+            tags: json_data.tags,
+            visibility: json_data.visibility,
+            promptTemplate: json_data.promptTemplate.template,
+            isCommentBlocked: json_data.isCommentBlocked,
+            defaultStartingSetName: json_data.defaultStartingSetName,
+            startingSets: json_data.startingSets,
+            keywordBook: json_data.keywordBook,
+            customPrompt: json_data.customPrompt,
+            defaultStartingSetSituationPrompt: json_data.defaultStartingSetSituationPrompt,
+        }));
+        return request;
+    }
+    remove(){
+        var request = JSON.parse(deleteAfetch(wrtn_api + `/characters/${this.json._id}`));
+        return request;
+    }
+    publish(){
+        var json_data = this.get(); //기본 캐챗의 json데이터
+        //startingSets의 _id가 있으면 안되서 지움
+        for (const a of json_data.startingSets) {
+            delete a._id;
+        }
+        /*
+        새로운 캐릭터챗을 만들때랑
+        기존 캐릭터챗을 수정하는거랑
+        보내야되는 json 데이터가 다름
+        거기다 보내야 되는 내용에 startingSets가 []이면 안되더라
+        startingSets가 없거나 아면 요소가 하나 이상 있어야됨
+            */
+        //위의 내용에 의거하여 startingSets가 []인지 아닌지 판별
+        if (json_data.startingSets.length == 0){
+            var json_body = {
+                name: json_data.name,
+                description: json_data.description,
+                profileImageUrl: json_data.profileImage.origin,
+                model: json_data.model,
+                initialMessages: json_data.initialMessages,
+                characterDetails: json_data.characterDetails,
+                replySuggestions: json_data.replySuggestions,
+                chatExamples: json_data.chatExamples,
+                situationImages: json_data.situationImages,
+                categoryIds: [json_data.categories[0]._id],
+                tags: json_data.tags,
+                visibility: "public",
+                promptTemplate: json_data.promptTemplate.template,
+                isCommentBlocked: json_data.isCommentBlocked,
+                defaultStartingSetName: json_data.defaultStartingSetName,
+                keywordBook: json_data.keywordBook,
+                customPrompt: json_data.customPrompt,
+                defaultStartingSetSituationPrompt: json_data.defaultStartingSetSituationPrompt,
+                isAdult: json_data.isAdult,
+            }
+        }
+        else{
+            var json_body = {
+                name: json_data.name,
+                description: json_data.description,
+                profileImageUrl: json_data.profileImage.origin,
+                model: json_data.model,
+                initialMessages: json_data.initialMessages,
+                characterDetails: json_data.characterDetails,
+                replySuggestions: json_data.replySuggestions,
+                chatExamples: json_data.chatExamples,
+                situationImages: json_data.situationImages,
+                categoryIds: [json_data.categories[0]._id],
+                tags: json_data.tags,
+                visibility: "public",
+                promptTemplate: json_data.promptTemplate.template,
+                isCommentBlocked: json_data.isCommentBlocked,
+                defaultStartingSetName: json_data.defaultStartingSetName,
+                startingSets: json_data.startingSets,
+                keywordBook: json_data.keywordBook,
+                customPrompt: json_data.customPrompt,
+                defaultStartingSetSituationPrompt: json_data.defaultStartingSetSituationPrompt,
+                isAdult: json_data.isAdult,
+            }
+        }
+        var request = JSON.parse(postAfetch(wrtn_api + "/characters",json_body));
+        return request;
+    }
+}
 
+//메세지
+class message_struct {
+    constructor(data){
+        this.json = data;
+    }
+    get(){
+        var request = JSON.parse(putAfetch(wrtn_api + `/message/${this.json._id}`,{}));
+        return request.data.content;
+    }
+    set(content){
+        var request = JSON.parse(patchAfetch(wrtn_api2 + `/characters/chat/${this.json.chatId}/message/${this.json._id}`,{
+            message:content
+        }));
+        return request;
+    }
+    remove(){
+        var request = JSON.parse(deleteAfetch(wrtn_api2 + `/characters/chat/${this.json.chatId}/message/${this.json._id}`));
+        return request;
+    }
+}
+
+//채팅방
+class chatroom_struct {
+    constructor(data){
+        this.getHeader = {method : "GET", headers : {"Authorization": `Bearer ${getCookie(token_key)}`}};
+        this.postHeader = {method : "POST",headers : {"Authorization": `Bearer ${getCookie(token_key)}`,"Content-Type": "application/json"},body:null};
+        this.json = data;
+    }
+    remove(){
+        var request = JSON.parse(putAfetch(wrtn_api + '/api/v2/chat/delete',{chatIds:[this.json._id]}));
+        return request;
+    }
+    async getMessages(cursor="",load_limit = 40){
+        if (cursor != "") {
+            var request = await fetch(wrtn_api2 + `/api/v2/chat-room/${this.json._id}/messages?limit=${load_limit}&cursor=${cursor}`, this.getHeader);
+            debug(`GET ${wrtn_api2 + `/api/v2/chat-room/${this.json._id}/messages?limit=${load_limit}&cursor=${cursor}`}`,2);
+        }
+        if (cursor == null){
+            return null;
+        }
+        else {
+            var request = await fetch(wrtn_api2 + `/api/v2/chat-room/${this.json._id}/messages?limit=${load_limit}`, this.getHeader);
+            debug(`GET ${wrtn_api + `/api/v2/chat-room/${this.json._id}/messages?limit=${load_limit}`}`,2);
+        }
+        var messages = await request.json();
+        return messages;
+    }
+    send(content,IsSuperMode = false){
+        var created_msg = JSON.parse(postAfetch(wrtn_api2 + `/characters/chat/${this.json._id}/message`, {
+            message: content,
+            reroll: false,
+            images: [],
+            isSuperMode: IsSuperMode
+        })).data;
+        getAfetch(wrtn_api2 + `/characters/chat/${this.json._id}/message/${created_msg}`);
+        var recontent = JSON.parse(getAfetch(wrtn_api2 + `/characters/chat/${this.json._id}/message/${created_msg}/result`));
+        return new message_struct(recontent.data);
+    }
+    getUsernote(){
+        var request = JSON.parse(getAfetch(wrtn_api2 + `/api/v2/chat-room/${this.json._id}`));
+        return request.data.character.userNote.content
+    }
+    setUsernote(content){
+        var request = JSON.parse(putAfetch(wrtn_william + `/chat-room/${this.json._id}`,{userNote: {"content":content}}));
+        return request;
+    }
+}
+
+//메인 api class
+class wrtn_api_class {
+    constructor(){
+        this.getHeader = {method : "GET", headers : {"Authorization": `Bearer ${getCookie(token_key)}`}};
+        this.postHeader = {method : "POST",headers : {"Authorization": `Bearer ${getCookie(token_key)}`,"Content-Type": "application/json"},data:null};
+    }
+    //유저 정보 조회
+    getUser() {
+        var request = JSON.parse(getAfetch(wrtn_api + '/user'));
+        return request;
+    }
+    //슈퍼챗 관련 조회
+    getSuperchat() {
+        var request = JSON.parse(getAfetch(wrtn_api + '/character-super-mode'));
+        return request;
+    }
+    //페르소나 조회
+    getPersona() {
+        var wrtn_uid = JSON.parse(getAfetch(wrtn_api + '/user')).data.wrtnUid;
+        var user_pid = JSON.parse(getAfetch(wrtn_api + `/character-profiles/${wrtn_uid}`)).data._id;
+        var character_profiles = JSON.parse(getAfetch(wrtn_api + `/character-profiles/${user_pid}/character-chat-profiles`)).data.characterChatProfiles;
+        return character_profiles;
+    }
+    //대표프로필 조회
+    getRepresentativePersona(){
+        var wrtn_uid = JSON.parse(getAfetch(wrtn_api + '/user')).data.wrtnUid;
+        var user_pid = JSON.parse(getAfetch(wrtn_api + `/character-profiles/${wrtn_uid}`)).data._id;
+        var character_profiles = JSON.parse(getAfetch(wrtn_api + `/character-profiles/${user_pid}/character-chat-profiles`)).data.characterChatProfiles;
+        //대표 프로필 가져오기
+        for (const dpi of character_profiles) {
+            if (dpi.isRepresentative == true){
+                return dpi;
+            }
+        }
+    }
+    //채팅방 목록
+    async getChatrooms(cursor="",load_limit=40,type="character") {
+        if (cursor != "") {
+            var request = await fetch(wrtn_api + `/api/v2/chat?type=${type}&limit=${load_limit}&cursor=${cursor}`, this.getHeader);
+            debug(`GET ${wrtn_api + `/api/v2/chat?type=${type}&limit=${load_limit}&cursor=${cursor}`}`,2);
+        }
+        if (cursor == null){
+            return null;
+        }
+        else {
+            var request = await fetch(wrtn_api + `/api/v2/chat?type=${type}&limit=${load_limit}`,this.getHeader);
+            debug(`GET ${wrtn_api + `/api/v2/chat?type=${type}&limit=${load_limit}`}`,2);
+        }
+        var chatrooms = await request.json();
+        return chatrooms;
+    }
+    //제작한 캐릭터 목록
+    async getMycharacters(cursor="",load_limit=40) {
+        if (cursor != ""){
+            var request = await fetch(wrtn_api + `/characters/me?limit=${load_limit}&cursor=${cursor}`, this.getHeader);
+        }
+        else if (cursor == null){
+            return null;
+        }
+        else{
+            var request = await fetch(wrtn_api + `/characters/me?limit=${load_limit}`, this.getHeader);
+        }
+        var characters = await request.json();
+        return characters;
+    }
+    async character_search(query,cursor="",sort="score",load_limit=40){
+        if (cursor != ""){
+            var request = await fetch(wrtn_api + `/characters/search?limit=${load_limit}&query=${query}&sort=${sort}&cursor=${cursor}`);
+        }
+        else if (cursor == null){
+            return null;
+        }
+        else{
+            var request = await fetch(wrtn_api + `/characters/search?limit=${load_limit}&query=${query}&sort=${sort}`);
+        }
+        var result = await request.json();
+        return result;
+    }
+    async user_search(query,cursor="",load_limit=40){
+        if (cursor != ""){
+            var request = await fetch(wrtn_api + `/character-profiles/search?limit=${load_limit}&query=${query}&cursor=${cursor}`);
+        }
+        else if (cursor == null){
+            return null;
+        }
+        else{
+            var request = await fetch(wrtn_api + `/character-profiles/search?limit=${load_limit}&query=${query}`);
+        }
+        var result = await request.json();
+        return result;
+    }
+    //제작한 캐릭터 불러오기
+    getMycharacter(charId){
+        var request = JSON.parse(getAfetch(wrtn_api + `/characters/me/${charId}`));
+        return new my_struct(request.data);
+    }
+    //메시지 불러오기
+    getMessage(msgId){
+        var request = JSON.parse(putAfetch(wrtn_api + `/message/${msgId}`,{}));
+        return new message_struct(request.data);
+    }
+    //채팅방 불러오기
+    getChatroom(chatId){
+        var request = JSON.parse(getAfetch(wrtn_api2 + `/api/v2/chat-room/${chatId}`));
+        return new chatroom_struct(request.data,this.token);
+    }
+}
+
+const wrtn = new wrtn_api_class();
 
 //댓글 및 업데이트 날짜 front html + css
 var plus_modal_date_and_comment = "<div display=\"flex\" width=\"100%\" style=\"    display: flex;\n" +
@@ -1980,7 +2263,7 @@ function chatroom(){
                 }
             }
             //prompt textarea를 추가하기 위함
-            var AfterIntetval = setInterval(()=>{
+            setInterval(()=>{
                 if (AfterMemory_select.value == "3"){
                     if (AfterMemory_tabs.childNodes.length < 6){
                         var AfterMemoryPrompt = document.createElement("div");
@@ -2029,16 +2312,7 @@ function chatroom(){
                 debug(`limited ${AfterMemory_limit_textarea.value}`);
                 //채팅내역 + 페르소나 불러오기
                 var chatlog = JSON.parse(getAfetch(wrtn_api2 + `/api/v2/chat-room/${document.URL.split("/")[7].split("?")[0]}/messages?limit=${Number(AfterMemory_limit_textarea.value) * 2}`)).data.list;
-                var usernmae = ""
-                var wrtn_uid = JSON.parse(getAfetch(wrtn_api + '/user')).data.wrtnUid;
-                var user_pid = JSON.parse(getAfetch(wrtn_api + `/character-profiles/${wrtn_uid}`)).data._id;
-                var character_profiles = JSON.parse(getAfetch(wrtn_api + `/character-profiles/${user_pid}/character-chat-profiles`)).data.characterChatProfiles;
-                //대표 프로필 가져오기
-                for (const dpi of character_profiles) {
-                    if (dpi.isRepresentative == true){
-                        usernmae = dpi.name;
-                    }
-                }
+                var usernmae = wrtn.getRepresentativePersona().name;
                 debug("character_profiles",4);
                 //select 박스 설정
                 if (AfterMemory_select.value == "0"){
@@ -2100,19 +2374,10 @@ function chatroom(){
                     alert("요약본이 2000자가 넘어갑니다. 클립보드에 복사되었으니 압축해주세요.");
                     return true;
                 }
-                //채팅 보내기
-                var created_msg = JSON.parse(postAfetch(wrtn_api2 + `/characters/chat/${document.URL.split("/")[7].split("?")[0]}/message`, {
-                    message: result,
-                    reroll: false,
-                    images: [],
-                    isSuperMode: false
-                })).data;
+                //채팅 보내고 삭제
+                wrtn.getChatroom(document.URL.split("/")[7].split("?")[0]).send(result).remove();
                 debug("wrtn.ai message sended");
-                //채팅 받기 (해야지 채팅이 등록됨)
-                getAfetch(wrtn_api2 + `/characters/chat/${document.URL.split("/")[7].split("?")[0]}/message/${created_msg}`);
-                var recontent = JSON.parse(getAfetch(wrtn_api2 + `/characters/chat/${document.URL.split("/")[7].split("?")[0]}/message/${created_msg}/result`));
-                //결과 받기
-                deleteAfetch(wrtn_api2 + `/characters/chat/${document.URL.split("/")[7].split("?")[0]}/message/${recontent.data._id}`);
+
                 debug("Afterburning completed");
                 alert("Afterburning complete!");
                 //새로고침
@@ -2283,15 +2548,8 @@ function my(){
                                     //조회한 캐챗을 가져옴
                                     if (i == selected){
                                         //캐챗 id를 사용해서 캐챗의 모든 정보를 가져온후 클립보드에 복사
-                                        fetch(wrtn_api + `/characters/me/${datum._id}`,{
-                                            method: "GET",
-                                            headers: {
-                                                "Authorization": `Bearer ${getCookie(token_key)}`,
-                                            },
-                                        }).then(res => res.json()).then(data => {
-                                            copyToClipboard(JSON.stringify(data.data));
-                                            alert('클립보드에 복사되었습니다!');
-                                        })
+                                        copyToClipboard(JSON.stringify(wrtn.getMycharacter(datum._id).get()));
+                                        alert('클립보드에 복사되었습니다!');
                                     }
                                     i++;
                                 }
@@ -2316,42 +2574,8 @@ function my(){
                                         //클립보드를 가져옴
                                         getClipboardTextModern().then(function (clipboardContent) {
                                             json_data = JSON.parse(clipboardContent); //클립보드 내용 json화
-                                            //startingSets에 _id 항목이 있는데 이게 있으면 안되서 지우는거
-                                            for (const a of json_data.startingSets) {
-                                                delete a._id;
-                                            }
-                                            //json화 시킨 캐릭터챗 정보를 덮어 씌움
-                                            fetch(wrtn_api + `/characters/${datum._id}`, {
-                                                method: "PATCH",
-                                                headers: {
-                                                    "Authorization": `Bearer ${getCookie(token_key)}`,
-                                                    "Content-Type": "application/json",
-                                                },
-                                                body: JSON.stringify({
-                                                    name: json_data.name,
-                                                    description: json_data.description,
-                                                    profileImageUrl: json_data.profileImage.origin,
-                                                    model: json_data.model,
-                                                    initialMessages: json_data.initialMessages,
-                                                    characterDetails: json_data.characterDetails,
-                                                    replySuggestions: json_data.replySuggestions,
-                                                    chatExamples: json_data.chatExamples,
-                                                    situationImages: json_data.situationImages,
-                                                    categoryIds: [json_data.categories[0]._id],
-                                                    tags: json_data.tags,
-                                                    visibility: json_data.visibility,
-                                                    promptTemplate: json_data.promptTemplate.template,
-                                                    isCommentBlocked: json_data.isCommentBlocked,
-                                                    defaultStartingSetName: json_data.defaultStartingSetName,
-                                                    startingSets: json_data.startingSets,
-                                                    keywordBook: json_data.keywordBook,
-                                                    customPrompt: json_data.customPrompt,
-                                                    defaultStartingSetSituationPrompt: json_data.defaultStartingSetSituationPrompt,
-                                                })
-                                            }).then(res => res.json).then(data => {
-                                                debug("PATCH " + wrtn_api + `/characters/${datum._id}`,2);
-                                                alert("캐챗 변경 성공! (새로고침 후 적용됩니다.)");
-                                            })
+                                            wrtn.getMycharacter(datum._id).set(json_data);
+                                            alert("캐챗 변경 성공! (새로고침 후 적용됩니다.)");
                                         })
                                     }
                                     i++
@@ -2372,86 +2596,8 @@ function my(){
                                 for (const datum of my_character_list) {
                                     //조회한 캐챗을 가져옴
                                     if (i == selected){
-                                        //새 캐챗을 만듬
-                                        fetch(wrtn_api + `/characters/me/${datum._id}`,{
-                                            method: "GET",
-                                            headers: {
-                                                "Authorization": `Bearer ${getCookie(token_key)}`,
-                                            },
-                                        }).then(res => res.json()).then(data => {
-                                            json_data = data.data; //기본 캐챗의 json데이터
-                                            //startingSets의 _id가 있으면 안되서 지움
-                                            for (const a of json_data.startingSets) {
-                                                delete a._id;
-                                            }
-                                            /*
-                                            새로운 캐릭터챗을 만들때랑
-                                            기존 캐릭터챗을 수정하는거랑
-                                            보내야되는 json 데이터가 다름
-                                            거기다 보내야 되는 내용에 startingSets가 []이면 안되더라
-                                            startingSets가 없거나 아면 요소가 하나 이상 있어야됨
-                                                */
-                                            //위의 내용에 의거하여 startingSets가 []인지 아닌지 판별
-                                            if (json_data.startingSets.length == 0){
-                                                json_body = JSON.stringify({
-                                                    name: json_data.name,
-                                                    description: json_data.description,
-                                                    profileImageUrl: json_data.profileImage.origin,
-                                                    model: json_data.model,
-                                                    initialMessages: json_data.initialMessages,
-                                                    characterDetails: json_data.characterDetails,
-                                                    replySuggestions: json_data.replySuggestions,
-                                                    chatExamples: json_data.chatExamples,
-                                                    situationImages: json_data.situationImages,
-                                                    categoryIds: [json_data.categories[0]._id],
-                                                    tags: json_data.tags,
-                                                    visibility: "public",
-                                                    promptTemplate: json_data.promptTemplate.template,
-                                                    isCommentBlocked: json_data.isCommentBlocked,
-                                                    defaultStartingSetName: json_data.defaultStartingSetName,
-                                                    keywordBook: json_data.keywordBook,
-                                                    customPrompt: json_data.customPrompt,
-                                                    defaultStartingSetSituationPrompt: json_data.defaultStartingSetSituationPrompt,
-                                                    isAdult: json_data.isAdult,
-                                                })
-                                            }
-                                            else{
-                                                json_body = JSON.stringify({
-                                                    name: json_data.name,
-                                                    description: json_data.description,
-                                                    profileImageUrl: json_data.profileImage.origin,
-                                                    model: json_data.model,
-                                                    initialMessages: json_data.initialMessages,
-                                                    characterDetails: json_data.characterDetails,
-                                                    replySuggestions: json_data.replySuggestions,
-                                                    chatExamples: json_data.chatExamples,
-                                                    situationImages: json_data.situationImages,
-                                                    categoryIds: [json_data.categories[0]._id],
-                                                    tags: json_data.tags,
-                                                    visibility: "public",
-                                                    promptTemplate: json_data.promptTemplate.template,
-                                                    isCommentBlocked: json_data.isCommentBlocked,
-                                                    defaultStartingSetName: json_data.defaultStartingSetName,
-                                                    startingSets: json_data.startingSets,
-                                                    keywordBook: json_data.keywordBook,
-                                                    customPrompt: json_data.customPrompt,
-                                                    defaultStartingSetSituationPrompt: json_data.defaultStartingSetSituationPrompt,
-                                                    isAdult: json_data.isAdult,
-                                                })
-                                            }
-                                            //캐릭터챗 만들기
-                                            fetch(wrtn_api + "/characters",{
-                                                method: "POST",
-                                                headers: {
-                                                    "Authorization": `Bearer ${getCookie(token_key)}`,
-                                                    "Content-Type": "application/json",
-                                                },
-                                                body: json_body,
-                                            }).then(res => res.json()).then(data => {
-                                                debug("POST "+ wrtn_api + "/characters",2);
-                                                alert("캐챗 공개 성공! (새로고침 후 적용됩니다.)");
-                                            })
-                                        })
+                                        wrtn.getMycharacter(datum._id).publish();
+                                        alert("캐챗 공개 성공! (새로고침 후 적용됩니다.)");
                                     }
                                     i++;
                                 }
@@ -2667,6 +2813,25 @@ function putAfetch (url,data){
     }
     else{
         alert(`api put 요청 실패 ${url} | ${JSON.stringify(data)}`);
+    }
+}
+
+//PUT
+function patchAfetch (url,data){
+    //******* AJAX Sync PUT 요청 *******
+    const xhr = new XMLHttpRequest();
+    xhr.open("PATCH", url, false); // 동기(false) ,비동기(true)
+    xhr.setRequestHeader("Authorization", `Bearer ${getCookie(token_key)}`);
+    //PUT 요청 시 일반적으로 Content-Type은 세팅
+    xhr.setRequestHeader("Content-Type", "application/json");
+    //PUT 요청에 보낼 데이터 작성
+    xhr.send(JSON.stringify(data)); //JSON 형태로 변환하여 서버에 전송
+    if (xhr.status == 200){
+        debug(`PATCH ${url}`,2);
+        return xhr.responseText;
+    }
+    else{
+        alert(`api patch 요청 실패 ${url} | ${JSON.stringify(data)}`);
     }
 }
 
