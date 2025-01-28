@@ -104,8 +104,8 @@ my_struct.publish() // 캐릭터 공개
 ## message_struct
 
 ```js
-message_struct.get() // 메시지 가져오기
-message_struct.set(content) // 메시지 수정
+message_struct.get() // 메시지 내용 가져오기
+message_struct.set(content) // 메시지 내용 수정
 message_struct.remove() // 메시지 삭제
 ```
 
