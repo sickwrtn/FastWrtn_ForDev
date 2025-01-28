@@ -37,7 +37,8 @@ ctl + 1~9 단축키 사용 가능합니다.
 
 템플릿별 프롬프트 선택이 가능합니다. (1 : 1 캐릭터챗,시뮬레이션,커스텀)
 
-![Memory Afterburner](https://github.com/user-attachments/assets/c44c6cf4-7a0e-4d39-9172-6d3ee9ecfd35)
+![Memory Afterburner](https://github.com/user-attachments/assets/d6a4876b-13e1-4c66-a09b-5bb028230191)
+
 
 ## 랭킹 플러스 기능
 
