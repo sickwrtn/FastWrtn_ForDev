@@ -558,6 +558,8 @@ class wrtn_api_class {
 
 const wrtn = new wrtn_api_class();
 
+debug("sdk");
+
 //댓글 및 업데이트 날짜 front html + css
 var plus_modal_date_and_comment = "<div display=\"flex\" width=\"100%\" style=\"    display: flex;\n" +
     "    flex-direction: column;\n" +
