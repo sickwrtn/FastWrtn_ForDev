@@ -65,8 +65,14 @@ ctl + 1~9 단축키 사용 가능합니다.
 
 ![제작 기능](https://github.com/user-attachments/assets/bd43b088-efaa-4840-b49f-047c56fb2024)
 
-# sdk
-![]
+# SDK
+
+[뤼튼 api SDK](https://github.com/sickwrtn/FastWrtn/blob/main/sdk/wrtn_api.js)
+
+```js
+const wrtn = new wrtn_api_class();
+console.log(wrtn.getUser());
+```
 
 # 패치노트
 
