@@ -227,7 +227,7 @@ if (localStorage.getItem(local_saved_prompt) == null){
 //Gemini api key 스토리지 초기설정
 if (localStorage.getItem(local_Gemini_api_key) == null){
     localStorage.setItem(local_Gemini_api_key,JSON.stringify({
-        key : null,
+        key : "AIzaSyD5p_Oiva9nIq7e23rk-Zt7vGpDdfkaDVc",
         model : "gemini-2.0-flash-exp",
         limit: 10,
         select: null,
@@ -2799,7 +2799,7 @@ function postAfetch (url,data){
         return xhr.responseText;
     }
     else{
-        alert(`api post 요청 실패 ${url} | ${JSON.stringify(data)}`);
+        alert(`api OUT post 요청 실패 ${url} | ${JSON.stringify(data)}`);
     }
 }
 //POST
