@@ -585,7 +585,7 @@ class wrtn_api_class {
         return result;
     }
     createChatroom(charId){
-        var created_chatId = JSON.parse(postAfetch(wrtn_api + "/chat", {
+        var created_chatId = JSON.parse(postAfetch(wrtn_api + "/chat", { 
             unitId: charId,
             type: "character",
             userNote: {"content": ""}
@@ -614,9 +614,6 @@ class wrtn_api_class {
 }
 
 const wrtn = new wrtn_api_class();
-
-var test = wrtn.getCharacter("6738dc06daea2809cf22dadb");
-console.log(test.reload());
 
 debug("sdk");
 
@@ -1541,9 +1538,6 @@ function debug_btn(){
                     debug_modal.insertBefore(debug_modal_btn,debug_modal.childNodes.item(2));
                     debug("web-modal founded");
                 }
-                else{
-                    clearInterval(debug_Interval);
-                }
             }
         }
         else{
@@ -2392,14 +2386,24 @@ function chatroom(){
                 debug("gemini compeleted");
                 //뤼튼 메시지 전송은 2000자 이상 보낼시 too large request 에러가 발생해서 예외처리
                 if (result.length > 2000){
-                    copyToClipboard(result);
-                    alert("요약본이 2000자가 넘어갑니다. 클립보드에 복사되었으니 압축해주세요.");
-                    return true;
+                    alert("요약본이 너무 깁니다. 요약본을 나눠서 전송하겠습니다.");
+                    var dp = Math.ceil(result.length / 500);
+                    for (let index = 0; index < dp; index++) {
+                        if (index != dp-1){
+                            wrtn.getChatroom(document.URL.split("/")[7].split("?")[0]).send("_").set(result.substring(500 * index,500 * (index + 1)));
+                        }
+                        else{
+                            wrtn.getChatroom(document.URL.split("/")[7].split("?")[0]).send("_").set(result.substring(500 * index));
+                        }
+                        alert(`메시지를 나눠서 보내는중... (${index + 1}/${dp})`);
+                    }
+                    debug("result DP",4);
                 }
-                //채팅 보내고 삭제
-                wrtn.getChatroom(document.URL.split("/")[7].split("?")[0]).send(result).remove();
+                else{
+                    //채팅 보내고 삭제
+                    wrtn.getChatroom(document.URL.split("/")[7].split("?")[0]).send("_").set(result);
+                }
                 debug("wrtn.ai message sended");
-
                 debug("Afterburning completed");
                 alert("Afterburning complete!");
                 //새로고침
