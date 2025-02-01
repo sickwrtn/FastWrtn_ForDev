@@ -37,7 +37,8 @@ ctl + 1~9 단축키 사용 가능합니다.
 
 템플릿별 프롬프트 선택이 가능합니다. (1 : 1 캐릭터챗,시뮬레이션,커스텀)
 
-![Memory Afterburner](https://github.com/user-attachments/assets/c44c6cf4-7a0e-4d39-9172-6d3ee9ecfd35)
+![Memory Afterburner](https://github.com/user-attachments/assets/d6a4876b-13e1-4c66-a09b-5bb028230191)
+
 
 ## 랭킹 플러스 기능
 
@@ -64,6 +65,60 @@ ctl + 1~9 단축키 사용 가능합니다.
 프롬프트를 저장할수있는 기능입니다.
 
 ![제작 기능](https://github.com/user-attachments/assets/bd43b088-efaa-4840-b49f-047c56fb2024)
+
+# SDK
+
+[뤼튼 api SDK](https://github.com/sickwrtn/FastWrtn/blob/main/sdk/wrtn_api.js)
+
+## fast
+
+```js
+const wrtn = new wrtn_api_class();
+console.log(wrtn.getUser());
+```
+
+## wrtn_api_class
+
+```js
+wrtn_api_class.getUser() // 유저 정보 조회
+wrtn_api_class.getSuperchat() // 슈퍼챗 관련 정보 조회
+wrtn_api_class.getPersona() // 페르소나 조회
+wrtn_api_class.getRepresentativePersona() // 대표프로필 조회
+async wrtn_api_class.getChatrooms(cursor="",load_limit=40,type="character") // 채팅방 조회
+async wrtn_api_class.getMycharacters(cursor="",load_limit=40) // 제작한 캐릭터 조회
+async wrtn_api_class.character_search(query,cursor="",sort="score",load_limit=40) // 캐릭터 검색
+async wrtn_api_class.user_search(query,cursor="",load_limit=40) // 유저 검색
+wrtn_api_class.getMycharacter(charId) // 캐릭터 가져오기 return new my_struct
+wrtn_api_class.getMessage(msgId) // 메시기 가져오기 return new message_struct
+wrtn_api_class.getChatroom(chatId) // 채팅방 가져오기 return new chatroom_struct
+```
+
+## my_struct
+
+```js
+my_struct.get() // json화 된 캐릭터 정보를 조회
+my_struct.set(json_data) // json화 된 캐릭터 정보로 캐챗 수정
+my_struct.remove() // 캐릭터 삭제
+my_struct.publish() // 캐릭터 공개
+```
+
+## message_struct
+
+```js
+message_struct.get() // 메시지 내용 가져오기
+message_struct.set(content) // 메시지 내용 수정
+message_struct.remove() // 메시지 삭제
+```
+
+## chatroom_struct
+
+```js
+chatroom_struct.chatroom_struct.remove()  // 채팅방 삭제
+async chatroom_struct.getMessages(cursor="",load_limit = 40) // 채팅방 메시지 조회
+chatroom_struct.send(content,IsSuperMode = false) // 메시지 보내기 return new message_struct
+chatroom_struct.getUsernote() // 유저 노트 가져오기
+chatroom_struct.setUsernote(content) // 유저 노트 변경
+```
 
 # 패치노트
 
