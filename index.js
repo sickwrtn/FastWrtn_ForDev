@@ -2665,20 +2665,25 @@ function my(){
                         tipbar_copy.childNodes.item(0).textContent = copyTojson;
                         //copy to json 클릭시
                         tipbar_copy.addEventListener('click',()=>{
-                            my_character_list = [];
-                            load_in_cursor(cursor="",my_character_list,wrtn,"my",(my_character_list)=>{
-                                i=0;
-                                for (const datum of my_character_list) {
-                                    //조회한 캐챗을 가져옴
-                                    if (i == selected){
-                                        //캐챗 id를 사용해서 캐챗의 모든 정보를 가져온후 클립보드에 복사
-                                        copyToClipboard(JSON.stringify(wrtn.getMycharacter(datum._id).get()));
-                                        alert('클립보드에 복사되었습니다!');
-                                    }
-                                    i++;
-                                }
-                            })
                             debug(`tipbar_copy`,3);
+                            if (confirm("진짜 복사 하시겠습니까?")){
+                                my_character_list = [];
+                                load_in_cursor(cursor="",my_character_list,wrtn,"my",(my_character_list)=>{
+                                    i=0;
+                                    for (const datum of my_character_list) {
+                                        //조회한 캐챗을 가져옴
+                                        if (i == selected){
+                                            //캐챗 id를 사용해서 캐챗의 모든 정보를 가져온후 클립보드에 복사
+                                            copyToClipboard(JSON.stringify(wrtn.getMycharacter(datum._id).get()));
+                                            alert('클립보드에 복사되었습니다!');
+                                        }
+                                        i++;
+                                    }
+                                })
+                            }
+                            else {
+                                return true;
+                            }
                         })
                         tipbar.item(0).appendChild(tipbar_copy);
                     }
@@ -2688,24 +2693,30 @@ function my(){
                         tipbar_paste.childNodes.item(0).textContent = pasteTojson;
                         //paste to json 클릭시
                         tipbar_paste.addEventListener('click',()=>{
-                            my_character_list = [];
-                            //유저가 제작한 캐챗 목록을 10000개 조회함 (설마 이것보다 많이 만든 사람이 있겠어?)
-                            load_in_cursor(cursor="",my_character_list,wrtn,"my",(my_character_list)=>{
-                                i = 0;
-                                for (const datum of my_character_list) {
-                                    //조회한 캐챗을 가져옴
-                                    if (i == selected) {
-                                        //클립보드를 가져옴
-                                        getClipboardTextModern().then(function (clipboardContent) {
-                                            json_data = JSON.parse(clipboardContent); //클립보드 내용 json화
-                                            wrtn.getMycharacter(datum._id).set(json_data);
-                                            alert("캐챗 변경 성공! (새로고침 후 적용됩니다.)");
-                                        })
-                                    }
-                                    i++
-                                }
-                            })
                             debug(`tipbar_paste`,3);
+                            if (confirm("진짜 붙혀넣으시겠습니까?")){
+                                my_character_list = [];
+                                //유저가 제작한 캐챗 목록을 10000개 조회함 (설마 이것보다 많이 만든 사람이 있겠어?)
+                                load_in_cursor(cursor="",my_character_list,wrtn,"my",(my_character_list)=>{
+                                    i = 0;
+                                    for (const datum of my_character_list) {
+                                        //조회한 캐챗을 가져옴
+                                        if (i == selected) {
+                                            //클립보드를 가져옴
+                                            getClipboardTextModern().then(function (clipboardContent) {
+                                                json_data = JSON.parse(clipboardContent); //클립보드 내용 json화
+                                                wrtn.getMycharacter(datum._id).set(json_data);
+                                                alert("캐챗 변경 성공! (새로고침 후 적용됩니다.)");
+                                                window.location.reload();
+                                            })
+                                        }
+                                        i++
+                                    }
+                                })
+                            }
+                            else{
+                                return true;
+                            }
                         })
                         tipbar.item(0).appendChild(tipbar_paste);
                     }
@@ -2714,19 +2725,25 @@ function my(){
                     if (tipbar.item(0).childNodes.item(4) == null){
                         tipbar_clone.childNodes.item(0).textContent = publish;
                         tipbar_clone.addEventListener("click",()=> {
-                            my_character_list = [];
-                            load_in_cursor(cursor="",my_character_list,wrtn,"my",(my_character_list)=>{
-                                i=0;
-                                for (const datum of my_character_list) {
-                                    //조회한 캐챗을 가져옴
-                                    if (i == selected){
-                                        wrtn.getMycharacter(datum._id).publish();
-                                        alert("캐챗 공개 성공! (새로고침 후 적용됩니다.)");
-                                    }
-                                    i++;
-                                }
-                            })
                             debug(`tipbar_clone`,3);
+                            if (confirm("진짜 공개하시겠습니까?")){
+                                my_character_list = [];
+                                load_in_cursor(cursor="",my_character_list,wrtn,"my",(my_character_list)=>{
+                                    i=0;
+                                    for (const datum of my_character_list) {
+                                        //조회한 캐챗을 가져옴
+                                        if (i == selected){
+                                            wrtn.getMycharacter(datum._id).publish();
+                                            alert("캐챗 공개 성공! (새로고침 후 적용됩니다.)");
+                                            window.location.reload();
+                                        }
+                                        i++;
+                                    }
+                                })
+                            }
+                            else{
+                                return true;
+                            }
                         })
                         tipbar.item(0).appendChild(tipbar_clone);
                     }
