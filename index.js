@@ -61,6 +61,7 @@ var local_IsDebug = "debug"; //로컬스토리지 디버그 위치
 var local_Gemini_api_key = "Gemini Api Key"; //로컬스토리지 제미니 키 + 모델 + limit + select 저장위치
 var local_saved_prompt = "saved_prompt"; //로컬스토리지 프롬프트 저장 위치
 var local_usernote = "usernote"; //로컬스토리지 유저노트용 캐챗방 id 저장 위치
+var local_tag = "tags";
 var token_key = "access_token"; //쿠키중 가져올 토큰값 (조회 및 수정용 토큰 정보를 수집하지 않음)
 debug("env variables");
 
@@ -241,6 +242,14 @@ if (localStorage.getItem(local_IsDebug) == null){
         IsDebug: false
     }))
 }
+
+//태그 초기설정
+if (localStorage.getItem(local_tag) == null){
+    localStorage.setItem(local_tag,JSON.stringify({
+        tags: []
+    }))
+}
+
 debug("localStorage");
 
 //log on developer console
@@ -1394,9 +1403,21 @@ var feed_struct_element_front_html = "<div display=\"flex\" class=\"css-1878569\
 var AfterMemory_front_html = "<div style='position: fixed; inset: 0px; z-index: -1; background-color: var(--color_bg_dimmed); cursor: default;'><div style='align-items: flex-end; width: 100%; height: 100%; display: flex; -webkit-box-align: center; align-items: center; -webkit-box-pack: center; justify-content: center; position: relative;'><div width='100%' display='flex' style=' width: 600px; max-width: calc(100% - 40px); background-color: var(--color_surface_elevated); max-height: 90dvh; overflow-y: auto; z-index: 15; border-width: initial; border-style: none; border-image: initial; border-color: var(--color_outline_secondary); border-radius: 12px; box-shadow: none; display: flex; flex-direction: column;'><div display='flex' style='flex-direction: column;-webkit-box-align: center;align-items: center;text-align: center;'><div display='flex' width='100%' style=' display: flex; flex-direction: row; padding: 20px 24px; -webkit-box-align: center; align-items: center; -webkit-box-pack: justify; justify-content: space-between; width: 100%; border-bottom: 1px solid rgb(97, 96, 90);'><p color='$color_text_primary' style=' color: var(--color_text_primary); font-size: 20px; line-height: 100%; font-weight: 600;'>Afterburning Memory</p><svg width='26' height='26' viewBox='0 0 24 25' fill='currentColor' xmlns='http://www.w3.org/2000/svg' color='#a8a69dff' cursor='pointer' id='W_x'><path fill-rule='evenodd' clip-rule='evenodd' d='M12 11.0228L7.05026 6.07305L5.63604 7.48726L10.5858 12.437L5.63604 17.3868L7.05026 18.801L12 13.8512L16.9498 18.801L18.364 17.3868L13.4142 12.437L18.364 7.48726L16.9498 6.07305L12 11.0228Z' fill='currentColor'></path></svg></div><div display='flex' width='100%' style=' display: flex; flex-direction: column; padding: 20px; width: 100%; gap: 12px;'><div display='flex' style=' display: flex; flex-direction: column; gap: 8px;'><p color='$color_text_primary' style=' color: var(--color_text_primary); text-align: left; font-size: 16px; line-height: 100%; font-weight: 600;'>Gemini Api Key</p><div style=' color: var(--color_text_primary); text-align: left; font-size: 16px; line-height: 100%; font-weight: 600;'><select name='languages' id='lang' style=' width: 150px; height: 35px; background-size: 20px; padding: 5px 30px 5px 10px; border-radius: 4px; outline: 0 none; background-color: #242321; color: white;'><option value='0'>1:1 캐릭터</option><option value='1'>시뮬레이션</option><option value='2'>주요사건 위주</option><option value='3'>커스텀</option></select></div></div><textarea height='26px' color='$color_text_primary' placeholder='Gemini Api Key를 넣어주세요' rows='5' wrap='hard' style='color: var(--color_text_primary);height: 26px; border-radius: 5px; border-width: 1px; border-style: solid; border-image: initial; border-color: var(--color_outline_secondary); background-color: var(--color_surface_ivory); padding: 11px 16px; min-height: 50px; max-height: 386px; font-size: 16px; line-height: 160%; font-weight: 500; resize: none; outline: none; caret-color: var(--color_text_brand);' class='css-wmzh35' id='W_name'></textarea><div display='flex' style=' display: flex; flex-direction: column; gap: 8px;'></div></div><div display='flex' width='100%' style=' display: flex; flex-direction: column; padding: 20px; width: 100%; gap: 12px;'><div display='flex' style=' display: flex; flex-direction: column; gap: 8px;'><p color='$color_text_primary' style=' color: var(--color_text_primary); text-align: left; font-size: 16px; line-height: 100%; font-weight: 600;'>Model</p></div><textarea height='26px' color='$color_text_primary' placeholder='사용하실 모델을 넣어주세요.' rows='5' wrap='hard' style='color: var(--color_text_primary);height: 26px; border-radius: 5px; border-width: 1px; border-style: solid; border-image: initial; border-color: var(--color_outline_secondary); background-color: var(--color_surface_ivory); padding: 11px 16px; min-height: 50px; max-height: 386px; font-size: 16px; line-height: 160%; font-weight: 500; resize: none; outline: none; caret-color: var(--color_text_brand);' class='css-wmzh35' id='W_name'></textarea><div display='flex' style=' display: flex; flex-direction: column; gap: 8px;'></div></div><div display='flex' width='100%' style=' display: flex; flex-direction: column; padding: 20px; width: 250px; gap: 12px;'><div display='flex' style=' display: flex; flex-direction: column; gap: 8px;'><p color='$color_text_primary' style=' color: var(--color_text_primary); text-align: left; font-size: 16px; line-height: 100%; font-weight: 600;'>가져올 턴수 (max:50 min:0)</p></div><textarea height='26px' color='$color_text_primary' placeholder='기억 턴수' rows='5' wrap='hard' style='color: var(--color_text_primary);height: 26px; border-radius: 5px; border-width: 1px; border-style: solid; border-image: initial; border-color: var(--color_outline_secondary); background-color: var(--color_surface_ivory); padding: 11px 16px; min-height: 50px; max-height: 386px; font-size: 16px; line-height: 160%; font-weight: 500; resize: none; outline: none; caret-color: var(--color_text_brand);' class='css-wmzh35' id='W_name'></textarea><div display='flex' style=' display: flex; flex-direction: column; gap: 8px;'></div></div><div display='flex' width='100%' style=' display: flex; flex-direction: row; width: 100%; -webkit-box-pack: end; justify-content: flex-end; gap: 8px; padding: 12px 20px 20px;'><button display='flex' width='100%' height='40px' color='$color_text_primary' id='W_close' style=' border-radius: 5px; -webkit-box-pack: center; justify-content: center; -webkit-box-align: center; align-items: center; display: flex; flex-direction: row; gap: 8px; width: 100%; border: 1px solid transparent; padding: 0px 20px; height: 40px; background-color: var(--color_surface_tertiary); color: var(--color_text_primary); font-size: 16px; line-height: 100%; font-weight: 600; cursor: pointer;'><div display='flex' style=' display: flex; flex-direction: row; gap: 8px; -webkit-box-align: center; align-items: center;'>닫기</div></button><button display='flex' width='100%' height='40px' color='$color_text_ivory' id='W_sumbit' style=' border-radius: 5px; -webkit-box-pack: center; justify-content: center; -webkit-box-align: center; align-items: center; display: flex; flex-direction: row; gap: 8px; width: 100%; border: 1px solid transparent; padding: 0px 20px; height: 40px; background-color: var(--color_surface_primary); color: var(--color_text_ivory); font-size: 16px; line-height: 100%; font-weight: 600; cursor: pointer;'><div display='flex' style=' display: flex; flex-direction: row; gap: 8px; -webkit-box-align: center; align-items: center;'>시작</div></button></div></div></div></div></div>";
 
 var AfterMemory_textarea_front_html = "<div display='flex' width='100%' style=' display: flex; flex-direction: column; padding: 20px; width: 100%; gap: 12px;'><div display='flex' style=' display: flex; flex-direction: column; gap: 8px;'><p color='$color_text_primary' style=' color: var(--color_text_primary); text-align: left; font-size: 16px; line-height: 100%; font-weight: 600;'>custum prompt</p></div><textarea height='26px' color='$color_text_primary' placeholder='사용 하실 프롬프트를 입력해 주세요' rows='5' wrap='hard' style='color: var(--color_text_primary);height: 26px; border-radius: 5px; border-width: 1px; border-style: solid; border-image: initial; border-color: var(--color_outline_secondary); background-color: var(--color_surface_ivory); padding: 11px 16px; min-height: 150px; max-height: 386px; font-size: 16px; line-height: 160%; font-weight: 500; resize: none; outline: none; caret-color: var(--color_text_brand);' class='css-wmzh35' id='W_name'></textarea><div display='flex' style=' display: flex; flex-direction: column; gap: 8px;'></div></div>";
+
+var tag_modal_front_html = "<div style='position: fixed; inset: 0px; z-index: -1; background-color: var(--color_bg_dimmed); cursor: default;'><div style='align-items: flex-end; width: 100%; height: 100%; display: flex; -webkit-box-align: center; align-items: center; -webkit-box-pack: center; justify-content: center; position: relative;'><div width='100%' display='flex' style=' width: 600px; max-width: calc(100% - 40px); background-color: var(--color_surface_elevated); max-height: 90dvh; overflow-y: auto; z-index: 15; border-width: initial; border-style: none; border-image: initial; border-color: var(--color_outline_secondary); border-radius: 12px; box-shadow: none; display: flex; flex-direction: column;'><div display='flex' style='flex-direction: column;-webkit-box-align: center;align-items: center;text-align: center;'><div display='flex' width='100%' style=' display: flex; flex-direction: row; padding: 20px 24px; -webkit-box-align: center; align-items: center; -webkit-box-pack: justify; justify-content: space-between; width: 100%; border-bottom: 1px solid rgb(97, 96, 90);'><p color='$color_text_primary' style=' color: var(--color_text_primary); font-size: 20px; line-height: 100%; font-weight: 600;'>태그 필터링</p><svg width='26' height='26' viewBox='0 0 24 25' fill='currentColor' xmlns='http://www.w3.org/2000/svg' color='#a8a69dff' cursor='pointer' id='W_x'><path fill-rule='evenodd' clip-rule='evenodd' d='M12 11.0228L7.05026 6.07305L5.63604 7.48726L10.5858 12.437L5.63604 17.3868L7.05026 18.801L12 13.8512L16.9498 18.801L18.364 17.3868L13.4142 12.437L18.364 7.48726L16.9498 6.07305L12 11.0228Z' fill='currentColor'></path></svg></div><div display='flex' width='100%' style=' display: flex; flex-direction: column; padding: 20px; width: 100%; gap: 12px;'><div display='flex' style=' display: flex; flex-direction: column; gap: 8px;'><p color='$color_text_primary' style=' color: var(--color_text_primary); text-align: left; font-size: 16px; line-height: 100%; font-weight: 600;'>태그 키워드 ( , 으로 구분)</p></div><textarea height='26px' color='$color_text_primary' placeholder='태그1,태그2' rows='5' wrap='hard' style='color: var(--color_text_primary);height: 26px; border-radius: 5px; border-width: 1px; border-style: solid; border-image: initial; border-color: var(--color_outline_secondary); background-color: var(--color_surface_ivory); padding: 11px 16px; min-height: 50px; max-height: 386px; font-size: 16px; line-height: 160%; font-weight: 500; resize: none; outline: none; caret-color: var(--color_text_brand);' class='css-wmzh35' id='W_name'></textarea><div display='flex' style=' display: flex; flex-direction: column; gap: 8px;'></div></div><div display='flex' width='100%' style=' display: flex; flex-direction: row; width: 100%; -webkit-box-pack: end; justify-content: flex-end; gap: 8px; padding: 12px 20px 20px;'><button display='flex' width='100%' height='40px' color='$color_text_primary' id='W_close' style=' border-radius: 5px; -webkit-box-pack: center; justify-content: center; -webkit-box-align: center; align-items: center; display: flex; flex-direction: row; gap: 8px; width: 100%; border: 1px solid transparent; padding: 0px 20px; height: 40px; background-color: var(--color_surface_tertiary); color: var(--color_text_primary); font-size: 16px; line-height: 100%; font-weight: 600; cursor: pointer;'><div display='flex' style=' display: flex; flex-direction: row; gap: 8px; -webkit-box-align: center; align-items: center;'>닫기</div></button><button display='flex' width='100%' height='40px' color='$color_text_ivory' id='W_sumbit' style=' border-radius: 5px; -webkit-box-pack: center; justify-content: center; -webkit-box-align: center; align-items: center; display: flex; flex-direction: row; gap: 8px; width: 100%; border: 1px solid transparent; padding: 0px 20px; height: 40px; background-color: var(--color_surface_primary); color: var(--color_text_ivory); font-size: 16px; line-height: 100%; font-weight: 600; cursor: pointer;'><div display='flex' style=' display: flex; flex-direction: row; gap: 8px; -webkit-box-align: center; align-items: center;'>시작</div></button></div></div></div></div></div>";
+
 debug("front html");
 //랭킹 플러스 필터링
 function filter_character_list(characterListElement,IsCe){
+    if (JSON.parse(localStorage.getItem(local_tag)).tags != []){
+        for (var element of JSON.parse(localStorage.getItem(local_tag)).tags) {
+            for (var element2 of characterListElement.tags) {
+                if (element == element2){
+                    return false;
+                }   
+            }
+        }
+    }
     if (characterListElement.likeCount < likeCount_limit || characterListElement.chatCount < chatCount_limit){
         return false;
     }
@@ -1404,7 +1425,7 @@ function filter_character_list(characterListElement,IsCe){
         if (IsCe){
             if (characterListElement.creator.isCertifiedCreator){
                 debug(characterListElement.name + " (Ce) ",5);
-                return true
+                return true;
             }
             else{
                 return false;
@@ -1512,6 +1533,7 @@ function debug_btn(){
     var debug_Interval = setInterval(()=>{
         if (document.URL == "https://wrtn.ai/character"){
             var debug_modal = document.getElementsByClassName("css-e5sxrv").item(0);
+            var tag_modal = document.getElementsByClassName("css-1chjrq6").item(0);
             if (debug_modal != null){
                 if (debug_modal.childNodes.length == 3){
                     var debug_modal_btn = debug_modal.childNodes[2].childNodes.item(0).cloneNode(true);
@@ -1537,6 +1559,55 @@ function debug_btn(){
                     })
                     debug_modal.insertBefore(debug_modal_btn,debug_modal.childNodes.item(2));
                     debug("web-modal founded");
+                }
+            }
+            if (tag_modal != null){
+                if (tag_modal.childNodes.length == 9){
+                    var tag_button = tag_modal.childNodes.item(0).cloneNode(true);
+                    tag_button.childNodes.item(1).textContent = "태그 검열";
+                    tag_button.addEventListener('click',()=>{
+                        document.getElementById("web-modal").remove();
+                        const tag_modal = document.createElement("modal");
+                        tag_modal.innerHTML = tag_modal_front_html;
+                        tag_modal.setAttribute("style","position: relative !important;\n" +
+                            "    z-index: 11 !important;");
+                        var tag_modal_tabs = tag_modal.childNodes[0].childNodes[0].childNodes[0].childNodes.item(0);
+                        var tag_modal_x = tag_modal_tabs.childNodes[0].childNodes.item(1);
+                        var tag_modal_cancel = tag_modal_tabs.childNodes[2].childNodes.item(0);
+                        var tag_modal_btn = tag_modal_tabs.childNodes[2].childNodes.item(1);
+                        var tag_modal_textarea = tag_modal_tabs.childNodes[1].childNodes.item(1);
+
+                        if (JSON.parse(localStorage.getItem(local_tag)).tags != []){
+                            var tags = JSON.parse(localStorage.getItem(local_tag)).tags;
+                            console.log(tags);
+                            var s = 1
+                            for (const element of tags) {
+                                if (s == tags.length){
+                                    tag_modal_textarea.value = tag_modal_textarea.value + element;
+                                }
+                                else{
+                                    tag_modal_textarea.value = tag_modal_textarea.value + element + ",";
+                                }
+                                s++
+                            }
+                        }
+                        tag_modal_x.addEventListener('click',()=>{
+                            tag_modal.remove();
+                        })
+                        tag_modal_cancel.addEventListener('click',()=>{
+                            tag_modal.remove();
+                        })
+                        tag_modal_btn.addEventListener('click',()=>{
+                            localStorage.setItem(local_tag,JSON.stringify({
+                                tags : tag_modal_textarea.value.replace(" ","").split(",")
+                            }))
+                            alert("등록 성공!");
+                            tag_modal.remove();
+                            window.location.reload();
+                        })
+                        document.body.appendChild(tag_modal);
+                    })
+                    tag_modal.appendChild(tag_button);
                 }
             }
         }
