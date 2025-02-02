@@ -294,7 +294,7 @@ function load_in_cursor(cursor="",target_list,Target,method="",w_func){
     }
     */
    //cursor 구현은 재귀함수로 구현함cursor가 null일때까지 반복
-   //아직 테스트는 못해봄
+   //테스트 완
     if (cursor == null){
         w_func(target_list);
         debug("load_in_cursor",0);
@@ -463,12 +463,14 @@ class character_struct {
     async getComments(cursor="",sort="likeCount",load_limit=40){
         if (cursor != "") {
             var request = await fetch(wrtn_api + `/characters/${this.json._id}/comments?sort=${sort}&cursor=${cursor}&limit=${load_limit}`, this.getHeader);
+            debug(`GET ${wrtn_api + `/characters/${this.json._id}/comments?sort=${sort}&cursor=${cursor}&limit=${load_limit}`}`,2);
         }
         if (cursor == null){
             return null;
         }
         else {
             var request = await fetch(wrtn_api + `/characters/${this.json._id}/comments?sort=${sort}&&limit=${load_limit}`, this.getHeader);
+            debug(`GET ${wrtn_api + `/characters/${this.json._id}/comments?sort=${sort}&&limit=${load_limit}`}`,2);
         }
         var comment = await request.json();
         return comment;
@@ -608,12 +610,14 @@ class wrtn_api_class {
     async getMycharacters(cursor="",load_limit=40) {
         if (cursor != ""){
             var request = await fetch(wrtn_api + `/characters/me?limit=${load_limit}&cursor=${cursor}`, this.getHeader);
+            debug("GET " + wrtn_api + `/characters/me?limit=${load_limit}&cursor=${cursor}`,2);
         }
         else if (cursor == null){
             return null;
         }
         else{
             var request = await fetch(wrtn_api + `/characters/me?limit=${load_limit}`, this.getHeader);
+            debug("GET " + wrtn_api + `/characters/me?limit=${load_limit}`,2);
         }
         var characters = await request.json();
         return characters;
@@ -621,12 +625,14 @@ class wrtn_api_class {
     async character_search(query,cursor="",sort="score",load_limit=40){
         if (cursor != ""){
             var request = await fetch(wrtn_api + `/characters/search?limit=${load_limit}&query=${query}&sort=${sort}&cursor=${cursor}`);
+            debug("GET " + wrtn_api + `/characters/search?limit=${load_limit}&query=${query}&sort=${sort}&cursor=${cursor}`,2);
         }
         else if (cursor == null){
             return null;
         }
         else{
             var request = await fetch(wrtn_api + `/characters/search?limit=${load_limit}&query=${query}&sort=${sort}`);
+            debug("GET " + wrtn_api + `/characters/search?limit=${load_limit}&query=${query}&sort=${sort}`,2);
         }
         var result = await request.json();
         return result;
@@ -634,12 +640,14 @@ class wrtn_api_class {
     async user_search(query,cursor="",load_limit=40){
         if (cursor != ""){
             var request = await fetch(wrtn_api + `/character-profiles/search?limit=${load_limit}&query=${query}&cursor=${cursor}`);
+            debug("GET " + wrtn_api + `/character-profiles/search?limit=${load_limit}&query=${query}&cursor=${cursor}`,2);
         }
         else if (cursor == null){
             return null;
         }
         else{
             var request = await fetch(wrtn_api + `/character-profiles/search?limit=${load_limit}&query=${query}`);
+            debug("GET " + wrtn_api + `/character-profiles/search?limit=${load_limit}&query=${query}`,2);
         }
         var result = await request.json();
         return result;
