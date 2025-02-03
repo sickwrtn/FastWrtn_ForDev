@@ -1695,7 +1695,12 @@ function plus_modal_func(Tfeed,CeCreator){
     const feed_struct_elements = feed_struct.childNodes[1].childNodes[0].childNodes[0].childNodes.item(0); //형식에 들어있던 캐챗 목록 가져오기
     const feed_struct_element = feed_struct_elements.childNodes.item(0).cloneNode(true); //형식에 들어있던 캐챗중 제일 첫번째걸 형식 삼아 가져옴
     feed_struct_element.innerHTML = feed_struct_element_front_html;
-    const feed_struct_scroll_btn = feed_struct.childNodes[1].childNodes[0].childNodes[1].childNodes.item(0); // > 버튼
+    try {
+        var feed_struct_scroll_btn = feed_struct.childNodes[1].childNodes[0].childNodes[1].childNodes.item(0); // > 버튼
+    }
+    catch{
+        var feed_struct_scroll_btn = null;
+    }
     const feed_struct_scroll_btn_l = document.createElement("div"); // < 버튼
     debug("plus_modal_func",1);
     feed_struct_scroll_btn_l.setAttribute("width", "61px");
@@ -1709,10 +1714,12 @@ function plus_modal_func(Tfeed,CeCreator){
     feed_struct_scroll_btn_l.innerHTML = feed_front_html_scroll;
     const feed_struct_six = feed_struct.childNodes[1].childNodes.item(0); // < 버튼.
     // > 버튼 누를시
-    feed_struct_scroll_btn.addEventListener('click', () => {
-        scroll_func(feed_struct_scroll,feed_struct_six,feed_struct_scroll_btn_l,scroll_all_amount,scroll_amount);
-        debug("feed_struct_scroll_btn",3);
-    })
+    if (feed_struct_scroll_btn != null){
+        feed_struct_scroll_btn.addEventListener('click', () => {
+            scroll_func(feed_struct_scroll,feed_struct_six,feed_struct_scroll_btn_l,scroll_all_amount,scroll_amount);
+            debug("feed_struct_scroll_btn",3);
+        })
+    }
     /* 이 부분 부터는 랭킹 플러스 내부에 자격을 만족하는 캐릭터챗을 추가하는 기능
     근대 웃긴게 캐릭터챗을 불러오는데 시간이 걸려서 (원래 형식에 들어있어야할 캐챗을 불러오는거 말하는거임)
     한번에 알잘딱갈센으로 삭제가 안됨 그래서 기존에 남아있던 캐챗이 전부 삭제될때까지 for문 돌림
@@ -2089,7 +2096,10 @@ function character(){
 function chatroom(){
     try{
         const targetDiv = document.getElementsByClassName("css-d7pngb").item(0); //채팅바
-        const NS = document.getElementsByClassName("css-13yljkq").item(0); // 파란색 -> 버튼
+        var NS = document.getElementsByClassName("css-13yljkq").item(0); // 파란색 -> 버튼
+        if (NS == null){
+            NS = document.getElementsByClassName("css-oewmjm").item(0);
+        }
         const NBS = NS.cloneNode(true); // + 버튼
         const NBS_E = NS.cloneNode(true); // - 버튼
         const Cm = NBS.childNodes.item(0).childNodes.item(0); // + 버튼 svg
@@ -2897,6 +2907,7 @@ function getAfetch (url){
         alert(`api get 요청 실패 ${url}`);
     }
 }
+
 function deleteAfetch (url){
     const xhr = new XMLHttpRequest();
     xhr.open("DELETE", url, false); // 동기(false) ,비동기(true)
