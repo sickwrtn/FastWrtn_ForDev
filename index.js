@@ -49,6 +49,7 @@ var wrtn_api = "https://api.wrtn.ai/be"; //api
 var wrtn_api2 = "https://api2.wrtn.ai/terry"; //api1
 var wrtn_william = "https://william.wow.wrtn.ai"; //william
 var gemini_api_url = "https://generativelanguage.googleapis.com";
+var fastjournal_url = "http://www.fastjournal.kro.kr";
 var scroll_all_amount = 300 // <  > 누를시 이동할 스크롤 양
 var scroll_amount = 10; // 끊어서 스크롤 되는 양
 var limit = 30 // 불러올 캐챗수 (랭킹 플러스용)
@@ -74,6 +75,7 @@ var AfterMemory_name = "Memory Afterburner"; //AfterMemory 버튼
 var copyTojson = "copy to json"; //캐릭터 복사기능
 var pasteTojson = "paste to json"; //캐릭터 븥여넣기 기능
 var publish = "publish"; //공개 기능
+var fastjournal = "FastJournal"; //FastJournal 기능
 var usernote_description = "(Fast wrtn) 자동요약기능을 활용해 글자수를 절약해보세요! 업데이트는 가끔씩 해주시는게 좋아요!"; //유저노트 설명칸
 var usernote_for_error = "(Fast wrtn) 유저노트 요약기능은 새로운 캐챗이 아닌 진행중인 캐챗에서만 적용됩니다."; //처음 사용 유저노트 설명칸
 debug("namesspace");
@@ -2688,10 +2690,11 @@ function my(){
             //드랍다운 내부에 copy to json, copy to paste, publish 추가
             if (tipbar_struct != null){
                 //드랍다운이 일정 개수 이상 늘어나지 않도록 하는 조건문 5 가 아니라 3이여도 작동할듯
-                if (tipbar.item(0).childNodes.length < 5) {
+                if (tipbar.item(0).childNodes.length < 6) {
                     var tipbar_copy = tipbar_struct.cloneNode(true); //copy to json 버튼
                     var tipbar_paste = tipbar_struct.cloneNode(true); //copy to paste 버튼
                     var tipbar_clone = tipbar_struct.cloneNode(true); //publish 버튼
+                    var tipbar_fastjournal = tipbar_struct.cloneNode(true);
                     //copy to json
                     //copy to json가 현재 없다면
                     if (tipbar.item(0).childNodes.item(2) == null){
@@ -2779,6 +2782,29 @@ function my(){
                             }
                         })
                         tipbar.item(0).appendChild(tipbar_clone);
+                    }
+                    //FastJournal
+                    //FastJournal가 없다면
+                    if (tipbar.item(0).childNodes.item(5) == null){
+                        tipbar_fastjournal.childNodes.item(0).textContent = "FastJournal";
+                        tipbar_fastjournal.addEventListener("click",()=> {
+                            if (confirm("진짜 FastJournal로 이동하시겠습니까?")){
+                                load_in_cursor(cursor="",[],wrtn,"my",(my_character_list)=>{
+                                    i=0;
+                                    for (const datum of my_character_list) {
+                                        //조회한 캐챗을 가져옴
+                                        if (i == selected){
+                                            location.href = `http://www.fastjournal.kro.kr/index.html?charId=${datum._id}`;
+                                        }
+                                        i++;
+                                    }
+                                })
+                            }
+                            else{
+                                return true;
+                            }
+                        })
+                        tipbar.item(0).appendChild(tipbar_fastjournal);
                     }
                 }
                 opend=true;
