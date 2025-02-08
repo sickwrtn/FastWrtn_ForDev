@@ -62,7 +62,7 @@ var local_IsDebug = "debug"; //로컬스토리지 디버그 위치
 var local_Gemini_api_key = "Gemini Api Key"; //로컬스토리지 제미니 키 + 모델 + limit + select 저장위치
 var local_saved_prompt = "saved_prompt"; //로컬스토리지 프롬프트 저장 위치
 var local_usernote = "usernote"; //로컬스토리지 유저노트용 캐챗방 id 저장 위치
-var local_tag = "tags";
+var local_tag = "tags"; //로컬스토리지 태그 차단 키워드 저장 위치
 var token_key = "access_token"; //쿠키중 가져올 토큰값 (조회 및 수정용 토큰 정보를 수집하지 않음)
 debug("env variables");
 
