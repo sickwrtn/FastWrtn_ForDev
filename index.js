@@ -2667,6 +2667,30 @@ function chatroom(){
     debug("chatroom",0);
 }
 
+function myDropdown(tipbar,tipbar_struct_I,textContent,selected,func) {
+    tipbar_struct_I.childNodes.item(0).textContent = textContent;
+    tipbar_struct_I.addEventListener("click",()=> {
+        console.log(selected);
+        debug(`tipbar_struct`,3);
+        if (confirm("진짜 계속 진행 하시겠습니까?")){
+            load_in_cursor(cursor="",[],wrtn,"my",(my_character_list)=>{
+                i=0;
+                for (const datum of my_character_list) {
+                    //조회한 캐챗을 가져옴
+                    if (i == selected){
+                        func(datum);
+                    }
+                    i++;
+                }
+            })
+        }
+        else{
+            return true;
+        }
+    })
+    tipbar.item(0).appendChild(tipbar_struct_I);
+}
+
 function my(){
     /*
     여러번 수정 끝에 만들어 낸거임
@@ -2689,7 +2713,7 @@ function my(){
             }
             //드랍다운 내부에 copy to json, copy to paste, publish 추가
             if (tipbar_struct != null){
-                //드랍다운이 일정 개수 이상 늘어나지 않도록 하는 조건문 5 가 아니라 3이여도 작동할듯
+                //드랍다운 내부 요소 + 3 으로 length 길이를 제어하세요
                 if (tipbar.item(0).childNodes.length < 6) {
                     var tipbar_copy = tipbar_struct.cloneNode(true); //copy to json 버튼
                     var tipbar_paste = tipbar_struct.cloneNode(true); //copy to paste 버튼
@@ -2698,113 +2722,40 @@ function my(){
                     //copy to json
                     //copy to json가 현재 없다면
                     if (tipbar.item(0).childNodes.item(2) == null){
-                        tipbar_copy.childNodes.item(0).textContent = copyTojson;
-                        //copy to json 클릭시
-                        tipbar_copy.addEventListener('click',()=>{
-                            debug(`tipbar_copy`,3);
-                            if (confirm("진짜 복사 하시겠습니까?")){
-                                my_character_list = [];
-                                load_in_cursor(cursor="",my_character_list,wrtn,"my",(my_character_list)=>{
-                                    i=0;
-                                    for (const datum of my_character_list) {
-                                        //조회한 캐챗을 가져옴
-                                        if (i == selected){
-                                            //캐챗 id를 사용해서 캐챗의 모든 정보를 가져온후 클립보드에 복사
-                                            copyToClipboard(JSON.stringify(wrtn.getMycharacter(datum._id).get()));
-                                            alert('클립보드에 복사되었습니다!');
-                                        }
-                                        i++;
-                                    }
-                                })
-                            }
-                            else {
-                                return true;
-                            }
+                        myDropdown(tipbar,tipbar_copy,copyTojson,selected,(datum)=>{
+                            //캐챗 id를 사용해서 캐챗의 모든 정보를 가져온후 클립보드에 복사
+                            copyToClipboard(JSON.stringify(wrtn.getMycharacter(datum._id).get()));
+                            alert('클립보드에 복사되었습니다!');
                         })
-                        tipbar.item(0).appendChild(tipbar_copy);
                     }
                     //paste to json
                     //paste to json가 없다면
                     if (tipbar.item(0).childNodes.item(3) == null){
-                        tipbar_paste.childNodes.item(0).textContent = pasteTojson;
-                        //paste to json 클릭시
-                        tipbar_paste.addEventListener('click',()=>{
-                            debug(`tipbar_paste`,3);
-                            if (confirm("진짜 붙혀넣으시겠습니까?")){
-                                my_character_list = [];
-                                //유저가 제작한 캐챗 목록을 10000개 조회함 (설마 이것보다 많이 만든 사람이 있겠어?)
-                                load_in_cursor(cursor="",my_character_list,wrtn,"my",(my_character_list)=>{
-                                    i = 0;
-                                    for (const datum of my_character_list) {
-                                        //조회한 캐챗을 가져옴
-                                        if (i == selected) {
-                                            //클립보드를 가져옴
-                                            getClipboardTextModern().then(function (clipboardContent) {
-                                                json_data = JSON.parse(clipboardContent); //클립보드 내용 json화
-                                                wrtn.getMycharacter(datum._id).set(json_data);
-                                                alert("캐챗 변경 성공! (새로고침 후 적용됩니다.)");
-                                                window.location.reload();
-                                            })
-                                        }
-                                        i++
-                                    }
-                                })
-                            }
-                            else{
-                                return true;
-                            }
+                        myDropdown(tipbar,tipbar_paste,pasteTojson,selected,(datum)=>{
+                            //클립보드를 가져옴
+                            getClipboardTextModern().then(function (clipboardContent) {
+                                json_data = JSON.parse(clipboardContent); //클립보드 내용 json화
+                                wrtn.getMycharacter(datum._id).set(json_data);
+                                alert("캐챗 변경 성공! (새로고침 후 적용됩니다.)");
+                                window.location.reload();
+                            })
                         })
-                        tipbar.item(0).appendChild(tipbar_paste);
                     }
                     //publish
                     //publish가 없다면
                     if (tipbar.item(0).childNodes.item(4) == null){
-                        tipbar_clone.childNodes.item(0).textContent = publish;
-                        tipbar_clone.addEventListener("click",()=> {
-                            debug(`tipbar_clone`,3);
-                            if (confirm("진짜 공개하시겠습니까?")){
-                                my_character_list = [];
-                                load_in_cursor(cursor="",my_character_list,wrtn,"my",(my_character_list)=>{
-                                    i=0;
-                                    for (const datum of my_character_list) {
-                                        //조회한 캐챗을 가져옴
-                                        if (i == selected){
-                                            wrtn.getMycharacter(datum._id).publish();
-                                            alert("캐챗 공개 성공! (새로고침 후 적용됩니다.)");
-                                            window.location.reload();
-                                        }
-                                        i++;
-                                    }
-                                })
-                            }
-                            else{
-                                return true;
-                            }
+                        myDropdown(tipbar,tipbar_clone,publish,selected,(datum)=>{
+                            wrtn.getMycharacter(datum._id).publish();
+                            alert("캐챗 공개 성공! (새로고침 후 적용됩니다.)");
+                            window.location.reload();
                         })
-                        tipbar.item(0).appendChild(tipbar_clone);
                     }
                     //FastJournal
                     //FastJournal가 없다면
                     if (tipbar.item(0).childNodes.item(5) == null){
-                        tipbar_fastjournal.childNodes.item(0).textContent = "FastJournal";
-                        tipbar_fastjournal.addEventListener("click",()=> {
-                            if (confirm("진짜 FastJournal로 이동하시겠습니까?")){
-                                load_in_cursor(cursor="",[],wrtn,"my",(my_character_list)=>{
-                                    i=0;
-                                    for (const datum of my_character_list) {
-                                        //조회한 캐챗을 가져옴
-                                        if (i == selected){
-                                            location.href = `http://www.fastjournal.kro.kr/index.html?charId=${datum._id}`;
-                                        }
-                                        i++;
-                                    }
-                                })
-                            }
-                            else{
-                                return true;
-                            }
+                        myDropdown(tipbar,tipbar_fastjournal,fastjournal,selected,(datum)=>{
+                            location.href = `http://www.fastjournal.kro.kr/index.html?charId=${datum._id}`;
                         })
-                        tipbar.item(0).appendChild(tipbar_fastjournal);
                     }
                 }
                 opend=true;
@@ -2839,7 +2790,7 @@ function my(){
             }
             i++;
         }
-    },500)
+    },100)
     debug("my",0);
 }
 
