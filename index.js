@@ -43,7 +43,6 @@ setInterval => main() {
     ->  builder() : 캐릭터챗 제작 편의기능 /character/builder (프롬프트 저장)
 }
 */
-
 //environment variables
 var wrtn_api = "https://api.wrtn.ai/be"; //api
 var wrtn_api2 = "https://api2.wrtn.ai/terry"; //api1
@@ -1505,6 +1504,81 @@ var AfterMemory_textarea_front_html = "<div display='flex' width='100%' style=' 
 var tag_modal_front_html = "<div style='position: fixed; inset: 0px; z-index: -1; background-color: var(--color_bg_dimmed); cursor: default;'><div style='align-items: flex-end; width: 100%; height: 100%; display: flex; -webkit-box-align: center; align-items: center; -webkit-box-pack: center; justify-content: center; position: relative;'><div width='100%' display='flex' style=' width: 600px; max-width: calc(100% - 40px); background-color: var(--color_surface_elevated); max-height: 90dvh; overflow-y: auto; z-index: 15; border-width: initial; border-style: none; border-image: initial; border-color: var(--color_outline_secondary); border-radius: 12px; box-shadow: none; display: flex; flex-direction: column;'><div display='flex' style='flex-direction: column;-webkit-box-align: center;align-items: center;text-align: center;'><div display='flex' width='100%' style=' display: flex; flex-direction: row; padding: 20px 24px; -webkit-box-align: center; align-items: center; -webkit-box-pack: justify; justify-content: space-between; width: 100%; border-bottom: 1px solid rgb(97, 96, 90);'><p color='$color_text_primary' style=' color: var(--color_text_primary); font-size: 20px; line-height: 100%; font-weight: 600;'>태그 필터링</p><svg width='26' height='26' viewBox='0 0 24 25' fill='currentColor' xmlns='http://www.w3.org/2000/svg' color='#a8a69dff' cursor='pointer' id='W_x'><path fill-rule='evenodd' clip-rule='evenodd' d='M12 11.0228L7.05026 6.07305L5.63604 7.48726L10.5858 12.437L5.63604 17.3868L7.05026 18.801L12 13.8512L16.9498 18.801L18.364 17.3868L13.4142 12.437L18.364 7.48726L16.9498 6.07305L12 11.0228Z' fill='currentColor'></path></svg></div><div display='flex' width='100%' style=' display: flex; flex-direction: column; padding: 20px; width: 100%; gap: 12px;'><div display='flex' style=' display: flex; flex-direction: column; gap: 8px;'><p color='$color_text_primary' style=' color: var(--color_text_primary); text-align: left; font-size: 16px; line-height: 100%; font-weight: 600;'>태그 키워드 ( , 으로 구분)</p></div><textarea height='26px' color='$color_text_primary' placeholder='태그1,태그2' rows='5' wrap='hard' style='color: var(--color_text_primary);height: 26px; border-radius: 5px; border-width: 1px; border-style: solid; border-image: initial; border-color: var(--color_outline_secondary); background-color: var(--color_surface_ivory); padding: 11px 16px; min-height: 50px; max-height: 386px; font-size: 16px; line-height: 160%; font-weight: 500; resize: none; outline: none; caret-color: var(--color_text_brand);' class='css-wmzh35' id='W_name'></textarea><div display='flex' style=' display: flex; flex-direction: column; gap: 8px;'></div></div><div display='flex' width='100%' style=' display: flex; flex-direction: row; width: 100%; -webkit-box-pack: end; justify-content: flex-end; gap: 8px; padding: 12px 20px 20px;'><button display='flex' width='100%' height='40px' color='$color_text_primary' id='W_close' style=' border-radius: 5px; -webkit-box-pack: center; justify-content: center; -webkit-box-align: center; align-items: center; display: flex; flex-direction: row; gap: 8px; width: 100%; border: 1px solid transparent; padding: 0px 20px; height: 40px; background-color: var(--color_surface_tertiary); color: var(--color_text_primary); font-size: 16px; line-height: 100%; font-weight: 600; cursor: pointer;'><div display='flex' style=' display: flex; flex-direction: row; gap: 8px; -webkit-box-align: center; align-items: center;'>닫기</div></button><button display='flex' width='100%' height='40px' color='$color_text_ivory' id='W_sumbit' style=' border-radius: 5px; -webkit-box-pack: center; justify-content: center; -webkit-box-align: center; align-items: center; display: flex; flex-direction: row; gap: 8px; width: 100%; border: 1px solid transparent; padding: 0px 20px; height: 40px; background-color: var(--color_surface_primary); color: var(--color_text_ivory); font-size: 16px; line-height: 100%; font-weight: 600; cursor: pointer;'><div display='flex' style=' display: flex; flex-direction: row; gap: 8px; -webkit-box-align: center; align-items: center;'>시작</div></button></div></div></div></div></div>";
 
 debug("front html");
+
+function myDropdown(tipbar,tipbar_struct_I,textContent,selected,func) {
+    tipbar_struct_I.childNodes.item(0).textContent = textContent;
+    tipbar_struct_I.addEventListener("click",()=> {
+        console.log(selected);
+        debug(`tipbar_struct`,3);
+        if (confirm("진짜 계속 진행 하시겠습니까?")){
+            load_in_cursor(cursor="",[],wrtn,"my",(my_character_list)=>{
+                i=0;
+                for (const datum of my_character_list) {
+                    //조회한 캐챗을 가져옴
+                    if (i == selected){
+                        func(datum);
+                    }
+                    i++;
+                }
+            })
+        }
+        else{
+            return true;
+        }
+    })
+    tipbar.item(0).appendChild(tipbar_struct_I);
+}
+
+//character/my dropdown 클래스
+class dropdown_class {
+    constructor(){
+        this.item = []; 
+    }
+    addDropdown(name,funtion){
+        this.item[this.item.length] = [name,funtion]; 
+    }
+    listen(tipbar,tipbar_struct,selected){
+        if (tipbar.item(0).childNodes.length < this.item.length + 2) {
+            for (const element of this.item) {
+                const new_tipbar = tipbar_struct.cloneNode(true);
+                myDropdown(tipbar,new_tipbar,element[0],selected,(datum)=>{
+                    element[1](datum);
+                })
+            }
+        }
+    }
+}
+
+const dropdown = new dropdown_class();
+
+dropdown.addDropdown(copyTojson, (datum)=>{
+    //캐챗 id를 사용해서 캐챗의 모든 정보를 가져온후 클립보드에 복사
+    copyToClipboard(JSON.stringify(wrtn.getMycharacter(datum._id).get()));
+    alert('클립보드에 복사되었습니다!');
+})
+
+dropdown.addDropdown(pasteTojson, (datum)=>{
+    //클립보드를 가져옴
+    getClipboardTextModern().then(function (clipboardContent) {
+        json_data = JSON.parse(clipboardContent); //클립보드 내용 json화
+        wrtn.getMycharacter(datum._id).set(json_data);
+        alert("캐챗 변경 성공! (새로고침 후 적용됩니다.)");
+        window.location.reload();
+    })
+})
+
+dropdown.addDropdown(publish, (datum)=>{
+    //캐릭터를 공개상태로 새로만듬
+    wrtn.getMycharacter(datum._id).publish();
+    alert("캐챗 공개 성공! (새로고침 후 적용됩니다.)");
+    window.location.reload();
+})
+
+dropdown.addDropdown(fastjournal, (datum)=>{
+    //fastjournal로 이동시킴
+    location.href = `http://www.fastjournal.kro.kr/index.html?charId=${datum._id}`;
+})
+
 //랭킹 플러스 필터링
 function filter_character_list(characterListElement,IsCe){
     /*
@@ -2667,30 +2741,6 @@ function chatroom(){
     debug("chatroom",0);
 }
 
-function myDropdown(tipbar,tipbar_struct_I,textContent,selected,func) {
-    tipbar_struct_I.childNodes.item(0).textContent = textContent;
-    tipbar_struct_I.addEventListener("click",()=> {
-        console.log(selected);
-        debug(`tipbar_struct`,3);
-        if (confirm("진짜 계속 진행 하시겠습니까?")){
-            load_in_cursor(cursor="",[],wrtn,"my",(my_character_list)=>{
-                i=0;
-                for (const datum of my_character_list) {
-                    //조회한 캐챗을 가져옴
-                    if (i == selected){
-                        func(datum);
-                    }
-                    i++;
-                }
-            })
-        }
-        else{
-            return true;
-        }
-    })
-    tipbar.item(0).appendChild(tipbar_struct_I);
-}
-
 function my(){
     /*
     여러번 수정 끝에 만들어 낸거임
@@ -2713,51 +2763,7 @@ function my(){
             }
             //드랍다운 내부에 copy to json, copy to paste, publish 추가
             if (tipbar_struct != null){
-                //드랍다운 내부 요소 + 3 으로 length 길이를 제어하세요
-                if (tipbar.item(0).childNodes.length < 6) {
-                    var tipbar_copy = tipbar_struct.cloneNode(true); //copy to json 버튼
-                    var tipbar_paste = tipbar_struct.cloneNode(true); //copy to paste 버튼
-                    var tipbar_clone = tipbar_struct.cloneNode(true); //publish 버튼
-                    var tipbar_fastjournal = tipbar_struct.cloneNode(true);
-                    //copy to json
-                    //copy to json가 현재 없다면
-                    if (tipbar.item(0).childNodes.item(2) == null){
-                        myDropdown(tipbar,tipbar_copy,copyTojson,selected,(datum)=>{
-                            //캐챗 id를 사용해서 캐챗의 모든 정보를 가져온후 클립보드에 복사
-                            copyToClipboard(JSON.stringify(wrtn.getMycharacter(datum._id).get()));
-                            alert('클립보드에 복사되었습니다!');
-                        })
-                    }
-                    //paste to json
-                    //paste to json가 없다면
-                    if (tipbar.item(0).childNodes.item(3) == null){
-                        myDropdown(tipbar,tipbar_paste,pasteTojson,selected,(datum)=>{
-                            //클립보드를 가져옴
-                            getClipboardTextModern().then(function (clipboardContent) {
-                                json_data = JSON.parse(clipboardContent); //클립보드 내용 json화
-                                wrtn.getMycharacter(datum._id).set(json_data);
-                                alert("캐챗 변경 성공! (새로고침 후 적용됩니다.)");
-                                window.location.reload();
-                            })
-                        })
-                    }
-                    //publish
-                    //publish가 없다면
-                    if (tipbar.item(0).childNodes.item(4) == null){
-                        myDropdown(tipbar,tipbar_clone,publish,selected,(datum)=>{
-                            wrtn.getMycharacter(datum._id).publish();
-                            alert("캐챗 공개 성공! (새로고침 후 적용됩니다.)");
-                            window.location.reload();
-                        })
-                    }
-                    //FastJournal
-                    //FastJournal가 없다면
-                    if (tipbar.item(0).childNodes.item(5) == null){
-                        myDropdown(tipbar,tipbar_fastjournal,fastjournal,selected,(datum)=>{
-                            location.href = `http://www.fastjournal.kro.kr/index.html?charId=${datum._id}`;
-                        })
-                    }
-                }
+                dropdown.listen(tipbar,tipbar_struct,selected);
                 opend=true;
                 debug("dropdown event");
             }
