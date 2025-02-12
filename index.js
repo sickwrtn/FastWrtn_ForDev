@@ -45,42 +45,61 @@ setInterval => main() {
 */
 
 //environment variables
-var wrtn_api = "https://api.wrtn.ai/be"; //api
-var wrtn_api2 = "https://api2.wrtn.ai/terry"; //api1
-var wrtn_william = "https://william.wow.wrtn.ai"; //william
-var gemini_api_url = "https://generativelanguage.googleapis.com";
-var fastjournal_url = "http://www.fastjournal.kro.kr";
-var scroll_all_amount = 300 // <  > 누를시 이동할 스크롤 양
-var scroll_amount = 10; // 끊어서 스크롤 되는 양
-var limit = 30 // 불러올 캐챗수 (랭킹 플러스용)
-var load_limit = 50; //불러올 기준을 만족하는 캐챗수
-var forced_limit = 40; //me?limite={}
-var likeCount_limit = 10; // 좋아요수가 10개 이상
-var chatCount_limit = 30; // 채팅수가 30개 이상 이면 올라옴
-var auto_summation_characterChatId = "6787aecf65c02321daf25b0d"; // 자동요약기능을 수행할 캐챗 id
-var local_IsDebug = "debug"; //로컬스토리지 디버그 위치
-var local_Gemini_api_key = "Gemini Api Key"; //로컬스토리지 제미니 키 + 모델 + limit + select 저장위치
-var local_saved_prompt = "saved_prompt"; //로컬스토리지 프롬프트 저장 위치
-var local_usernote = "usernote"; //로컬스토리지 유저노트용 캐챗방 id 저장 위치
-var local_tag = "tags"; //로컬스토리지 태그 차단 키워드 저장 위치
-var token_key = "access_token"; //쿠키중 가져올 토큰값 (조회 및 수정용 토큰 정보를 수집하지 않음)
+const wrtn_api = "https://api.wrtn.ai/be"; //api
+const wrtn_api2 = "https://api2.wrtn.ai/terry"; //api1
+const wrtn_william = "https://william.wow.wrtn.ai"; //william
+const gemini_api_url = "https://generativelanguage.googleapis.com";
+const fastjournal_url = "http://www.fastjournal.kro.kr";
+const scroll_all_amount = 300 // <  > 누를시 이동할 스크롤 양
+const scroll_amount = 10; // 끊어서 스크롤 되는 양
+const limit = 30 // 불러올 캐챗수 (랭킹 플러스용)
+const load_limit = 50; //불러올 기준을 만족하는 캐챗수
+const forced_limit = 40; //me?limite={}
+const likeCount_limit = 10; // 좋아요수가 10개 이상
+const chatCount_limit = 30; // 채팅수가 30개 이상 이면 올라옴
+const auto_summation_characterChatId = "6787aecf65c02321daf25b0d"; // 자동요약기능을 수행할 캐챗 id
+const local_IsDebug = "debug"; //로컬스토리지 디버그 위치
+const local_Gemini_api_key = "Gemini Api Key"; //로컬스토리지 제미니 키 + 모델 + limit + select 저장위치
+const local_saved_prompt = "saved_prompt"; //로컬스토리지 프롬프트 저장 위치
+const local_usernote = "usernote"; //로컬스토리지 유저노트용 캐챗방 id 저장 위치
+const local_tag = "tags"; //로컬스토리지 태그 차단 키워드 저장 위치
+const token_key = "access_token"; //쿠키중 가져올 토큰값 (조회 및 수정용 토큰 정보를 수집하지 않음)
 debug("env variables");
 
 //namespace
-var auto_summation = "자동요약"; //자동요약 버튼
-var auto_summation_update = "업데이트"; //업데이트 버튼
-var plus = "랭킹 플러스 (Fast wrtn)"; //랭킹플러스
-var persona_name = "페르소나"; //페르소나
-var AfterMemory_name = "Memory Afterburner"; //AfterMemory 버튼
-var copyTojson = "copy to json"; //캐릭터 복사기능
-var pasteTojson = "paste to json"; //캐릭터 븥여넣기 기능
-var publish = "publish"; //공개 기능
-var fastjournal = "FastJournal"; //FastJournal 기능
-var usernote_description = "(Fast wrtn) 자동요약기능을 활용해 글자수를 절약해보세요! 업데이트는 가끔씩 해주시는게 좋아요!"; //유저노트 설명칸
-var usernote_for_error = "(Fast wrtn) 유저노트 요약기능은 새로운 캐챗이 아닌 진행중인 캐챗에서만 적용됩니다."; //처음 사용 유저노트 설명칸
-var MemoryAfterbuner_svg_d = "M12 2.5l2.66 6.46 6.91.6c.81.07 1.14 1.06.55 1.58l-5.21 4.53 1.56 6.73c.18.78-.68 1.42-1.35.97L12 18.86l-5.12 3.51c-.67.46-1.53-.19-1.35-.97l1.56-6.73-5.21-4.53c-.59-.51-.26-1.5.55-1.58l6.91-.6L12 2.5z";
-var persona_svg_d = "M 12 2 C 7 2 4 4 4 7 V 11 C 4 16 8 20 12 20 C 16 20 20 16 20 11 V 7 C 20 4 17 2 12 2 Z Z Z M 9 14 C 9 13.5 10.5 13 12 13 C 13.5 13 15 13.5 15 14 C 15 14.5 14 15 12 15 C 10 15 9 14.5 9 14 Z M 6 9 L 8 8 C 8 8 9 8 10 9 C 9.3333 9.3333 9 10 8 10 L 8 10 C 7 10 6 10 6 9 C 6 9 6 9 6 9 C 6 9 7 8 8 8 M 14 9 C 15 8 16 8 16 8 C 17 8 18 9 18 9 C 18 10 17 10 16 10 C 15 10 14.6667 9.3333 14 9";
-debug("namesspace");
+const auto_summation = "자동요약"; //자동요약 버튼
+const auto_summation_update = "업데이트"; //업데이트 버튼
+const plus = "랭킹 플러스 (Fast wrtn)"; //랭킹플러스
+const persona_name = "페르소나"; //페르소나
+const AfterMemory_name = "Memory Afterburner"; //AfterMemory 버튼
+const copyTojson = "copy to json"; //캐릭터 복사기능
+const pasteTojson = "paste to json"; //캐릭터 븥여넣기 기능
+const publish = "publish"; //공개 기능
+const fastjournal = "FastJournal"; //FastJournal 기능
+const usernote_description = "(Fast wrtn) 자동요약기능을 활용해 글자수를 절약해보세요! 업데이트는 가끔씩 해주시는게 좋아요!"; //유저노트 설명칸
+const usernote_for_error = "(Fast wrtn) 유저노트 요약기능은 새로운 캐챗이 아닌 진행중인 캐챗에서만 적용됩니다."; //처음 사용 유저노트 설명칸
+const MemoryAfterbuner_svg_d = "M12 2.5l2.66 6.46 6.91.6c.81.07 1.14 1.06.55 1.58l-5.21 4.53 1.56 6.73c.18.78-.68 1.42-1.35.97L12 18.86l-5.12 3.51c-.67.46-1.53-.19-1.35-.97l1.56-6.73-5.21-4.53c-.59-.51-.26-1.5.55-1.58l6.91-.6L12 2.5z";
+const persona_svg_d = "M 12 2 C 7 2 4 4 4 7 V 11 C 4 16 8 20 12 20 C 16 20 20 16 20 11 V 7 C 20 4 17 2 12 2 Z Z Z M 9 14 C 9 13.5 10.5 13 12 13 C 13.5 13 15 13.5 15 14 C 15 14.5 14 15 12 15 C 10 15 9 14.5 9 14 Z M 6 9 L 8 8 C 8 8 9 8 10 9 C 9.3333 9.3333 9 10 8 10 L 8 10 C 7 10 6 10 6 9 C 6 9 6 9 6 9 C 6 9 7 8 8 8 M 14 9 C 15 8 16 8 16 8 C 17 8 18 9 18 9 C 18 10 17 10 16 10 C 15 10 14.6667 9.3333 14 9";
+debug("namesSpace");
+
+//class Names
+const profileBoxClass = "css-e5sxrv";
+const profileBoxMenuClass = "css-1chjrq6";
+const mainFeedClass = "css-1go39bq";
+const chatroomMenuClass = "css-1diwz7b";
+const chatbarClass = "css-d7pngb";
+const chatbarPointbuttonClass = "css-13yljkq";
+const chatbarPointbutton_inactiveClass = "css-oewmjm";
+const usernoteModalClass = "css-f3xxdk";
+const usernoteModalspaceClass = "css-uxwch2";
+const threeDotButtonClass = "css-j7qwjs";
+const dropdownClass = "css-1w2weol";
+const dropdownListClass = "css-1wh9bd4";
+const dropdownListClassWhite = "css-zklud";
+const myCharactersClass = "css-j7qwjs";
+const builderMenuClass = "css-xxmugq";
+const targetDivClass = "css-d7pngb";
+debug("classSpace");
 
 //Memory Afterburner prompt
 /*
@@ -1551,11 +1570,9 @@ class dropdown_class {
         }
     }
 }
-try{
-    //dropdown 클래스 선언
-    var dropdown = new dropdown_class();
-}
-catch{}
+
+//dropdown 클래스 선언
+var dropdown = new dropdown_class();
 
 //랭킹 플러스 필터링
 function filter_character_list(characterListElement,IsCe){
@@ -1690,9 +1707,9 @@ function debug_btn(){
     var debug_Interval = setInterval(()=>{
         if (document.URL == "https://wrtn.ai/character"){
             //프로필 누르면 나오는거
-            var debug_modal = document.getElementsByClassName("css-e5sxrv").item(0);
+            var debug_modal = document.getElementsByClassName(profileBoxClass).item(0);
             //태그 검열 넣을 부분
-            var tag_modal = document.getElementsByClassName("css-1chjrq6").item(0);
+            var tag_modal = document.getElementsByClassName(profileBoxMenuClass).item(0);
             if (debug_modal != null){
                 if (debug_modal.childNodes.length == 3){
                     //디버그 버튼
@@ -2168,12 +2185,12 @@ function plus_modal_no(isModal,character_list,fe){
 }
 
 function character(){
-/*
+    /*
     정확한 명칭을 잘모르겠어서 일단 피드라고 했는데
     처음 들어가면 태그 반뜨 뭐 이런거 뜨잖아?
     그것들의 상위 엘리먼트임 정확하게는
         */
-    var Tfeed = document.getElementsByClassName("css-1go39bq").item(0); // 피드를 가져옴
+    var Tfeed = document.getElementsByClassName(mainFeedClass).item(0); // 피드를 가져옴
     // 랭킹 플러스 기준
     //랭킹 플러스
     if (Tfeed != null) {
@@ -2186,50 +2203,49 @@ function character(){
 }
 
 class chatroom_menus_class {
-    constructor(menu){
-        this.menu = menu.childNodes[1].childNodes[0].childNodes[1];
+    constructor(){
         this.item = [];
     }
     add(name,svg,func,color=null){
-        const new_item = this.menu.childNodes.item(0).cloneNode(true);
-        new_item.childNodes.item(1).textContent = name;
-        for (let i = 0; i < 4; i++) {
-            new_item.childNodes[0].childNodes[1].remove();
-        }
-        new_item.childNodes[0].childNodes.item(0).setAttribute("d",svg);
-        if (color != null){
-            new_item.childNodes[0].childNodes.item(0).setAttribute("fill",color);
-        }
-        new_item.addEventListener('click',func);
-        this.item[this.item.length] = new_item;
+        this.item[this.item.length] = [name,svg,func,color];
+        this.listeners = [];
     }
     get(name){
-        for (const i of this.item) {
+        for (const i of this.listeners) {
             if (i.childNodes.item(1).textContent == name){
                 return i
             }
         }
         return undefined
     }
-    apply(){
+    apply(menu){
+        this.menu = menu;
         for (const i of this.item){
-            this.menu.appendChild(i);
+            const new_item = menu.childNodes.item(0).cloneNode(true);
+            new_item.childNodes.item(1).textContent = i[0];
+            for (let i = 0; i < 4; i++) {
+                new_item.childNodes[0].childNodes[1].remove();
+            }
+            new_item.childNodes[0].childNodes.item(0).setAttribute("d",i[1]);
+            if (i[3] != null){
+                new_item.childNodes[0].childNodes.item(0).setAttribute("fill",i[3]);
+            }
+            new_item.addEventListener('click',i[2]);
+            this.listeners[this.listeners.length] = new_item;
+            menu.appendChild(new_item);
         }
     }
 }
 
-try{
-    //메뉴 클래스 선언
-    var menus = new chatroom_menus_class(document.getElementsByClassName("css-1diwz7b").item(0)); 
-}
-catch{}
+//메뉴 클래스 선언
+var menus = new chatroom_menus_class(); 
 
 function chatroom(){
     try{
-        const targetDiv = document.getElementsByClassName("css-d7pngb").item(0); //채팅바
-        var NS = document.getElementsByClassName("css-13yljkq").item(0); // 파란색 -> 버튼
+        const targetDiv = document.getElementsByClassName(chatbarClass).item(0); //채팅바
+        var NS = document.getElementsByClassName(chatbarPointbuttonClass).item(0); // 파란색 -> 버튼
         if (NS == null){
-            NS = document.getElementsByClassName("css-oewmjm").item(0);
+            NS = document.getElementsByClassName(chatbarPointbutton_inactiveClass).item(0);
         }
         const NBS = NS.cloneNode(true); // + 버튼
         const NBS_E = NS.cloneNode(true); // - 버튼
@@ -2242,8 +2258,7 @@ function chatroom(){
         debug("chatroom",1);
 
         //모든 메뉴 적용
-        menus.apply();
-
+        menus.apply(document.getElementsByClassName(chatroomMenuClass).item(0).childNodes[1].childNodes[0].childNodes[1]);
         // 단축버튼
         //+버튼 추가
         Cm.setAttribute("d","M 12 12 L 12 7 L 14 7 L 14 12 L 19 12 L 19 14 L 14 14 L 14 19 L 12 19 L 12 14 L 7 14 L 7 12 L 12 12");
@@ -2258,7 +2273,7 @@ function chatroom(){
 
         //유저노트 자동 요약 기능
         var km = setInterval(()=>{
-            const usernote_modal = document.getElementsByClassName("css-f3xxdk").item(0);//유저노트 클릭시 생기는 모달 팝업
+            const usernote_modal = document.getElementsByClassName(usernoteModalClass).item(0);//유저노트 클릭시 생기는 모달 팝업
             if (usernote_modal != null){
                 //페르소나 모달 팝업인지 아닌지 판별
                 if (usernote_modal.childNodes[0].childNodes[0].childNodes[0].childNodes[0].childNodes.item(0).textContent == "유저 노트"){
@@ -2289,7 +2304,7 @@ function chatroom(){
                             const usernote_modal_update_btn = usernote_modal_btn.cloneNode(true); //닫기 버튼 형식 기반으로 업데이트 버튼을 만듦
                             const usernote_modal_new_close_btn = usernote_modal_btn.cloneNode(true); //닫기 버튼형식으로 새로운 닫기버튼을 만듦
                             var modal = document.getElementById("web-modal"); //모달 팝업을 가져옴
-                            var usernote = document.getElementsByClassName("css-uxwch2").item(0).childNodes.item(0); //유저노트를 가져옴
+                            var usernote = document.getElementsByClassName(usernoteModalspaceClass).item(0).childNodes.item(0); //유저노트를 가져옴
                             debug("usernote",1);
                             //메뉴속 유저노트 버튼을 누를시 모달팝업을 띄워주는 함수
                             function after_usernote_event() {
@@ -2480,14 +2495,14 @@ function my(){
     var selected = 0; //점 세개 퍼튼이 어떤 요소의 버튼인지 판별하는 번수
     opend=false; //구원자
     setInterval(()=>{
-        var myTdiv = document.getElementsByClassName("css-j7qwjs"); //점 세개 버튼
-        var tipbar = document.getElementsByClassName("css-1w2weol"); //dropdown 목록
+        var myTdiv = document.getElementsByClassName(threeDotButtonClass); //점 세개 버튼
+        var tipbar = document.getElementsByClassName(dropdownClass); //dropdown 목록
         //드랍다운이 있는지 없는지
         if (tipbar != null){
-            var tipbar_struct = document.getElementsByClassName("css-1wh9bd4").item(0); //드랍다운 내부 요소 (형식용)
+            var tipbar_struct = document.getElementsByClassName(dropdownListClass).item(0); //드랍다운 내부 요소 (형식용)
             //화이트 테마일시
             if (tipbar_struct == null){
-                tipbar_struct = document.getElementsByClassName("css-zklud").item(0); //화이트 테마용 드랍다운 내부요소 (형식용)
+                tipbar_struct = document.getElementsByClassName(dropdownListClassWhite).item(0); //화이트 테마용 드랍다운 내부요소 (형식용)
             }
             //드랍다운 내부에 copy to json, copy to paste, publish 추가
             if (tipbar_struct != null){
@@ -2508,7 +2523,7 @@ function my(){
                 myTdivElement.setAttribute("id",i)
                 myTdivElement.addEventListener('click',()=>{
                     j=0;
-                    var myTdiv2 = document.getElementsByClassName("css-j7qwjs");
+                    var myTdiv2 = document.getElementsByClassName(myCharactersClass);
                     for (const argument of myTdiv2) {
                         if (argument==myTdivElement){
                             if (j != myTdiv2.length){
@@ -2530,7 +2545,7 @@ function my(){
 
 function builder (){
     setInterval(()=>{
-        const Topbar = document.getElementsByClassName("css-xxmugq").item(0).childNodes; // 맨위의 프로필, 상세설정, 시작설정, 미디어, 키워드북, 등록 있는 바
+        const Topbar = document.getElementsByClassName(builderMenuClass).item(0).childNodes; // 맨위의 프로필, 상세설정, 시작설정, 미디어, 키워드북, 등록 있는 바
         i=0;
         //현재 Topbar 내부의 어느 탭에 있는지 확인
         for (const topbarElement of Topbar) {
@@ -2757,7 +2772,7 @@ setInterval(()=>{
             debug(`${lastest} -> ${document.URL}`);
         }
         //character/u
-        const targetDiv = document.getElementsByClassName("css-d7pngb").item(0);
+        const targetDiv = document.getElementsByClassName(targetDivClass).item(0);
         if (targetDiv != null) {
             if (targetDiv.childNodes.length < 5) {
                 debug(`if targetDiv != null`);
