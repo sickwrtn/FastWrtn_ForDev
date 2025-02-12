@@ -6,8 +6,9 @@
         "clipboardWrite"
     ],
     "content_scripts": [{
-        "js": ["index.js"],
-        "matches": ["https://wrtn.ai/character/*"]
+        "js": ["./index.js"],
+        "matches": ["https://wrtn.ai/character/*"],
+        "type": "module"
     }],
     "icons": {
         "16": "./icons/icon-16x16.png",

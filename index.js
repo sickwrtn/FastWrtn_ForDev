@@ -43,6 +43,7 @@ setInterval => main() {
     ->  builder() : 캐릭터챗 제작 편의기능 /character/builder (프롬프트 저장)
 }
 */
+
 //environment variables
 var wrtn_api = "https://api.wrtn.ai/be"; //api
 var wrtn_api2 = "https://api2.wrtn.ai/terry"; //api1
@@ -77,6 +78,8 @@ var publish = "publish"; //공개 기능
 var fastjournal = "FastJournal"; //FastJournal 기능
 var usernote_description = "(Fast wrtn) 자동요약기능을 활용해 글자수를 절약해보세요! 업데이트는 가끔씩 해주시는게 좋아요!"; //유저노트 설명칸
 var usernote_for_error = "(Fast wrtn) 유저노트 요약기능은 새로운 캐챗이 아닌 진행중인 캐챗에서만 적용됩니다."; //처음 사용 유저노트 설명칸
+var MemoryAfterbuner_svg_d = "M12 2.5l2.66 6.46 6.91.6c.81.07 1.14 1.06.55 1.58l-5.21 4.53 1.56 6.73c.18.78-.68 1.42-1.35.97L12 18.86l-5.12 3.51c-.67.46-1.53-.19-1.35-.97l1.56-6.73-5.21-4.53c-.59-.51-.26-1.5.55-1.58l6.91-.6L12 2.5z";
+var persona_svg_d = "M 12 2 C 7 2 4 4 4 7 V 11 C 4 16 8 20 12 20 C 16 20 20 16 20 11 V 7 C 20 4 17 2 12 2 Z Z Z M 9 14 C 9 13.5 10.5 13 12 13 C 13.5 13 15 13.5 15 14 C 15 14.5 14 15 12 15 C 10 15 9 14.5 9 14 Z M 6 9 L 8 8 C 8 8 9 8 10 9 C 9.3333 9.3333 9 10 8 10 L 8 10 C 7 10 6 10 6 9 C 6 9 6 9 6 9 C 6 9 7 8 8 8 M 14 9 C 15 8 16 8 16 8 C 17 8 18 9 18 9 C 18 10 17 10 16 10 C 15 10 14.6667 9.3333 14 9";
 debug("namesspace");
 
 //Memory Afterburner prompt
@@ -1534,7 +1537,7 @@ class dropdown_class {
     constructor(){
         this.item = []; 
     }
-    addDropdown(name,funtion){
+    add(name,funtion){
         this.item[this.item.length] = [name,funtion]; 
     }
     listen(tipbar,tipbar_struct,selected){
@@ -1548,36 +1551,11 @@ class dropdown_class {
         }
     }
 }
-
-const dropdown = new dropdown_class();
-
-dropdown.addDropdown(copyTojson, (datum)=>{
-    //캐챗 id를 사용해서 캐챗의 모든 정보를 가져온후 클립보드에 복사
-    copyToClipboard(JSON.stringify(wrtn.getMycharacter(datum._id).get()));
-    alert('클립보드에 복사되었습니다!');
-})
-
-dropdown.addDropdown(pasteTojson, (datum)=>{
-    //클립보드를 가져옴
-    getClipboardTextModern().then(function (clipboardContent) {
-        json_data = JSON.parse(clipboardContent); //클립보드 내용 json화
-        wrtn.getMycharacter(datum._id).set(json_data);
-        alert("캐챗 변경 성공! (새로고침 후 적용됩니다.)");
-        window.location.reload();
-    })
-})
-
-dropdown.addDropdown(publish, (datum)=>{
-    //캐릭터를 공개상태로 새로만듬
-    wrtn.getMycharacter(datum._id).publish();
-    alert("캐챗 공개 성공! (새로고침 후 적용됩니다.)");
-    window.location.reload();
-})
-
-dropdown.addDropdown(fastjournal, (datum)=>{
-    //fastjournal로 이동시킴
-    location.href = `http://www.fastjournal.kro.kr/index.html?charId=${datum._id}`;
-})
+try{
+    //dropdown 클래스 선언
+    var dropdown = new dropdown_class();
+}
+catch{}
 
 //랭킹 플러스 필터링
 function filter_character_list(characterListElement,IsCe){
@@ -1800,6 +1778,7 @@ function debug_btn(){
     },100)
     debug("debug_btn",0)
 }
+
 //플러스 랭크 내부 캐릭터 클릭시 팝업
 function plus_modal_func(Tfeed,CeCreator){
     const feed_struct = Tfeed.childNodes.item(1).cloneNode(true); //피드의 제일위에서 2번째 요소를 가져와서 형식만 가져옴
@@ -2206,6 +2185,45 @@ function character(){
     debug("character",0);
 }
 
+class chatroom_menus_class {
+    constructor(menu){
+        this.menu = menu.childNodes[1].childNodes[0].childNodes[1];
+        this.item = [];
+    }
+    add(name,svg,func,color=null){
+        const new_item = this.menu.childNodes.item(0).cloneNode(true);
+        new_item.childNodes.item(1).textContent = name;
+        for (let i = 0; i < 4; i++) {
+            new_item.childNodes[0].childNodes[1].remove();
+        }
+        new_item.childNodes[0].childNodes.item(0).setAttribute("d",svg);
+        if (color != null){
+            new_item.childNodes[0].childNodes.item(0).setAttribute("fill",color);
+        }
+        new_item.addEventListener('click',func);
+        this.item[this.item.length] = new_item;
+    }
+    get(name){
+        for (const i of this.item) {
+            if (i.childNodes.item(1).textContent == name){
+                return i
+            }
+        }
+        return undefined
+    }
+    apply(){
+        for (const i of this.item){
+            this.menu.appendChild(i);
+        }
+    }
+}
+
+try{
+    //메뉴 클래스 선언
+    var menus = new chatroom_menus_class(document.getElementsByClassName("css-1diwz7b").item(0)); 
+}
+catch{}
+
 function chatroom(){
     try{
         const targetDiv = document.getElementsByClassName("css-d7pngb").item(0); //채팅바
@@ -2217,42 +2235,16 @@ function chatroom(){
         const NBS_E = NS.cloneNode(true); // - 버튼
         const Cm = NBS.childNodes.item(0).childNodes.item(0); // + 버튼 svg
         const Cm_E = NBS_E.childNodes.item(0).childNodes.item(0); // - 버튼 svg
-        const bar = document.getElementsByClassName("css-1diwz7b").item(0); // 채팅방 메뉴바
-        const bar_c = bar.childNodes[1].childNodes[0].childNodes[1]; // 채팅방 메뉴 내부
-        const persona = bar.childNodes[1].childNodes[0].childNodes[1].childNodes.item(0).cloneNode(true); // 페르소나
         var bar_c_list = []; //단축 내용 및 목록
-        const persona_p = persona.childNodes.item(1); // 페르소나 내부 text
-        persona_p.textContent = persona_name;
-        const persona_svg = persona.childNodes.item(0); // 페르소나 svg
-        const persona_path = persona_svg.childNodes.item(0); // 페르소나 path
         var personal_modal = document.createElement("div"); //모달팝업
-        const AfterMemory = bar.childNodes[1].childNodes[0].childNodes[1].childNodes.item(0).cloneNode(true); // After Memory 기능
-        const summation_p = AfterMemory.childNodes.item(1); //AftetMemory text
-        const summation_svg = AfterMemory.childNodes.item(0); //AfterMemoy svg
-        const summation_path = summation_svg.childNodes.item(0); //AfterMemory path
-        summation_p.textContent = AfterMemory_name;
-        debug("chatroom",1);
         personal_modal.setAttribute("id","web-modal");
         document.body.appendChild(personal_modal); // body에 모달팝업 추가
+        debug("chatroom",1);
 
-        //페스로나 svg.path에 원래는 유저노트 svg.path가 존재해서 제거
-        for (let i = 0; i < 4; i++) {
-            persona_svg.childNodes[1].remove();
-        }
+        //모든 메뉴 적용
+        menus.apply();
 
-        //페스로나 svg.path에 원래는 유저노트 svg.path가 존재해서 제거
-        for (let i = 0; i < 4; i++) {
-            summation_svg.childNodes[1].remove();
-        }
-        //AfterMemory 버튼 이벤트 + svg 추가
-        AfterMemory.addEventListener('click',AfterMemory_func);
-        summation_path.setAttribute("d","M12 2.5l2.66 6.46 6.91.6c.81.07 1.14 1.06.55 1.58l-5.21 4.53 1.56 6.73c.18.78-.68 1.42-1.35.97L12 18.86l-5.12 3.51c-.67.46-1.53-.19-1.35-.97l1.56-6.73-5.21-4.53c-.59-.51-.26-1.5.55-1.58l6.91-.6L12 2.5z");
-        summation_path.setAttribute("fill","yellow");
-        bar_c.appendChild(AfterMemory);
-        //페르소나 svg 추가
-        persona_path.setAttribute("d","M 12 2 C 7 2 4 4 4 7 V 11 C 4 16 8 20 12 20 C 16 20 20 16 20 11 V 7 C 20 4 17 2 12 2 Z Z Z M 9 14 C 9 13.5 10.5 13 12 13 C 13.5 13 15 13.5 15 14 C 15 14.5 14 15 12 15 C 10 15 9 14.5 9 14 Z M 6 9 L 8 8 C 8 8 9 8 10 9 C 9.3333 9.3333 9 10 8 10 L 8 10 C 7 10 6 10 6 9 C 6 9 6 9 6 9 C 6 9 7 8 8 8 M 14 9 C 15 8 16 8 16 8 C 17 8 18 9 18 9 C 18 10 17 10 16 10 C 15 10 14.6667 9.3333 14 9");
-        persona.addEventListener('click',persona_change);
-        bar_c.appendChild(persona);
+        // 단축버튼
         //+버튼 추가
         Cm.setAttribute("d","M 12 12 L 12 7 L 14 7 L 14 12 L 19 12 L 19 14 L 14 14 L 14 19 L 12 19 L 12 14 L 7 14 L 7 12 L 12 12");
         targetDiv.appendChild(NBS);
@@ -2470,270 +2462,6 @@ function chatroom(){
         }
         function keysReleased(e) {
             keys[e.keyCode] = false;
-        }
-        //Afrburning Memory 버튼 이벤트 함수
-        function AfterMemory_func(){
-            debug("AfterMemory",3);
-            const AfterMemory_modal = document.createElement("modal");//Afterburning Memory 모달 팝업
-            AfterMemory_modal.innerHTML = AfterMemory_front_html;
-            const AfterMemory_tabs = AfterMemory_modal.childNodes[0].childNodes[0].childNodes[0].childNodes.item(0); //주요 탭
-            AfterMemory_modal.setAttribute("style","position: relative !important;\n" +
-                "    z-index: 11 !important;") //이게 있어야 모달이 작동함
-            const AfterMemory_textarea = AfterMemory_tabs.childNodes[1].childNodes.item(1); //Gemini Api key 부분
-            const AfterMemory_select = AfterMemory_tabs.childNodes[1].childNodes[0].childNodes[1].childNodes.item(0); //select 박스
-            const AfterMemory_model_textarea = AfterMemory_tabs.childNodes[2].childNodes.item(1); //model 부분
-            const AfterMemory_limit_textarea = AfterMemory_tabs.childNodes[3].childNodes.item(1); //limit 부분
-            const AfterMemory_btn = AfterMemory_tabs.childNodes[4].childNodes.item(1) //시작 버튼
-            const AfterMemory_x = AfterMemory_tabs.childNodes[0].childNodes.item(1); //x 버튼
-            const AfterMemory_close = AfterMemory_tabs.childNodes[4].childNodes.item(0); //닫기 버튼
-            debug("AfterMemory_func",1);
-            function close(){
-                AfterMemory_modal.remove();   
-                debug("AfterMemory_close",3);
-            }
-            //스토리지 가져오기
-            if (JSON.parse(localStorage.getItem(local_Gemini_api_key)).key != null) {
-                AfterMemory_textarea.value = JSON.parse(localStorage.getItem(local_Gemini_api_key)).key;
-            }
-            if (JSON.parse(localStorage.getItem(local_Gemini_api_key)).model != null) {
-                AfterMemory_model_textarea.value = JSON.parse(localStorage.getItem(local_Gemini_api_key)).model;
-            }
-            if (JSON.parse(localStorage.getItem(local_Gemini_api_key)).limit != null) {
-                AfterMemory_limit_textarea.value = JSON.parse(localStorage.getItem(local_Gemini_api_key)).limit;
-            }
-            if (JSON.parse(localStorage.getItem(local_Gemini_api_key)).select != null) {
-                var sel2 = AfterMemory_select.options;
-                for (let i=0; i<sel2.length; i++) {
-                    if (sel2[i].value == JSON.parse(localStorage.getItem(local_Gemini_api_key)).select) sel2[i].selected = true;
-                }
-            }
-            //prompt textarea를 추가하기 위함
-            setInterval(()=>{
-                if (AfterMemory_select.value == "3"){
-                    if (AfterMemory_tabs.childNodes.length < 6){
-                        var AfterMemoryPrompt = document.createElement("div");
-                        AfterMemoryPrompt.innerHTML = AfterMemory_textarea_front_html;
-                        if (JSON.parse(localStorage.getItem(local_Gemini_api_key)).prompt != null){
-                            AfterMemoryPrompt.childNodes[0].childNodes.item(1).value = JSON.parse(localStorage.getItem(local_Gemini_api_key)).prompt;
-                        }
-                        AfterMemory_tabs.insertBefore(AfterMemoryPrompt,AfterMemory_tabs.childNodes.item(2));
-                    }
-                }
-                else{
-                    if (AfterMemory_tabs.childNodes.length > 5){
-                        AfterMemory_tabs.childNodes.item(2).remove();
-                    }
-                }
-            },100)
-            //이벤트 리스너 추가
-            AfterMemory_close.addEventListener('click',close);
-            AfterMemory_x.addEventListener('click',close);
-            AfterMemory_btn.addEventListener('click',()=>{
-                //limit 판단
-                if (Number(AfterMemory_limit_textarea.value) > 50 || Number(AfterMemory_limit_textarea.value) < 0){
-                    alert("limit는 0 이상 50 이하여야 합니다.");
-                    return true;
-                }
-                alert("시간이 많이 소요되니 당황하시지말고 기다려 주세요...");
-                //현재 상태 로컬스토리지 저장
-                if (AfterMemory_select.value == "3"){
-                    localStorage.setItem(local_Gemini_api_key,JSON.stringify({
-                        key : AfterMemory_textarea.value,
-                        model : AfterMemory_model_textarea.value,
-                        limit : AfterMemory_limit_textarea.value,
-                        select : AfterMemory_select.value,
-                        prompt : AfterMemory_tabs.childNodes[2].childNodes[0].childNodes.item(1).value
-                    }));
-                }
-                else{
-                    localStorage.setItem(local_Gemini_api_key,JSON.stringify({
-                        key : AfterMemory_textarea.value,
-                        model : AfterMemory_model_textarea.value,
-                        limit : AfterMemory_limit_textarea.value,
-                        select : AfterMemory_select.value,
-                        prompt : null
-                    }));
-                }
-                debug(`limited ${AfterMemory_limit_textarea.value}`);
-                //채팅내역 + 페르소나 불러오기
-                wrtn.getChatroom(document.URL.split("/")[7].split("?")[0]).getMessages(cursor="",load_limit=Number(AfterMemory_limit_textarea.value) * 2).then(res => {
-                    var chatlog = res.data.list;
-                    try{
-                        var usernmae = wrtn.getRepresentativePersona().name;
-                    }
-                    catch{
-                        alert("대표프로필을 설정해주세요");
-                        return true;
-                    }
-                    debug("character_profiles",4);
-                    //select 박스 설정
-                    if (AfterMemory_select.value == "0"){
-                        var promptTemp = one_by_one_character_prompt;                      
-                        debug("selected 1 : 1 캐릭터챗");
-                    }
-                    else if (AfterMemory_select.value == "1"){
-                        var promptTemp = simulation_prompt;
-                        debug("selected 시뮬레이션");
-                    }
-                    else if (AfterMemory_select.value == "2"){
-                        var promptTemp = focus_on_important_cases_prompt;
-                        debug("selected 주요사건 위주");
-                    }
-                    else if (AfterMemory_select.value == "3"){
-                        var promptTemp = AfterMemory_tabs.childNodes[2].childNodes[0].childNodes.item(1).value;
-                        debug("selected 커스텀");
-                    }
-                    //gemini에게 보낼 json
-                    var lastContent = {
-                        content: []
-                    } 
-                    for (const element of chatlog) {
-                        if (element.role == "user"){
-                            lastContent.content[lastContent.content.length] = {
-                                message: element.content,
-                                role: "user",
-                                username: usernmae
-                            }
-                        }
-                        else if (element.role == "assistant"){
-                            lastContent.content[lastContent.content.length] = {
-                                message: element.content,
-                                role: "assistant"
-                            }
-                        }
-                    }
-                    debug("chatlog",4);
-                    //프롬 추가
-                    if (AfterMemory_select.value != "3"){
-                        promptTemp.chat_log = lastContent.content;
-                        var gemini_text = JSON.stringify(promptTemp);
-                    }
-                    else{
-                        var gemini_text = promptTemp + `[대화내역]\n${JSON.stringify(lastContent)}`;
-                    }
-                    //제미니 전송
-                    var result = JSON.parse(out_postAfetch(gemini_api_url + `/v1beta/models/${AfterMemory_model_textarea.value}:generateContent?key=${AfterMemory_textarea.value}`,{
-                        contents: {
-                            parts : [
-                                {text: gemini_text}
-                            ]
-                        }
-                    })).candidates[0].content.parts[0].text;
-                    debug("gemini compeleted");
-                    //뤼튼 메시지 전송은 2000자 이상 보낼시 too large request 에러가 발생해서 예외처리
-                    if (result.length > 2000){
-                        if(!confirm("요약본이 너무 깁니다. 요약본을 나눠서 전송하겠습니다. 진행하시겠습니까?")){
-                            return true;
-                        }
-                        var dp = Math.ceil(result.length / 500);
-                        for (let index = 0; index < dp; index++) {
-                            if (index != dp-1){
-                                wrtn.getChatroom(document.URL.split("/")[7].split("?")[0]).send("_").set(result.substring(500 * index,500 * (index + 1)));
-                            }
-                            else{
-                                wrtn.getChatroom(document.URL.split("/")[7].split("?")[0]).send("_").set(result.substring(500 * index));
-                            }
-                            if(!confirm(`메시지를 나눠서 보내는중... (${index + 1}/${dp})`)){
-                                return true;
-                            }
-                        }
-                        debug("result DP",4);
-                    }
-                    else{
-                        //채팅 보내고 삭제
-                        wrtn.getChatroom(document.URL.split("/")[7].split("?")[0]).send("_").set(result);
-                    }
-                    debug("wrtn.ai message sended");
-                    debug("Afterburning completed");
-                    alert("Afterburning complete!");
-                    //새로고침
-                    document.location.reload();
-                    debug("AfterMemory_func",0);
-                })
-            })
-            document.body.appendChild(AfterMemory_modal);
-        }
-        //페르소나 버튼 누를시
-        function persona_change(){
-            //유저 wrtnUid가져오기
-            //메뉴 내부에 perona_L을 추가후 재로드시 기존에있던 perona_L을 전부 삭제
-            //메뉴에 기능 추가시 bar_c.childNodes.length - X 부분을 + 1
-            //if 문의 수도 + 1 bar_c.childNodes[X]도 + 1
-            var data = wrtn.getPersona();
-            if (bar_c.childNodes.length > 3){
-                for (let i = bar_c.childNodes.length - 2; i > 1 ; i--) {
-                    bar_c.childNodes[3].remove();
-                }
-            }
-            c = 0;
-            for (const datum of data) {
-                const personaL = persona.cloneNode(true); //페르소나 목록 요소
-                const for_personaL = document.createElement("div");//페르소나 한칸 띄우기
-                personaL.insertBefore(for_personaL,personaL.childNodes[0]);
-                const personaL_p = personaL.childNodes.item(2); //페르소나 text
-                //대표 프로필일 경우 '<-' 붙이기 아니면 없음
-                if (datum.isRepresentative){
-                    personaL_p.textContent = `${datum.name} <-`;
-                }
-                else {
-                    personaL_p.textContent = datum.name;
-                }
-                personaL.setAttribute("id",`${c}`) //페르소나 요소 id 지정
-                //페르소나 목록을 누를시
-                function personaL_change(){
-                    var mpid = "";
-                    m_i = 0;
-                    for (m of data) {
-                        if (`${m_i}` == personaL.id) {
-                            var mpid = m._id; //뭔지 모르겠지만 혹시몰라서 안지움
-                            var name = m.name; //페르소나 이름 가져오기
-                            var information = m.information; //페르소나 정보 가져오기
-                        }
-                        m_i++;
-                    }
-                    var personaL_change_modal = document.createElement("modal");//페르소나 모달 팝업
-                    personaL_change_modal.innerHTML = persona_modal_html;
-                    personal_modal.setAttribute("style","position: relative !important;\n" +
-                        "    z-index: 11 !important;") //이게 있어야 모달이 작동함
-                    personal_modal.appendChild(personaL_change_modal.firstChild);
-                    var personal_modal_name = document.getElementById("W_name"); //모달 내부 이름 textarea
-                    personal_modal_name.value = name;
-                    var personal_modal_info = document.getElementById("W_info"); //모달 내부 정보 textarea
-                    personal_modal_info.value = information;
-                    var personal_modal_Sbtn = document.getElementById("W_sumbit"); //모달 내부 등록 버튼
-                    var personal_modal_Cbtn = document.getElementById("W_close"); //모달 내부 닫기 버튼
-                    var personal_modal_x = document.getElementById("W_x"); //모달 내부 x버튼
-                    //모달 등록버튼을 눌렀을시
-                    personal_modal_Sbtn.addEventListener("click",()=>{
-                        //모달의 내용을 조합해 페르소나 등록 및 대표프로필로 설정
-                        var re = wrtn.setPersona(mpid,personal_modal_name.value,personal_modal_info.value);
-                        if (re.result == "SUCCESS"){
-                            alert("페르소나 등록 성공!");
-                            personal_modal.childNodes.item(0).remove();
-                            persona_change();
-                        }
-                        else{
-                            alert("페르소나 등록 실패!");
-                            personal_modal.childNodes.item(0).remove();
-                        }
-                    })
-                    //모달 내부 닫기버튼 눌렀을시
-                    personal_modal_Cbtn.addEventListener("click",()=>{
-                        personal_modal.childNodes.item(0).remove();
-                        debug("personal_modal_Cbtn",3);
-                    })
-                    //모달 내부 x버튼 눌렀을시
-                    personal_modal_x.addEventListener("click",()=>{
-                        personal_modal.childNodes.item(0).remove();
-                        debug("personal_modal_x",3);
-                    })
-                    debug("personaL",3);
-                }
-                personaL.addEventListener('click',personaL_change);
-                bar_c.appendChild(personaL);
-                c++;
-            }
-            debug("persona",0);
         }
     }catch (e){
         console.log(e);
@@ -3012,18 +2740,21 @@ setInterval(()=>{
             //character
             if (document.URL == "https://wrtn.ai/character"){
                 main();
+                debug("1");
             }
             //character/builder
             if (document.URL.split("/")[4] != undefined){
                 if (document.URL.split("/")[4].split("?")[0] == "builder"){
                     main();
+                    debug("2");
                 }
             }
-            debug(`${lastest} -> ${document.URL}`);
             //character/my
             if (document.URL.split("/")[4] == "my"){
                 main();
+                debug("3");
             }
+            debug(`${lastest} -> ${document.URL}`);
         }
         //character/u
         const targetDiv = document.getElementsByClassName("css-d7pngb").item(0);
@@ -3043,6 +2774,7 @@ function main(){
     if (document.URL.split("/")[3] == "character" && document.URL.split("/").length == 4){
         debug_btn();
         character();
+        debug("asd");
     }
 
     //채팅방 기능
@@ -3064,4 +2796,311 @@ function main(){
     debug('main',0);
 }
 
+//Afrburning Memory 버튼 이벤트 함수
+function AfterMemory_func(){
+    debug("AfterMemory",3);
+    const AfterMemory_modal = document.createElement("modal");//Afterburning Memory 모달 팝업
+    AfterMemory_modal.innerHTML = AfterMemory_front_html;
+    const AfterMemory_tabs = AfterMemory_modal.childNodes[0].childNodes[0].childNodes[0].childNodes.item(0); //주요 탭
+    AfterMemory_modal.setAttribute("style","position: relative !important;\n" +
+        "    z-index: 11 !important;") //이게 있어야 모달이 작동함
+    const AfterMemory_textarea = AfterMemory_tabs.childNodes[1].childNodes.item(1); //Gemini Api key 부분
+    const AfterMemory_select = AfterMemory_tabs.childNodes[1].childNodes[0].childNodes[1].childNodes.item(0); //select 박스
+    const AfterMemory_model_textarea = AfterMemory_tabs.childNodes[2].childNodes.item(1); //model 부분
+    const AfterMemory_limit_textarea = AfterMemory_tabs.childNodes[3].childNodes.item(1); //limit 부분
+    const AfterMemory_btn = AfterMemory_tabs.childNodes[4].childNodes.item(1) //시작 버튼
+    const AfterMemory_x = AfterMemory_tabs.childNodes[0].childNodes.item(1); //x 버튼
+    const AfterMemory_close = AfterMemory_tabs.childNodes[4].childNodes.item(0); //닫기 버튼
+    debug("AfterMemory_func",1);
+    function close(){
+        AfterMemory_modal.remove();   
+        debug("AfterMemory_close",3);
+    }
+    //스토리지 가져오기
+    if (JSON.parse(localStorage.getItem(local_Gemini_api_key)).key != null) {
+        AfterMemory_textarea.value = JSON.parse(localStorage.getItem(local_Gemini_api_key)).key;
+    }
+    if (JSON.parse(localStorage.getItem(local_Gemini_api_key)).model != null) {
+        AfterMemory_model_textarea.value = JSON.parse(localStorage.getItem(local_Gemini_api_key)).model;
+    }
+    if (JSON.parse(localStorage.getItem(local_Gemini_api_key)).limit != null) {
+        AfterMemory_limit_textarea.value = JSON.parse(localStorage.getItem(local_Gemini_api_key)).limit;
+    }
+    if (JSON.parse(localStorage.getItem(local_Gemini_api_key)).select != null) {
+        var sel2 = AfterMemory_select.options;
+        for (let i=0; i<sel2.length; i++) {
+            if (sel2[i].value == JSON.parse(localStorage.getItem(local_Gemini_api_key)).select) sel2[i].selected = true;
+        }
+    }
+    //prompt textarea를 추가하기 위함
+    setInterval(()=>{
+        if (AfterMemory_select.value == "3"){
+            if (AfterMemory_tabs.childNodes.length < 6){
+                var AfterMemoryPrompt = document.createElement("div");
+                AfterMemoryPrompt.innerHTML = AfterMemory_textarea_front_html;
+                if (JSON.parse(localStorage.getItem(local_Gemini_api_key)).prompt != null){
+                    AfterMemoryPrompt.childNodes[0].childNodes.item(1).value = JSON.parse(localStorage.getItem(local_Gemini_api_key)).prompt;
+                }
+                AfterMemory_tabs.insertBefore(AfterMemoryPrompt,AfterMemory_tabs.childNodes.item(2));
+            }
+        }
+        else{
+            if (AfterMemory_tabs.childNodes.length > 5){
+                AfterMemory_tabs.childNodes.item(2).remove();
+            }
+        }
+    },100)
+    //이벤트 리스너 추가
+    AfterMemory_close.addEventListener('click',close);
+    AfterMemory_x.addEventListener('click',close);
+    AfterMemory_btn.addEventListener('click',()=>{
+        //limit 판단
+        if (Number(AfterMemory_limit_textarea.value) > 50 || Number(AfterMemory_limit_textarea.value) < 0){
+            alert("limit는 0 이상 50 이하여야 합니다.");
+            return true;
+        }
+        alert("시간이 많이 소요되니 당황하시지말고 기다려 주세요...");
+        //현재 상태 로컬스토리지 저장
+        if (AfterMemory_select.value == "3"){
+            localStorage.setItem(local_Gemini_api_key,JSON.stringify({
+                key : AfterMemory_textarea.value,
+                model : AfterMemory_model_textarea.value,
+                limit : AfterMemory_limit_textarea.value,
+                select : AfterMemory_select.value,
+                prompt : AfterMemory_tabs.childNodes[2].childNodes[0].childNodes.item(1).value
+            }));
+        }
+        else{
+            localStorage.setItem(local_Gemini_api_key,JSON.stringify({
+                key : AfterMemory_textarea.value,
+                model : AfterMemory_model_textarea.value,
+                limit : AfterMemory_limit_textarea.value,
+                select : AfterMemory_select.value,
+                prompt : null
+            }));
+        }
+        debug(`limited ${AfterMemory_limit_textarea.value}`);
+        //채팅내역 + 페르소나 불러오기
+        wrtn.getChatroom(document.URL.split("/")[7].split("?")[0]).getMessages(cursor="",load_limit=Number(AfterMemory_limit_textarea.value) * 2).then(res => {
+            var chatlog = res.data.list;
+            try{
+                var usernmae = wrtn.getRepresentativePersona().name;
+            }
+            catch{
+                alert("대표프로필을 설정해주세요");
+                return true;
+            }
+            debug("character_profiles",4);
+            //select 박스 설정
+            if (AfterMemory_select.value == "0"){
+                var promptTemp = one_by_one_character_prompt;                      
+                debug("selected 1 : 1 캐릭터챗");
+            }
+            else if (AfterMemory_select.value == "1"){
+                var promptTemp = simulation_prompt;
+                debug("selected 시뮬레이션");
+            }
+            else if (AfterMemory_select.value == "2"){
+                var promptTemp = focus_on_important_cases_prompt;
+                debug("selected 주요사건 위주");
+            }
+            else if (AfterMemory_select.value == "3"){
+                var promptTemp = AfterMemory_tabs.childNodes[2].childNodes[0].childNodes.item(1).value;
+                debug("selected 커스텀");
+            }
+            //gemini에게 보낼 json
+            var lastContent = {
+                content: []
+            } 
+            for (const element of chatlog) {
+                if (element.role == "user"){
+                    lastContent.content[lastContent.content.length] = {
+                        message: element.content,
+                        role: "user",
+                        username: usernmae
+                    }
+                }
+                else if (element.role == "assistant"){
+                    lastContent.content[lastContent.content.length] = {
+                        message: element.content,
+                        role: "assistant"
+                    }
+                }
+            }
+            debug("chatlog",4);
+            //프롬 추가
+            if (AfterMemory_select.value != "3"){
+                promptTemp.chat_log = lastContent.content;
+                var gemini_text = JSON.stringify(promptTemp);
+            }
+            else{
+                var gemini_text = promptTemp + `[대화내역]\n${JSON.stringify(lastContent)}`;
+            }
+            //제미니 전송
+            var result = JSON.parse(out_postAfetch(gemini_api_url + `/v1beta/models/${AfterMemory_model_textarea.value}:generateContent?key=${AfterMemory_textarea.value}`,{
+                contents: {
+                    parts : [
+                        {text: gemini_text}
+                    ]
+                }
+            })).candidates[0].content.parts[0].text;
+            debug("gemini compeleted");
+            //뤼튼 메시지 전송은 2000자 이상 보낼시 too large request 에러가 발생해서 예외처리
+            if (result.length > 2000){
+                if(!confirm("요약본이 너무 깁니다. 요약본을 나눠서 전송하겠습니다. 진행하시겠습니까?")){
+                    return true;
+                }
+                var dp = Math.ceil(result.length / 500);
+                for (let index = 0; index < dp; index++) {
+                    if (index != dp-1){
+                        wrtn.getChatroom(document.URL.split("/")[7].split("?")[0]).send("_").set(result.substring(500 * index,500 * (index + 1)));
+                    }
+                    else{
+                        wrtn.getChatroom(document.URL.split("/")[7].split("?")[0]).send("_").set(result.substring(500 * index));
+                    }
+                    if(!confirm(`메시지를 나눠서 보내는중... (${index + 1}/${dp})`)){
+                        return true;
+                    }
+                }
+                debug("result DP",4);
+            }
+            else{
+                //채팅 보내고 삭제
+                wrtn.getChatroom(document.URL.split("/")[7].split("?")[0]).send("_").set(result);
+            }
+            debug("wrtn.ai message sended");
+            debug("Afterburning completed");
+            alert("Afterburning complete!");
+            //새로고침
+            document.location.reload();
+            debug("AfterMemory_func",0);
+        })
+    })
+    document.body.appendChild(AfterMemory_modal);
+}
+
+//페르소나 버튼 누를시
+function persona_change(){
+    //유저 wrtnUid가져오기
+    //메뉴 내부에 perona_L을 추가후 재로드시 기존에있던 perona_L을 전부 삭제
+    //메뉴에 기능 추가시 bar_c.childNodes.length - X 부분을 + 1
+    //if 문의 수도 + 1 bar_c.childNodes[X]도 + 1
+    var personal_modal = document.getElementById("web-modal");
+    var data = wrtn.getPersona();
+    c = 0;
+    if (document.getElementById("personas") != null){
+        document.getElementById("personas").remove();
+    }
+    var persona_div = document.createElement("div");
+    persona_div.setAttribute("id","personas");
+    for (const datum of data) {
+        const personaL = menus.get(persona_name).cloneNode(true);
+        const for_personaL = document.createElement("div");//페르소나 한칸 띄우기
+        personaL.insertBefore(for_personaL,personaL.childNodes[0]);
+        const personaL_p = personaL.childNodes.item(2); //페르소나 text
+        //대표 프로필일 경우 '<-' 붙이기 아니면 없음
+        if (datum.isRepresentative){
+            personaL_p.textContent = `${datum.name} <-`;
+        }
+        else {
+            personaL_p.textContent = datum.name;
+        }
+        personaL.setAttribute("id",`${c}`) //페르소나 요소 id 지정
+        //페르소나 목록을 누를시
+        function personaL_change(){
+            var mpid = "";
+            m_i = 0;
+            for (m of data) {
+                if (`${m_i}` == personaL.id) {
+                    var mpid = m._id; //뭔지 모르겠지만 혹시몰라서 안지움
+                    var name = m.name; //페르소나 이름 가져오기
+                    var information = m.information; //페르소나 정보 가져오기
+                }
+                m_i++;
+            }
+            var personaL_change_modal = document.createElement("modal");//페르소나 모달 팝업
+            personaL_change_modal.innerHTML = persona_modal_html;
+            personal_modal.setAttribute("style","position: relative !important;\n" +
+                "    z-index: 11 !important;") //이게 있어야 모달이 작동함
+            personal_modal.appendChild(personaL_change_modal.firstChild);
+            var personal_modal_name = document.getElementById("W_name"); //모달 내부 이름 textarea
+            personal_modal_name.value = name;
+            var personal_modal_info = document.getElementById("W_info"); //모달 내부 정보 textarea
+            personal_modal_info.value = information;
+            var personal_modal_Sbtn = document.getElementById("W_sumbit"); //모달 내부 등록 버튼
+            var personal_modal_Cbtn = document.getElementById("W_close"); //모달 내부 닫기 버튼
+            var personal_modal_x = document.getElementById("W_x"); //모달 내부 x버튼
+            //모달 등록버튼을 눌렀을시
+            personal_modal_Sbtn.addEventListener("click",()=>{
+                //모달의 내용을 조합해 페르소나 등록 및 대표프로필로 설정
+                var re = wrtn.setPersona(mpid,personal_modal_name.value,personal_modal_info.value);
+                if (re.result == "SUCCESS"){
+                    alert("페르소나 등록 성공!");
+                    personal_modal.childNodes.item(0).remove();
+                    persona_change();
+                }
+                else{
+                    alert("페르소나 등록 실패!");
+                    personal_modal.childNodes.item(0).remove();
+                }
+            })
+            //모달 내부 닫기버튼 눌렀을시
+            personal_modal_Cbtn.addEventListener("click",()=>{
+                personal_modal.childNodes.item(0).remove();
+                debug("personal_modal_Cbtn",3);
+            })
+            //모달 내부 x버튼 눌렀을시
+            personal_modal_x.addEventListener("click",()=>{
+                personal_modal.childNodes.item(0).remove();
+                debug("personal_modal_x",3);
+            })
+            debug("personaL",3);
+        }
+        personaL.addEventListener('click',personaL_change);
+        persona_div.appendChild(personaL);
+        c++;
+    }
+    menus.menu.appendChild(persona_div);
+    debug("persona",0);
+}
+
+//채팅방 메뉴를 추가하고 싶다면 수정
+if (menus != undefined){
+    //Memory Afterburner 메뉴 추가
+    menus.add(AfterMemory_name,MemoryAfterbuner_svg_d,AfterMemory_func,"yellow");
+
+    //페르소나 메뉴 추가
+    menus.add(persona_name,persona_svg_d,persona_change);
+}
+
+//캐릭터 관리의 드랍다운을 추가하고 싶다면 수정
+if (dropdown != undefined){
+    dropdown.add(copyTojson, (datum)=>{
+        //캐챗 id를 사용해서 캐챗의 모든 정보를 가져온후 클립보드에 복사
+        copyToClipboard(JSON.stringify(wrtn.getMycharacter(datum._id).get()));
+        alert('클립보드에 복사되었습니다!');
+    })
+    
+    dropdown.add(pasteTojson, (datum)=>{
+        //클립보드를 가져옴
+        getClipboardTextModern().then(function (clipboardContent) {
+            json_data = JSON.parse(clipboardContent); //클립보드 내용 json화
+            wrtn.getMycharacter(datum._id).set(json_data);
+            alert("캐챗 변경 성공! (새로고침 후 적용됩니다.)");
+            window.location.reload();
+        })
+    })
+    
+    dropdown.add(publish, (datum)=>{
+        //캐릭터를 공개상태로 새로만듬
+        wrtn.getMycharacter(datum._id).publish();
+        alert("캐챗 공개 성공! (새로고침 후 적용됩니다.)");
+        window.location.reload();
+    })
+    
+    dropdown.add(fastjournal, (datum)=>{
+        //fastjournal로 이동시킴
+        location.href = `http://www.fastjournal.kro.kr/index.html?charId=${datum._id}`;
+    })
+}
 
