@@ -57,7 +57,7 @@ const load_limit = 50; //불러올 기준을 만족하는 캐챗수
 const forced_limit = 40; //me?limite={}
 const likeCount_limit = 10; // 좋아요수가 10개 이상
 const chatCount_limit = 30; // 채팅수가 30개 이상 이면 올라옴
-const sendLimit = 500; // MA기능 글자수 나눠서 보내기
+const sendLimit = 1100; // MA기능 글자수 나눠서 보내기
 const auto_summation_characterChatId = "6787aecf65c02321daf25b0d"; // 자동요약기능을 수행할 캐챗 id
 const local_IsDebug = "debug"; //로컬스토리지 디버그 위치
 const local_Gemini_api_key = "Gemini Api Key"; //로컬스토리지 제미니 키 + 모델 + limit + select 저장위치
@@ -408,7 +408,7 @@ class my_struct {
         return request;
     }
     //캐챗을 공개
-    publish(){
+    publish(visibility = "public"){
         var json_data = this.get(); //기본 캐챗의 json데이터
         //startingSets의 _id가 있으면 안되서 지움
         for (const a of json_data.startingSets) {
@@ -435,7 +435,7 @@ class my_struct {
                 situationImages: json_data.situationImages,
                 categoryIds: [json_data.categories[0]._id],
                 tags: json_data.tags,
-                visibility: "public",
+                visibility: visibility,
                 promptTemplate: json_data.promptTemplate.template,
                 isCommentBlocked: json_data.isCommentBlocked,
                 defaultStartingSetName: json_data.defaultStartingSetName,
@@ -458,7 +458,7 @@ class my_struct {
                 situationImages: json_data.situationImages,
                 categoryIds: [json_data.categories[0]._id],
                 tags: json_data.tags,
-                visibility: "public",
+                visibility: visibility,
                 promptTemplate: json_data.promptTemplate.template,
                 isCommentBlocked: json_data.isCommentBlocked,
                 defaultStartingSetName: json_data.defaultStartingSetName,
@@ -3098,15 +3098,33 @@ if (dropdown != undefined){
         getClipboardTextModern().then(function (clipboardContent) {
             json_data = JSON.parse(clipboardContent); //클립보드 내용 json화
             wrtn.getMycharacter(datum._id).set(json_data);
-            alert("캐챗 변경 성공! (새로고침 후 적용됩니다.)");
+            alert("캐릭터 변경 성공! (새로고침 후 적용됩니다.)");
             window.location.reload();
         })
     })
     
     dropdown.add(publish, (datum)=>{
         //캐릭터를 공개상태로 새로만듬
-        wrtn.getMycharacter(datum._id).publish();
-        alert("캐챗 공개 성공! (새로고침 후 적용됩니다.)");
+        var answord = prompt("공개 범위를 적어주세요 (공개, 비공개, 링크 공개)","공개");
+        if (answord == "공개"){
+            wrtn.getMycharacter(datum._id).publish();
+            alert("캐릭터 공개 성공! (새로고침 후 적용됩니다.)");
+        }
+        else if (answord == "비공개"){
+            wrtn.getMycharacter(datum._id).publish("private");
+            alert("캐릭터 비공개 성공! (새로고침 후 적용됩니다.)");
+        }
+        else if (answord == "링크 공개"){
+            wrtn.getMycharacter(datum._id).publish("linkonly");
+            alert("캐릭터 링크 공개 성공! (새로고침 후 적용됩니다.)");
+        }
+        else if (answord == "링크공개"){
+            wrtn.getMycharacter(datum._id).publish("linkonly");
+            alert("캐릭터 링크 공개 성공! (새로고침 후 적용됩니다.)");
+        }
+        else{
+            alert("공개,비공개,링크 공개 셋중 하나만 선택 가능합니다.");
+        }
         window.location.reload();
     })
     
