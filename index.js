@@ -2981,10 +2981,6 @@ function AfterMemory_func(){
 
 //페르소나 버튼 누를시
 function persona_change(){
-    //유저 wrtnUid가져오기
-    //메뉴 내부에 perona_L을 추가후 재로드시 기존에있던 perona_L을 전부 삭제
-    //메뉴에 기능 추가시 bar_c.childNodes.length - X 부분을 + 1
-    //if 문의 수도 + 1 bar_c.childNodes[X]도 + 1
     var personal_modal = document.getElementById("web-modal");
     var data = wrtn.getPersona();
     c = 0;
