@@ -57,6 +57,7 @@ const load_limit = 50; //불러올 기준을 만족하는 캐챗수
 const forced_limit = 40; //me?limite={}
 const likeCount_limit = 10; // 좋아요수가 10개 이상
 const chatCount_limit = 30; // 채팅수가 30개 이상 이면 올라옴
+const sendLimit = 500; // MA기능 글자수 나눠서 보내기
 const auto_summation_characterChatId = "6787aecf65c02321daf25b0d"; // 자동요약기능을 수행할 캐챗 id
 const local_IsDebug = "debug"; //로컬스토리지 디버그 위치
 const local_Gemini_api_key = "Gemini Api Key"; //로컬스토리지 제미니 키 + 모델 + limit + select 저장위치
@@ -2965,13 +2966,13 @@ function AfterMemory_func(){
                 if(!confirm("요약본이 너무 깁니다. 요약본을 나눠서 전송하겠습니다. 진행하시겠습니까?")){
                     return true;
                 }
-                var dp = Math.ceil(result.length / 500);
+                var dp = Math.ceil(result.length / sendLimit);
                 for (let index = 0; index < dp; index++) {
                     if (index != dp-1){
-                        wrtn.getChatroom(document.URL.split("/")[7].split("?")[0]).send("_").set(result.substring(500 * index,500 * (index + 1)));
+                        wrtn.getChatroom(document.URL.split("/")[7].split("?")[0]).send("_").set(result.substring(sendLimit * index,sendLimit * (index + 1)));
                     }
                     else{
-                        wrtn.getChatroom(document.URL.split("/")[7].split("?")[0]).send("_").set(result.substring(500 * index));
+                        wrtn.getChatroom(document.URL.split("/")[7].split("?")[0]).send("_").set(result.substring(sendLimit * index));
                     }
                     if(!confirm(`메시지를 나눠서 보내는중... (${index + 1}/${dp})`)){
                         return true;
