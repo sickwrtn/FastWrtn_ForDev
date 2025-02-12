@@ -2875,7 +2875,7 @@ function AfterMemory_func(){
             alert("limit는 0 이상 50 이하여야 합니다.");
             return true;
         }
-        alert("시간이 많이 소요되니 당황하시지말고 기다려 주세요...");
+        alert("시간이 많이 소요되니 당황하시지말고 기다려 주세요... (확인을 누르셔야 진행됩니다.)");
         //현재 상태 로컬스토리지 저장
         if (AfterMemory_select.value == "3"){
             localStorage.setItem(local_Gemini_api_key,JSON.stringify({
@@ -2897,7 +2897,7 @@ function AfterMemory_func(){
         }
         debug(`limited ${AfterMemory_limit_textarea.value}`);
         //채팅내역 + 페르소나 불러오기
-        wrtn.getChatroom(document.URL.split("/")[7].split("?")[0]).getMessages(cursor="",load_limit=Number(AfterMemory_limit_textarea.value) * 2).then(res => {
+        wrtn.getChatroom(document.URL.split("/")[7].split("?")[0]).getMessages("",Number(AfterMemory_limit_textarea.value) * 2).then(res => {
             var chatlog = res.data.list;
             try{
                 var usernmae = wrtn.getRepresentativePersona().name;
@@ -2961,8 +2961,8 @@ function AfterMemory_func(){
                 }
             })).candidates[0].content.parts[0].text;
             debug("gemini compeleted");
-            //뤼튼 메시지 전송은 2000자 이상 보낼시 too large request 에러가 발생해서 예외처리
-            if (result.length > 2000){
+            //뤼튼 메시지 전송은 sendLimit자 이상 보낼시 too large request 에러가 발생해서 예외처리
+            if (result.length > sendLimit){
                 if(!confirm("요약본이 너무 깁니다. 요약본을 나눠서 전송하겠습니다. 진행하시겠습니까?")){
                     return true;
                 }
@@ -2998,7 +2998,18 @@ function AfterMemory_func(){
 //페르소나 버튼 누를시
 function persona_change(){
     var personal_modal = document.getElementById("web-modal");
-    var data = wrtn.getPersona();
+    try{
+        var data = wrtn.getPersona();
+        console.log(data);
+        if (data.length == 0){
+            alert("대화프로필을 만들어 해주세요.");
+            return true;
+        }
+    }
+    catch{
+        alert("대화프로필을 만들어 해주세요.");
+        return true;
+    }
     c = 0;
     if (document.getElementById("personas") != null){
         document.getElementById("personas").remove();
