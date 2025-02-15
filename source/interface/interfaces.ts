@@ -19,12 +19,12 @@ export interface dropdown_class {
 export interface onClickDropdown { (character: myCharacter): void; }
 
 export interface feed_class {
-    item: Array<[string,filter_character_list,boolean]>;
-    add(name: string, filter_character_list: filter_character_list, CeCreator: boolean): void;
+    item: Array<[string,filter_character_list,boolean,any?,any?]>;
+    add(name: string, filter_character_list: filter_character_list, CeCreator: boolean, stopLine?: any, onStopped? : any): void;
     listen(Tfeed: any): void;
 }
 
-export interface filter_character_list { (characterListElement: character): boolean }
+export interface filter_character_list { (characterListElement: character, text?: any): boolean }
 
 export interface my_struct {
     json: myCharacter;

@@ -7,7 +7,7 @@ import * as interfaces from "../interface/interfaces"
 
 
 //랭플 cursor 조회
-function load_character_func(cursorL: string,feed_struct_element: any,filter_character_list: interfaces.filter_character_list,character_list: Array<interfaces.character>,loaded,feed_struct_elements){
+function load_character_func(cursorL: string,feed_struct_element: any,filter_character_list: interfaces.filter_character_list,character_list: Array<interfaces.character>,loaded,feed_struct_elements,stopLine?: any, onStopped?: any, text? : any){
     /* /character response
     {
         "result":"SUCCESS",
@@ -20,9 +20,9 @@ function load_character_func(cursorL: string,feed_struct_element: any,filter_cha
             "Authorization": `Bearer ${getCookie(env.token_key)}`,
     }}).then(res => res.json()).then(data => {
         for (const element of data.data.characters) {
-            if(filter_character_list(element)){
-                character_list[character_list.length] = element;
+            if(function(){if (stopLine != undefined && onStopped != undefined) return filter_character_list(element, text);else return filter_character_list(element)}()){
                 const fe = feed_struct_element.cloneNode(true);
+                character_list[character_list.length] = element;
                 if (fe.childNodes[0].childNodes[0].childNodes[0].childNodes.item(1) != null) {
                     fe.childNodes[0].childNodes[0].childNodes[0].childNodes.item(1).remove();
                 }
@@ -87,13 +87,19 @@ function load_character_func(cursorL: string,feed_struct_element: any,filter_cha
             }
         }
         if (loaded < env.load_limit){
-            load_character_func(data.data.nextCursor,feed_struct_element,filter_character_list,character_list,loaded,feed_struct_elements);
+            if (stopLine != undefined && character_list.length != 0){
+                if (stopLine(character_list[character_list.length - 1])){
+                    onStopped(character_list,feed_struct_elements,text);
+                    return true;
+                }
+            }
+            load_character_func(data.data.nextCursor,feed_struct_element,filter_character_list,character_list,loaded,feed_struct_elements,stopLine,onStopped,text);
         }
     })
 }
 
 //플러스 랭크 내부 캐릭터 클릭시 팝업
-export function plus_modal_func(Tfeed: any,filter_character_list: interfaces.filter_character_list,name:string ,CeCreator: boolean){
+export function plus_modal_func(Tfeed: any,filter_character_list: interfaces.filter_character_list,name:string ,CeCreator: boolean, stopLine?: any, onStopped?: any){
     const feed_struct: any = Tfeed.childNodes.item(1).cloneNode(true); //피드의 제일위에서 2번째 요소를 가져와서 형식만 가져옴
     const feed_struct_text: any = feed_struct.childNodes[0].childNodes[0].childNodes.item(0); //랭킹 플러스 (Fast wrtn) <- 이거 들어간 텍스트 구역
     const feed_struct_scroll: any = feed_struct.childNodes[1].childNodes[0].childNodes.item(0); //스크롤 가져오기
@@ -154,9 +160,9 @@ export function plus_modal_func(Tfeed: any,filter_character_list: interfaces.fil
                                 "Authorization": `Bearer ${getCookie(env.token_key)}`,
                         }}).then(res => res.json()).then(data => {
                             for (const element of data.data.characters) {
-                                if(filter_character_list(element)){
-                                    character_list[character_list.length] = element;
+                                if(function(){if (stopLine != undefined && onStopped != undefined) return filter_character_list(element, feed_struct_text);else return filter_character_list(element)}()){
                                     const fe = feed_struct_element.cloneNode(true);
+                                    character_list[character_list.length] = element;
                                     if (fe.childNodes[0].childNodes[0].childNodes[0].childNodes.item(1) != null) {
                                         fe.childNodes[0].childNodes[0].childNodes[0].childNodes.item(1).remove();
                                     }
@@ -222,7 +228,7 @@ export function plus_modal_func(Tfeed: any,filter_character_list: interfaces.fil
                             }
                             debug("first_charcter_section",2)
                             cursor = data.data.nextCursor;
-                            load_character_func(cursor,feed_struct_element,filter_character_list,character_list,loaded,feed_struct_elements);
+                            load_character_func(cursor,feed_struct_element,filter_character_list,character_list,loaded,feed_struct_elements,stopLine,onStopped,feed_struct_text);
                         })
                         IsLoaded = true;
                         debug("character");
@@ -237,7 +243,6 @@ export function plus_modal_func(Tfeed: any,filter_character_list: interfaces.fil
     if (CeCreator){
         feed_struct.childNodes[0].childNodes.item(0).appendChild(feed_struct_element.childNodes[1].childNodes.item(2).cloneNode(true));
     }
-    feed_struct_text.textContent = env.plus;
     Tfeed.prepend(feed_struct);
     debug("plus_modal_func",0);
 }

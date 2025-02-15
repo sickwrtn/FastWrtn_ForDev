@@ -8,8 +8,8 @@ export const gemini_api_url: string = "https://generativelanguage.googleapis.com
 export const fastjournal_url: string= "https://www.fastwrtn.com";
 export const scroll_all_amount: number = 300 // <  > 누를시 이동할 스크롤 양
 export const scroll_amount: number = 10; // 끊어서 스크롤 되는 양
-export const limit: number = 30 // 불러올 캐챗수 (랭킹 플러스용)
-export const load_limit: number = 50; //불러올 기준을 만족하는 캐챗수
+export const limit: number = 30 // 불러올 캐챗수
+export const load_limit: number = 100; //불러올 기준을 만족하는 캐챗수
 export const forced_limit: number = 40; //me?limite={}
 export const likeCount_limit: number = 10; // 좋아요수가 10개 이상
 export const chatCount_limit: number = 30; // 채팅수가 30개 이상 이면 올라옴

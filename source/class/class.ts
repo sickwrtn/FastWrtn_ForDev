@@ -91,16 +91,16 @@ export class dropdown_class {
 }
 
 export class feed_class {
-    item: Array<[string,interfaces.filter_character_list,boolean]>;
+    item: Array<[string,interfaces.filter_character_list,boolean,any,any]>;
     constructor(){
         this.item = [];
     }
-    add(name: string, filter_character_list: interfaces.filter_character_list, CeCreator: boolean): void{
-        this.item[this.item.length] = [name,filter_character_list,CeCreator];
+    add(name: string, filter_character_list: interfaces.filter_character_list, CeCreator: boolean, stopLine?: any,onStopped?: any): void{
+        this.item[this.item.length] = [name,filter_character_list,CeCreator,stopLine,onStopped];
     }
     listen(Tfeed: any): void{
         for (const element of this.item) {
-            plus_modal_func(Tfeed,element[1],element[0],element[2]);
+            plus_modal_func(Tfeed,element[1],element[0],element[2],element[3],element[4]);
         }
     }
 }

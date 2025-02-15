@@ -173,6 +173,58 @@ const filter_character_list = (CeCreator) => {return function(characterListEleme
     }
 }}
 
+
+
+var list = [];
+//패스트 푸드
+const fastfood = (IsAdult) => {return function(characterListElement: interfaces.character, text?: any): boolean{
+    list[list.length] = characterListElement;
+    /*
+    return true 시 통과
+    return false 시 비통과
+    */
+    //태그 검열
+    if (JSON.parse(localStorage.getItem(env.local_tag)).tags.length != 0){
+        for (var element of JSON.parse(localStorage.getItem(env.local_tag)).tags) {
+            for (var element2 of characterListElement.tags) {
+                if (element == element2){
+                    return false;
+                }   
+            }
+        }
+    }
+    //기준 검열
+    if (characterListElement.likeCount < 10 || characterListElement.chatCount < 10 || characterListElement.chatUserCount < 10){
+        return false;
+    }
+    else{
+        if(IsAdult){
+            if (characterListElement.isAdult == true){
+                debug(characterListElement.name + " (UnSafe) ",5);
+                text.textContent += ".";
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        else {
+            if (characterListElement.isAdult == false){
+                debug(characterListElement.name + " (Safe) ",5);
+                text.textContent += ".";
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+    }
+}}
+
+setInterval(()=>{
+    console.log(list.length);
+},100)
+
 //캐릭터 관리 드랍다운 기능
 if (true==true){
     dropdown.add(env.copyTojson, (character: interfaces.myCharacter)=>{
@@ -234,14 +286,56 @@ const feed: interfaces.feed_class = new feed_class();
 
 //피드 기능
 if (true==true){
-    //비크리
-    feed.add("랭킹 플러스",filter_character_list(false),false);
-    //크리
-    feed.add("랭킹 플러스",filter_character_list(true),true);
+    // 패스트푸드 언셒
+    feed.add("데이터를 수집중",fastfood(true),false,(element) => {
+        if (new Date(element.createdAt).setHours(new Date(element.createdAt).getHours() + 12) < new Date().getTime()){
+            return true;
+        }
+    },(elements,feed,text)=>{
+        let i = 0;
+        let k: Array<[interfaces.character,any]> = []
+        for (const element of feed.childNodes) {
+            k[k.length] = [elements[i],element]
+            i++;
+        }
+        k.sort((a: [interfaces.character,any], b: [interfaces.character,any]) => {
+            return b[0].chatCount - a[0].chatCount;
+        })
+        elements = [];
+        k.forEach((i: Array<[interfaces.character,any]>) => {elements[elements.length] = i[0]; feed.appendChild(i[1])});
+        text.textContent = "패스트 푸드 (unSafe)";
+    });
+    // 패스트푸드 언셒
+    feed.add("데이터를 수집중",fastfood(false),false,(element) => {
+        if (new Date(element.createdAt).setHours(new Date(element.createdAt).getHours() + 24) < new Date().getTime()){
+            return true;
+        }
+    },(elements,feed,text)=>{
+        let i = 0;
+        let k: Array<[interfaces.character,any]> = []
+        for (const element of feed.childNodes) {
+            k[k.length] = [elements[i],element]
+            i++;
+        }
+        k.sort((a: [interfaces.character,any], b: [interfaces.character,any]) => {
+            return b[0].chatCount - a[0].chatCount;
+        })
+        elements = [];
+        k.forEach((i: Array<[interfaces.character,any]>) => {elements[elements.length] = i[0]; feed.appendChild(i[1])});
+        text.textContent = "패스트 푸드";
+    });
+    // 비크리
+    feed.add(env.plus,filter_character_list(false),false);
+    // 크리
+    feed.add(env.plus,filter_character_list(true),true);
     //피드에 새로운 기능을 추가할경우
     /*
     feed.add(이름, interfaces.filter_character_list의 형식을 만족하는 필러링 함수, 크리딱지를 붙일건지 (캐챗말고 이름 옆에));
     + character에는 조회한 모든 캐챗이 하나씩 들어오고 true일 경우 넣고 false 경우 나오지 않습니다.
+    + stopLine은 캐릭터 수집이 멈추는 조건임 true를 반환하면 멈춤
+      onStopped는 캐릭터 수집이 멈춘후 일어나는 이벤트
+      text는 피드의 textContent를 유연하게 바꿀수있게 만든거임
+      text는 stopLine onStopped의 이벤트가 할당되어있어야지만 파라미터로 주어짐
     */
     //예시 (테스트시 주석 제거)
     //feed.add("테스트", function(character: interfaces.character){return true}, false);
