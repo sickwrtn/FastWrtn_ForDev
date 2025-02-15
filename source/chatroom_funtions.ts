@@ -1,7 +1,7 @@
 import { wrtn_api_class } from "./tools/sdk";
 import { debug } from "./tools/debug";
 import { one_by_one_character_prompt, simulation_prompt, focus_on_important_cases_prompt} from "./.env/MAprompt";
-import * as requests from "./tools/request";
+import * as requests from "./tools/requests";
 import * as frontHtml from "./.env/fronthtml";
 import * as env from "./.env/env";
 import * as interfaces from "./interface/interfaces";

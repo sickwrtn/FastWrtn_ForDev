@@ -1,6 +1,6 @@
 import * as interfaces from "../interface/interfaces";
 import * as env from "../.env/env";
-import * as requests from "./request";
+import * as requests from "./requests";
 import { debug } from "./debug";
 import { getCookie } from "./functions";
 

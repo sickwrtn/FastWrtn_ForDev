@@ -2,7 +2,7 @@ import { debug } from "../tools/debug";
 import * as env from "../.env/env";
 import * as fronHtml from "../.env/fronthtml";
 import { getCookie } from "../tools/functions";
-import * as requests from "../tools/request";
+import * as requests from "../tools/requests";
 import * as interfaces from "../interface/interfaces"
 
 
