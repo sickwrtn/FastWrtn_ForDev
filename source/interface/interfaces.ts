@@ -55,7 +55,7 @@ export interface message_struct{
 export interface chatroom_struct{
     getHeader: RequestInit;
     postHeader: RequestInit;
-    json: myCharacter;
+    json: chatroom;
     reload(): response;
     remove(): response;
     getMessages(cursor: string,load_limit: number): Promise<response | null>;
@@ -236,7 +236,7 @@ export interface message extends ids{
     liked: boolean;
     diliked: boolean;
     status: string;
-    isSuperMode: string;
+    isSuperMode: boolean;
 }
 
 export interface usernote extends ids{

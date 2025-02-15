@@ -196,7 +196,7 @@ export class my_struct{
   export class chatroom_struct {
     getHeader: RequestInit;
     postHeader: RequestInit;
-    json: interfaces.myCharacter;
+    json: interfaces.chatroom;
     constructor(data){
         this.getHeader = {method : "GET", headers : {"Authorization": `Bearer ${getCookie(env.token_key)}`}};
         this.postHeader = {method : "POST",headers : {"Authorization": `Bearer ${getCookie(env.token_key)}`,"Content-Type": "application/json"},body:null};
