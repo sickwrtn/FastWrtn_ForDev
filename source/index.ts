@@ -22,8 +22,8 @@ if (localStorage.getItem(env.local_saved_prompt) == null){
 if (localStorage.getItem(env.local_Gemini_api_key) == null){
     localStorage.setItem(env.local_Gemini_api_key,JSON.stringify({
         key : "AIzaSyD5p_Oiva9nIq7e23rk-Zt7vGpDdfkaDVc",
-        model : "gemini-2.0-flash-exp",
-        limit: 10,
+        model : "gemini-2.0-flash",
+        limit: 20,
         select: null,
         prompt: null
     }))
@@ -218,7 +218,7 @@ if (true==true){
     
     dropdown.add(env.fastjournal, (character: interfaces.myCharacter)=>{
         //fastjournal로 이동시킴
-        location.href = `http://www.fastwrtn.com/index.html?charId=${character._id}`;
+        location.href = `${env.fastjournal_url}/index.html?charId=${character._id}`;
     })
 
     //캐릭터 관리 드랍다운에 새로운 기능을 추가할경우

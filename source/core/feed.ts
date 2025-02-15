@@ -93,13 +93,14 @@ function load_character_func(cursorL: string,feed_struct_element: any,filter_cha
 }
 
 //플러스 랭크 내부 캐릭터 클릭시 팝업
-export function plus_modal_func(Tfeed,filter_character_list: interfaces.filter_character_list,CeCreator){
+export function plus_modal_func(Tfeed: any,filter_character_list: interfaces.filter_character_list,name:string ,CeCreator: boolean){
     const feed_struct: any = Tfeed.childNodes.item(1).cloneNode(true); //피드의 제일위에서 2번째 요소를 가져와서 형식만 가져옴
     const feed_struct_text: any = feed_struct.childNodes[0].childNodes[0].childNodes.item(0); //랭킹 플러스 (Fast wrtn) <- 이거 들어간 텍스트 구역
     const feed_struct_scroll: any = feed_struct.childNodes[1].childNodes[0].childNodes.item(0); //스크롤 가져오기
     const feed_struct_elements: any = feed_struct.childNodes[1].childNodes[0].childNodes[0].childNodes.item(0); //형식에 들어있던 캐챗 목록 가져오기
     const feed_struct_element: any = feed_struct_elements.childNodes.item(0).cloneNode(true); //형식에 들어있던 캐챗중 제일 첫번째걸 형식 삼아 가져옴
     feed_struct_element.innerHTML = fronHtml.feed_struct_element_front_html;
+    feed_struct_text.textContent = name;
     try {
         var feed_struct_scroll_btn = feed_struct.childNodes[1].childNodes[0].childNodes[1].childNodes.item(0); // > 버튼
     }

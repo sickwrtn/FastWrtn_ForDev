@@ -100,7 +100,7 @@ export class feed_class {
     }
     listen(Tfeed: any): void{
         for (const element of this.item) {
-            plus_modal_func(Tfeed,element[1],element[2]);
+            plus_modal_func(Tfeed,element[1],element[0],element[2]);
         }
     }
 }
