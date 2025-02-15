@@ -68,7 +68,7 @@ ctl + 1~9 단축키 사용 가능합니다.
 
 # SDK
 
-[뤼튼 api SDK](https://github.com/sickwrtn/FastWrtn/blob/main/sdk/wrtn_api.js)
+[뤼튼 api SDK](https://github.com/sickwrtn/FastWrtn/blob/main/source/tools/sdk.ts)
 
 ## fast
 
