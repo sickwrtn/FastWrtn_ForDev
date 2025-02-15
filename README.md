@@ -68,7 +68,7 @@ ctl + 1~9 단축키 사용 가능합니다.
 
 # SDK
 
-[뤼튼 api SDK](https://github.com/sickwrtn/FastWrtn/blob/main/sourse/tools/requests.ts)
+[뤼튼 api SDK](https://github.com/sickwrtn/FastWrtn/blob/main/source/tools/requests.ts)
 
 ## fast
 
