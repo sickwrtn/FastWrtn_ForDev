@@ -1,15 +1,11 @@
 import * as env from "./.env/env";
 import * as interfaces from "./interface/interfaces";
 import { debug } from "./tools/debug";
-import { getCookie } from "./tools/functions";
-import { chatroom } from "./core/chatroom";
-import { my } from "./core/myChatacters";
-import { character } from "./core/feed";
-import { debug_btn } from "./core/profile";
 import { chatroom_menus_class, dropdown_class, feed_class } from "./class/class";
 import { persona_change,AfterMemory_func } from "./chatroom_funtions";
 import { wrtn_api_class } from "./tools/sdk";
 import { copyToClipboard,getClipboardTextModern } from "./tools/functions";
+import { main } from "./main";
 
 //로컬 스토리지 초기설정
 if (localStorage.getItem(env.local_saved_prompt) == null){
@@ -42,67 +38,6 @@ if (localStorage.getItem(env.local_tag) == null){
         tags: []
     }))
 }
-
-//main()
-function main(){
-    //캐릭터 플러스 랭킹 기능
-    if (document.URL.split("/")[3] == "character" && document.URL.split("/").length == 4){
-        debug_btn();
-        character(feed);
-        debug("asd");
-    }
-
-    //채팅방 기능
-    if (document.URL.split("/")[4] == "u"){
-        chatroom(menus);
-    }
-
-    //캐릭터 관리
-    if (document.URL.split("/")[4] == "my"){
-        my(dropdown);
-    }
-
-    //캐릭터 만들기
-    if (document.URL.split("/")[4] != undefined){
-        if (document.URL.split("/")[4].split("?")[0] == "builder"){
-            //builder();
-        }
-    }
-    debug('main',0);
-}
-
-//real-time apply
-var lastest = "";
-setInterval(()=>{
-    if (getCookie(env.token_key) != undefined){
-        if (lastest != document.URL){
-            //character
-            if (document.URL == "https://wrtn.ai/character"){
-                main();
-            }
-            //character/builder
-            if (document.URL.split("/")[4] != undefined){
-                if (document.URL.split("/")[4].split("?")[0] == "builder"){
-                    main();
-                }
-            }
-            //character/my
-            if (document.URL.split("/")[4] == "my"){
-                main();
-            }
-            debug(`${lastest} -> ${document.URL}`);
-        }
-        //character/u
-        const targetDiv = document.getElementsByClassName(env.targetDivClass).item(0);
-        if (targetDiv != null) {
-            if (targetDiv.childNodes.length < 5) {
-                debug(`if targetDiv != null`);
-                main();
-            }
-        }
-    }
-    lastest = document.URL;
-},500)
 
 const wrtn: interfaces.wrtn_api_class = new wrtn_api_class();
 
@@ -337,7 +272,10 @@ if (true==true){
     //feed.add("테스트", function(character: interfaces.character){return true}, false);
 }
 
-
+//main()
+if (true==true){
+    main(feed,menus,dropdown);
+}
 debug("localStorage");
 
 
