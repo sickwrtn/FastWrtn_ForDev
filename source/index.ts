@@ -13,6 +13,8 @@ const feed = new feed_class();
 const dropdown = new dropdown_class();
 const menus = new chatroom_menus_class();
 
+dropdown.add()
+
 
 //실제 실행
 main(feed,menus,dropdown);
