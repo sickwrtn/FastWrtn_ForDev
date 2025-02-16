@@ -15,10 +15,10 @@ export class chatroom_menus_class {
         this.item = [];
         this.listeners = [];
     }
-    add(name: string,svg: string,func: interfaces.onClickChatroom_menus,color:string | null): void{
+    add(name: string,svg: string,func: interfaces.onClickChatroom_menus,color?:string): void{
         this.item[this.item.length] = [name,svg,func,color];
     }
-    get(name): any | undefined{
+    get(name: string): any | undefined{
         for (const i of this.listeners) {
             if (i.childNodes.item(1).textContent == name){
                 return i
@@ -35,7 +35,7 @@ export class chatroom_menus_class {
                 new_item.childNodes[0].childNodes[1].remove();
             }
             new_item.childNodes[0].childNodes.item(0).setAttribute("d",i[1]);
-            if (i[3] != null){
+            if (i[3] != undefined){
                 new_item.childNodes[0].childNodes.item(0).setAttribute("fill",i[3]);
             }
             new_item.addEventListener('click',i[2]);
@@ -91,11 +91,11 @@ export class dropdown_class {
 }
 
 export class feed_class {
-    item: Array<[string,interfaces.filter_character_list,boolean,any,any]>;
+    item: Array<[string,interfaces.filter_character_list,boolean,interfaces.stopLine,interfaces.onStopped]>;
     constructor(){
         this.item = [];
     }
-    add(name: string, filter_character_list: interfaces.filter_character_list, CeCreator: boolean, stopLine?: any,onStopped?: any): void{
+    add(name: string, filter_character_list: interfaces.filter_character_list, CeCreator: boolean, stopLine?: interfaces.stopLine,onStopped?: interfaces.onStopped): void{
         this.item[this.item.length] = [name,filter_character_list,CeCreator,stopLine,onStopped];
     }
     listen(Tfeed: any): void{

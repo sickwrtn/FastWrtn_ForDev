@@ -7,7 +7,7 @@ import * as interfaces from "../interface/interfaces"
 
 
 //랭플 cursor 조회
-function load_character_func(cursorL: string,feed_struct_element: any,filter_character_list: interfaces.filter_character_list,character_list: Array<interfaces.character>,loaded,feed_struct_elements,stopLine?: any, onStopped?: any, text? : any){
+function load_character_func(cursorL: string,feed_struct_element: any,filter_character_list: interfaces.filter_character_list,character_list: Array<interfaces.character>,loaded,feed_struct_elements,stopLine?: interfaces.stopLine, onStopped?: interfaces.onStopped, text? : any){
     /* /character response
     {
         "result":"SUCCESS",
@@ -99,7 +99,7 @@ function load_character_func(cursorL: string,feed_struct_element: any,filter_cha
 }
 
 //플러스 랭크 내부 캐릭터 클릭시 팝업
-export function plus_modal_func(Tfeed: any,filter_character_list: interfaces.filter_character_list,name:string ,CeCreator: boolean, stopLine?: any, onStopped?: any){
+export function plus_modal_func(Tfeed: any,filter_character_list: interfaces.filter_character_list,name:string ,CeCreator: boolean, stopLine?: interfaces.stopLine, onStopped?: interfaces.onStopped){
     const feed_struct: any = Tfeed.childNodes.item(1).cloneNode(true); //피드의 제일위에서 2번째 요소를 가져와서 형식만 가져옴
     const feed_struct_text: any = feed_struct.childNodes[0].childNodes[0].childNodes.item(0); //랭킹 플러스 (Fast wrtn) <- 이거 들어간 텍스트 구역
     const feed_struct_scroll: any = feed_struct.childNodes[1].childNodes[0].childNodes.item(0); //스크롤 가져오기

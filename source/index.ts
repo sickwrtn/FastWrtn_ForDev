@@ -79,19 +79,16 @@ setInterval(()=>{
             //character
             if (document.URL == "https://wrtn.ai/character"){
                 main();
-                debug("1");
             }
             //character/builder
             if (document.URL.split("/")[4] != undefined){
                 if (document.URL.split("/")[4].split("?")[0] == "builder"){
                     main();
-                    debug("2");
                 }
             }
             //character/my
             if (document.URL.split("/")[4] == "my"){
                 main();
-                debug("3");
             }
             debug(`${lastest} -> ${document.URL}`);
         }
@@ -107,29 +104,7 @@ setInterval(()=>{
     lastest = document.URL;
 },500)
 
-const menus: interfaces.chatroom_menus_class = new chatroom_menus_class();
-
-//채팅방 메뉴기능
-if (true==true){
-    
-    //Memory Afterburner 메뉴 추가
-    menus.add(env.AfterMemory_name,env.MemoryAfterbuner_svg_d,AfterMemory_func,"yellow");
-
-    //페르소나 메뉴 추가
-    menus.add(env.persona_name,env.persona_svg_d,() => persona_change(menus),null);
-
-    //채팅방 메뉴에 새로운 기능을 추가할경우
-    /*
-    menus.add(메뉴에 추가될 기능 이름, 아이콘(svg), 함수 ()=>{},fill 색상 (null일 경우 투명));
-    + () => func(menus)를 사용해 현재 추가되어있는 채팅방 메뉴 기능을 가져올수있다.
-    */
-    //예시 (테스트시 주석제거)
-    //menus.add("test",env.MemoryAfterbuner_svg_d,()=>alert("테스트"),null);
-}
-
 const wrtn: interfaces.wrtn_api_class = new wrtn_api_class();
-
-const dropdown: interfaces.dropdown_class = new dropdown_class();
 
 //랭킹 플러스 필터링 함수
 const filter_character_list = (CeCreator) => {return function(characterListElement: interfaces.character): boolean{
@@ -221,19 +196,36 @@ const fastfood = (IsAdult) => {return function(characterListElement: interfaces.
     }
 }}
 
-setInterval(()=>{
-    console.log(list.length);
-},100)
+const menus: interfaces.chatroom_menus_class = new chatroom_menus_class();
+
+//채팅방 메뉴기능
+if (true==true){
+    
+    //Memory Afterburner 메뉴 추가
+    menus.add(env.AfterMemory_name,env.MemoryAfterbuner_svg_d,AfterMemory_func,"yellow");
+
+    //페르소나 메뉴 추가
+    menus.add(env.persona_name,env.persona_svg_d,() => persona_change(menus));
+    //채팅방 메뉴에 새로운 기능을 추가할경우
+    /*
+    menus.add(메뉴에 추가될 기능 이름, 아이콘(svg.path.d), 함수 ()=>{},fill 색상 없을 경우 null);
+    + () => func(menus)를 사용해 현재 추가되어있는 채팅방 메뉴 기능을 가져올수있다.
+    */
+    //예시 (테스트시 주석제거)
+    //menus.add("test",env.MemoryAfterbuner_svg_d,()=>alert("테스트"));
+}
+
+const dropdown: interfaces.dropdown_class = new dropdown_class();
 
 //캐릭터 관리 드랍다운 기능
 if (true==true){
-    dropdown.add(env.copyTojson, (character: interfaces.myCharacter)=>{
+    dropdown.add(env.copyTojson, (character)=>{
         //캐챗 id를 사용해서 캐챗의 모든 정보를 가져온후 클립보드에 복사
         copyToClipboard(JSON.stringify(wrtn.getMycharacter(character._id).get()));
         alert('클립보드에 복사되었습니다!');
     })
     
-    dropdown.add(env.pasteTojson, (character: interfaces.myCharacter)=>{
+    dropdown.add(env.pasteTojson, (character)=>{
         //클립보드를 가져옴
         getClipboardTextModern().then(function (clipboardContent) {
             let json_data: interfaces.myCharacter = JSON.parse(clipboardContent); //클립보드 내용 json화
@@ -243,7 +235,7 @@ if (true==true){
         })
     })
     
-    dropdown.add(env.publish, (character: interfaces.myCharacter)=>{
+    dropdown.add(env.publish, (character)=>{
         //캐릭터를 선택한 공개범위로 새로 만듬
         var answord = prompt("공개 범위를 적어주세요 (공개, 비공개, 링크 공개)","공개");
         if (answord == "공개"){
@@ -268,7 +260,7 @@ if (true==true){
         window.location.reload();
     })
     
-    dropdown.add(env.fastjournal, (character: interfaces.myCharacter)=>{
+    dropdown.add(env.fastjournal, (character)=>{
         //fastjournal로 이동시킴
         location.href = `${env.fastjournal_url}/index.html?charId=${character._id}`;
     })
@@ -287,42 +279,46 @@ const feed: interfaces.feed_class = new feed_class();
 //피드 기능
 if (true==true){
     // 패스트푸드 언셒
-    feed.add("데이터를 수집중",fastfood(true),false,(element) => {
-        if (new Date(element.createdAt).setHours(new Date(element.createdAt).getHours() + 12) < new Date().getTime()){
+    feed.add("데이터를 수집중",fastfood(true),false,(character) => {
+        if (new Date(character.createdAt).setHours(new Date(character.createdAt).getHours() + 12) < new Date().getTime()){
             return true;
         }
-    },(elements,feed,text)=>{
+    },(characters,feed,text)=>{
         let i = 0;
         let k: Array<[interfaces.character,any]> = []
         for (const element of feed.childNodes) {
-            k[k.length] = [elements[i],element]
+            k[k.length] = [characters[i],element]
             i++;
         }
         k.sort((a: [interfaces.character,any], b: [interfaces.character,any]) => {
             return b[0].chatCount - a[0].chatCount;
         })
-        elements = [];
-        k.forEach((i: Array<[interfaces.character,any]>) => {elements[elements.length] = i[0]; feed.appendChild(i[1])});
-        text.textContent = "패스트 푸드 (unSafe)";
+        characters = [];
+        for (const k_i of k) {
+            characters[characters.length] = k_i[0]; feed.appendChild(k_i[1])
+        }
+        text.textContent =  env.rankingFastfood + "(Fast wrtn) (unSafe)";
     });
     // 패스트푸드 언셒
-    feed.add("데이터를 수집중",fastfood(false),false,(element) => {
-        if (new Date(element.createdAt).setHours(new Date(element.createdAt).getHours() + 24) < new Date().getTime()){
+    feed.add("데이터를 수집중",fastfood(false),false,(character) => {
+        if (new Date(character.createdAt).setHours(new Date(character.createdAt).getHours() + 24) < new Date().getTime()){
             return true;
         }
-    },(elements,feed,text)=>{
+    },(characters,feed,text)=>{
         let i = 0;
         let k: Array<[interfaces.character,any]> = []
         for (const element of feed.childNodes) {
-            k[k.length] = [elements[i],element]
+            k[k.length] = [characters[i],element]
             i++;
         }
         k.sort((a: [interfaces.character,any], b: [interfaces.character,any]) => {
             return b[0].chatCount - a[0].chatCount;
         })
-        elements = [];
-        k.forEach((i: Array<[interfaces.character,any]>) => {elements[elements.length] = i[0]; feed.appendChild(i[1])});
-        text.textContent = "패스트 푸드";
+        characters = [];
+        for (const k_i of k) {
+            characters[characters.length] = k_i[0]; feed.appendChild(k_i[1])
+        }
+        text.textContent = env.rankingFastfood + "(Fast wrtn) (Safe)";
     });
     // 비크리
     feed.add(env.plus,filter_character_list(false),false);

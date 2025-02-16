@@ -26,6 +26,7 @@ export const token_key: string = "access_token"; //쿠키중 가져올 토큰값
 export const auto_summation: string = "자동요약"; //자동요약 버튼
 export const auto_summation_update: string = "업데이트"; //업데이트 버튼
 export const plus: string = "랭킹 플러스 (Fast wrtn)"; //랭킹플러스
+export const rankingFastfood: string = "패스트 푸드 ";
 export const persona_name: string = "페르소나"; //페르소나
 export const AfterMemory_name: string = "Memory Afterburner"; //AfterMemory 버튼
 export const copyTojson: string = "copy to json"; //캐릭터 복사기능
